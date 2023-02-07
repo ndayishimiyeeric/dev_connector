@@ -1,1 +1,1 @@
-this folder is reserved for the backend djangorestapi
+this folder is reserved for the frontend djangorestapi
