@@ -1,1 +1,0 @@
-this folder is reserved for the frontend djangorestapi
