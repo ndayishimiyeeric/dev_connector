@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../css/index.css" />
+    <title>DevConnector || Project</title>
+  </head>
+  <body>
+    <nav class="navbar bg-dark">
+      <h1>
+        <!-- Logo Link -->
+        <a href="">
+          <!-- Code Icon -->
+          <i class="fas fa-code"></i>
+          DevConnector
+        </a>
+      </h1>
+      <!-- Nav links -->
+      <ul>
+        <li>
+          <a href="Developers.html">
+            <i class="fab fa-connectdevelop"></i>
+            <span class="hide-sm">Developers</span>
+          </a>
+        </li>
+        <li>
+          <a href="Projects.html">
+            <i class="fa fa-diagram-project"></i>
+            <span class="hide-sm">Projects</span>
+          </a>
+        </li>
+        <li>
+          <a href="Dashboard.html">
+            <i class="fas fa-user"></i>
+            <span class="hide-sm">Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="Login.html">
+            <i class="fas fa-sign-out-alt"></i>
+            <span class="hide-sm">Logout</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <section class="container">
+      <!-- Link back to posts -->
+      <a href="#" class="btn">Back To Projects</a>
+      <!-- Delete project if you are owner -->
+      <a href="#" class="btn btn-danger sm-my-1">Delete Project</a>
+      <!-- origin post -->
+      <div class="project bg-white p-1 my-1">
+        <div>
+          <!-- Link to profile -->
+          <a href="#">
+            <img
+              class="round-img"
+              src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200"
+              alt=""
+            />
+            <h4>John Doe</h4>
+          </a>
+          <div class="project-feedback">
+            <div class="project-votes">
+              <i class="fas fa-check-to-slot"></i>
+              <span>4</span>
+            </div>
+            <div class="project-ratio">
+              <i class="fas fa-thumbs-up"></i>
+              <span>75%</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="project-header">
+            <h4 class="project-title">Networking</h4>
+            <p class="project-date">Posted on 04/20/2021</p>
+          </div>
+          <p class="project-description my-1">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint
+            possimus corporis sunt necessitatibus! Minus nesciunt soluta
+            suscipit nobis. Amet accusamus distinctio cupiditate blanditiis
+            dolor? Illo perferendis eveniet cum cupiditate aliquam?
+          </p>
+          <ul class="project-links">
+            <li>
+              <a href="#" target="_blank" rel="noopener noreferrer">
+                <i class="fas fa-globe"></i> Website
+              </a>
+            </li>
+            <li>
+              <a href="#" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-github"></i> Github
+              </a>
+            </li>
+          </ul>
+          <ul class="project-tags">
+            <li class="badge badge-gray">Networking</li>
+            <li class="badge badge-gray">Python</li>
+            <li class="badge badge-gray">Flask</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Add Reviw form -->
+      <div class="post-form">
+        <div class="post-form-header bg-primary">
+          <h3>Leave A Review</h3>
+        </div>
+        <form class="form my-1">
+          <!-- dropdown -->
+          <select name="status" class="my-1">
+            <option value="0">* Vote</option>
+            <option value="up">Up Vote</option>
+            <option value="down">Down Vote</option>
+          </select>
+          <textarea
+            name="text"
+            cols="30"
+            rows="5"
+            placeholder="Leave a comment on this project"
+          ></textarea>
+          <input type="submit" class="btn btn-dark my-1" value="Submit" />
+        </form>
+      </div>
+
+      <!-- Reviews div -->
+      <div class="reviews">
+        <!-- Single review -->
+        <div class="review bg-white my-1">
+          <!-- enter icon -->
+          <i class="fas fa-arrow-turn-right turn-icon"></i>
+          <div class="review-body">
+            <a href="#" class="review-owner">
+              <img
+                class="round-img"
+                src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200"
+                alt=""
+              />
+              <h4>John Doe</h4>
+            </a>
+            <div>
+              <p class="review-comment">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint
+                possimus corporis sunt necessitatibus! Minus nesciunt soluta
+                suscipit nobis. Amet accusamus distinctio cupiditate blanditiis
+                dolor? Illo perferendis eveniet cum cupiditate aliquam?
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- End of single comment -->
+        <div class="review bg-white my-1">
+          <!-- enter icon -->
+          <i class="fas fa-arrow-turn-right turn-icon"></i>
+          <div class="review-body">
+            <a href="#" class="review-owner">
+              <img
+                class="round-img"
+                src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200"
+                alt=""
+              />
+              <h4>John Doe</h4>
+            </a>
+            <div>
+              <p class="review-comment">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint
+                possimus corporis sunt necessitatibus! Minus nesciunt soluta
+                suscipit nobis. Amet accusamus distinctio cupiditate blanditiis
+                dolor? Illo perferendis eveniet cum cupiditate aliquam?
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

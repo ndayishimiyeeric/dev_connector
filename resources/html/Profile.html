@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../css/index.css" />
+    <title>DevConnector || User Profile</title>
+  </head>
+  <body>
+
+    <nav class="navbar bg-dark">
+      <h1>
+        <!-- Logo Link -->
+        <a href="">
+          <!-- Code Icon -->
+          <i class="fas fa-code"></i>
+          DevConnector
+        </a>
+      </h1>
+      <!-- Nav links -->
+      <ul>
+        <li>
+          <a href="Developers.html">
+            <i class="fab fa-connectdevelop"></i>
+            <span class="hide-sm">Developers</span>
+          </a>
+        </li>
+        <li>
+          <a href="Projects.html">
+            <i class="fa fa-diagram-project"></i>
+            <span class="hide-sm">Projects</span>
+          </a>
+        </li>
+        <li>
+          <a href="Dashboard.html">
+            <i class="fas fa-user"></i>
+            <span class="hide-sm">Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="Login.html">
+            <i class="fas fa-sign-out-alt"></i>
+            <span class="hide-sm">Logout</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <section class="container">
+      <!-- Link back to Developers -->
+      <a href="#" class="btn">Back to profiles</a>
+
+      <div class="profile-grid my-1">
+        <!-- Top -->
+        <div class="profile-top bg-primary p-2">
+          <!-- remember to use correct images maybe gravatar docs size "?s=200" -->
+          <img
+            src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200"
+            alt=""
+            class="round-img my-1"
+            width="200"
+            height="200"
+          />
+          <!-- Name -->
+          <h1 class="large">John Doe</h1>
+          <!-- Postion and company -->
+          <p class="lead">Developer at Microsoft</p>
+          <!-- Location -->
+          <p>Seattle, WA</p>
+
+          <!-- profile social icons -->
+          <div class="icons my-1">
+            <a href="">
+              <!-- their website -->
+              <i class="fas fa-globe fa-2x"></i>
+            </a>
+            <a href="">
+              <i class="fab fa-linkedin fa-2x"></i>
+            </a>
+            <a href="">
+              <i class="fab fa-github fa-2x"></i>
+            </a>
+            <a href="">
+              <i class="fab fa-twitter fa-2x"></i>
+            </a>
+            <a href="">
+              <i class="fab fa-youtube fa-2x"></i>
+            </a>
+          </div>
+        </div>
+        <!-- About -->
+        <div class="profile-about bg-light p-2">
+          <h2 class="text-primary">John's Bio</h2>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat
+            alias possimus est iusto quis aperiam corporis saepe blanditiis nisi
+            doloribus.
+          </p>
+          <div class="line"></div>
+          <h2 class="text-primary">Skill set</h2>
+          <div class="skills">
+            <div class="p-1">
+              <!-- checked icon -->
+              <i class="fa fa-check"></i> HTML
+            </div>
+            <div class="p-1"><i class="fa fa-check"></i> CSS</div>
+            <div class="p-1"><i class="fa fa-check"></i> Javascript</div>
+          </div>
+        </div>
+        <!-- Experience -->
+        <div class="profile-exp bg-white p-2">
+          <h2 class="text-primary">Experiences</h2>
+          <div>
+            <h3>Microsoft</h3>
+            <p>Oct 2011 - current</p>
+            <p><strong>Position: </strong>Senior Developer</p>
+            <p>
+              <strong>Description: </strong>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nemo
+              temporibus nesciunt unde et alias deleniti.
+            </p>
+          </div>
+          <div>
+            <h3>Sun microsystems</h3>
+            <p>Oct 2005 - Nov 2010</p>
+            <p><strong>Position: </strong>Systems Admin</p>
+            <p>
+              <strong>Description: </strong>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nemo
+              temporibus nesciunt unde et alias deleniti.
+            </p>
+          </div>
+        </div>
+        <!-- Education -->
+        <div class="profile-edu bg-white p-2">
+          <h2 class="text-primary">Education</h2>
+          <div>
+            <h3>University of Washington</h3>
+            <p>Sept 1993 - June 1999</p>
+            <p><strong>Degree: </strong>Masters</p>
+            <p><strong>Field: </strong>Computer science</p>
+            <p>
+              <strong>Description: </strong>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nemo
+              temporibus nesciunt unde et alias deleniti.
+            </p>
+          </div>
+        </div>
+        <!-- Projects Repos -->
+        <div class="profile-projects">
+          <h2 class="text-primary my-1">
+            <i class="fas fa-project-diagram"></i> Projects Created
+          </h2>
+          <!-- single github repo -->
+          <div class="repo bg-white my-1 p-1">
+            <div>
+              <h4><a href="#">Networking</a></h4>
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Tempora, alias.
+              </p>
+            </div>
+            <div>
+              <ul>
+                <li class="badge badge-primary">Reviews: 44</li>
+                <li class="badge badge-dark">Ratio: 75</li>
+                <li class="badge">Created: 12/12/2021</li>
+              </ul>
+            </div>
+          </div>
+          <div class="repo bg-white my-1 p-1">
+            <div>
+              <h4><a href="#">Machine Learning</a></h4>
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint
+                possimus corporis sunt necessitatibus! Minus nesciunt soluta
+                suscipit nobis. Amet accusamus distinctio cupiditate blanditiis
+                dolor? Illo perferendis eveniet cum cupiditate aliquam?
+              </p>
+            </div>
+            <div>
+              <ul>
+                <li class="badge badge-primary">Reviews: 44</li>
+                <li class="badge badge-dark">Ratio: 75</li>
+                <li class="badge">Created: 12/12/2021</li>
+              </ul>
+            </div>
+          </div>
+          <!-- End of single repo -->
+        </div>
+      </div>
+    </section>
+  </body>
+</html>
