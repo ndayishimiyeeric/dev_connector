@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<style>
+    .hero-image {
+      background-image: url("file_attente.png"); /* The image used */
+      background-color: #cccccc; /* Used if the image is unavailable */
+      height: 500px; /* You must set a specified height */
+      background-position: center; /* Center the image */
+      background-repeat: no-repeat; /* Do not repeat the image */
+      background-size: cover; /* Resize the background image to cover the entire container */
+    }
+  </style>
+
+<div style="">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-4 offset-sm-4" style="margin-top: 5em;" >
+        <div class="card">
+          <div class="card-body">
+            <p class="text-center">
+              <img src="{% static 'images/avatar.jpg' %}" style="width:10em;">
+            </p>
+            <h5 class="card-title text-center text-primary">Authentification</h5>
+            <p class="card-text">
+              <form method="post" action="{% url 'authentication' %}">
+                {% csrf_token %}
+                  <p>
+                      <label for="exampleInputEmail1"><b>Nom d'utilisateur:</b></label>
+                      <div class="input-group mb-3">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">🙎‍♂️</span>
+                          </div>
+                          <input id="login" type="text" class="form-control {% if erreur %} is-invalid{% endif %}"
+                          name="login" value="{{ login }}" required autocomplete="login"
+                          placeholder="entrez votre login" autofocus>
+                      {% if erreur %}
+                      <span class="invalid-feedback" role="alert">
+                          <strong>login ou mot de passe incorrect</strong>
+                      </span>
+                      {% endif %}
+                        </div>
+                    </p>
+                    <p>
+                      <label for="exampleInputPassword1"><b>Mot de passe:</b></label>
+                      <div class="input-group mb-3">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">🔓</span>
+                          </div>
+                          <input type="password" class="form-control {% if erreur %} is-invalid{% endif %}" 
+                          value="{{ mp }}"
+                          name="password" placeholder="enter your password" aria-label="Username" aria-describedby="basic-addon1" required>
+                        </div>
+                    </p>
+                
+                <p class="text-center mt-2">
+                  <button type="submit" class="btn btn-lg btn-primary">Connexion</button>
+                
+                </p>
+               
+            </form> 
+            </p>
+          </div>
+          <div class="text-center mb-2">
+            <a href="#" class="text-center">s'inscrire</a>
+        </div>
+        </div>
+     
+      </div>
+    
+    </div>
+    
+  </div>
+  {% endblock %}

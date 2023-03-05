@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    .hero-image {
+      background-image: url("file_attente.png"); /* The image used */
+      background-color: #cccccc; /* Used if the image is unavailable */
+      height: 500px; /* You must set a specified height */
+      background-position: center; /* Center the image */
+      background-repeat: no-repeat; /* Do not repeat the image */
+      background-size: cover; /* Resize the background image to cover the entire container */
+    }
+  </style>
+
+<div  class="justify-content-center">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-md-5 offset-0" style="margin-top: 5em;" >
+        <div class="card">
+          <div class="card-body">
+            <form method="POST" action="#">
+
+                {{ forms.as_p }}
+                {% csrf_token %}
+                <button class="btn btn-success">register</button>
+                <button class="btn btn-default">cancel</button>
+            </form>
+</div>
+</div>
+      </div>
+    </div>
+</div>
+</div>
+{% endblock%}

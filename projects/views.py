@@ -21,8 +21,8 @@ projectsList = [
 ]
 
 def projects(request):
-    text = "This is the projects page"
-    return render(request, "projects/projects.html", {"text": text, "projects": projectsList})
+   
+    return render(request, "accueil.html")
 
 def project(request, pk):
     obj = None
