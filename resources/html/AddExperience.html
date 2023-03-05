@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../css/index.css" />
+    <title>DevConnector || Add Experience</title>
+  </head>
+  <body>
+
+    <nav class="navbar bg-dark">
+      <h1>
+        <!-- Logo Link -->
+        <a href="">
+          <!-- Code Icon -->
+          <i class="fas fa-code"></i>
+          DevConnector
+        </a>
+      </h1>
+      <!-- Nav links -->
+      <ul>
+        <li>
+          <a href="Developers.html">
+            <i class="fab fa-connectdevelop"></i>
+            <span class="hide-sm">Developers</span>
+          </a>
+        </li>
+        <li>
+          <a href="Projects.html">
+            <i class="fa fa-diagram-project"></i>
+            <span class="hide-sm">Projects</span>
+          </a>
+        </li>
+        <li>
+          <a href="Dashboard.html">
+            <i class="fas fa-user"></i>
+            <span class="hide-sm">Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="Login.html">
+            <i class="fas fa-sign-out-alt"></i>
+            <span class="hide-sm">Logout</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <section class="container">
+      <p class="lead">
+        <!-- user icon -->
+        <i class="fas fa-code-branch text-primary"></i>
+        Add any developer/programming position that you have had in the past
+      </p>
+      <small>* = required field</small>
+      <form class="form">
+        <div class="form-group">
+          <input type="text" placeholder="* Job Title" name="title" required />
+        </div>
+        <div class="form-group">
+          <input type="text" placeholder="* Company" name="company" required />
+        </div>
+        <div class="form-group">
+          <input type="text" placeholder="Location" name="location" />
+        </div>
+        <div class="form-group">
+          <h4>From Date</h4>
+          <input type="date" name="from" />
+        </div>
+        <div class="form-group">
+          <h4>To Date</h4>
+          <input type="date" name="to" />
+        </div>
+        <div class="form-group">
+          <p><input type="checkbox" name="current" value="" /> Current Job</p>
+        </div>
+        <div class="form-group">
+          <textarea
+            name="description"
+            cols="30"
+            rows="5"
+            placeholder="Job Description"
+          ></textarea>
+        </div>
+        <input type="submit" class="btn btn-primary my-1" />
+        <!-- go back to dashboard -->
+        <a class="btn my-1" href="#">Go Back</a>
+      </form>
+    </section>
+  </body>
+</html>
