@@ -19,10 +19,17 @@
       <div class="col-sm-4 offset-sm-4" style="margin-top: 5em;" >
         <div class="card">
           <div class="card-body">
+            
             <p class="text-center">
               <img src="{% static 'images/avatar.jpg' %}" style="width:10em;">
             </p>
-            <h5 class="card-title text-center text-primary">Authentification</h5>
+            <div class="text-center">
+                <h3>
+
+                    <i class="fas fa-code"></i>
+                    DevConnector
+                </h3>
+            </div>
             <p class="card-text">
               <form method="post" action="{% url 'authentication' %}">
                 {% csrf_token %}
@@ -55,16 +62,19 @@
                     </p>
                 
                 <p class="text-center mt-2">
-                  <button type="submit" class="btn btn-lg btn-primary">Connexion</button>
+                  <button type="submit" class="btn btn-lg btn-primary form-control">Connexion</button>
                 
                 </p>
+                <p class="my-1 text-center">
+                    Don't have an account?
+                    <!-- Link to register -->
+                    <a href="{% url 'register' %}">Sign Up</a>
+                  </p>
                
             </form> 
             </p>
           </div>
-          <div class="text-center mb-2">
-            <a href="#" class="text-center">s'inscrire</a>
-        </div>
+          
         </div>
      
       </div>

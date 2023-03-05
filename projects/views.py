@@ -22,7 +22,7 @@ projectsList = [
 
 def projects(request):
    
-    return render(request, "accueil.html")
+    return render(request, "homePage.html")
 
 def project(request, pk):
     obj = None
