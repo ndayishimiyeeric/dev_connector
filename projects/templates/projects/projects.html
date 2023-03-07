@@ -1,13 +1,66 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Projects Template</h1>
-    <p>{{text}}</p>
-
-    <h3>Projects</h3>
-    <ul>
-        {% for project in projects %}
-            <li><a href="{% url 'project' project.id %}">{{project.title}}</a></li>
-        {% endfor %}
-    </ul>
+    <main class="home">
+        <section class="hero bg-header border-muted">
+          <div class="main_container">
+            <div class="hero-showcase">
+              <p class="lead">
+                <!-- connectDevelop icon -->
+                <i class="fa fa-diagram-project"></i>
+                Welcome to the developers community
+              </p>
+            </div>
+            <div class="hero-search_form">
+              <form action="" class="search_form">
+                <div class="search_form-group">
+                  <input
+                    type="text"
+                    placeholder="Project title"
+                    name="title"
+                    required
+                  />
+                </div>
+                <input type="submit" value="Search" class="btn btn-dark" />
+              </form>
+            </div>
+          </div>
+        </section>
+        <section class="projects">
+          <div class="main_container">
+            <div class="projects-grid"> 
+              {% for project in projects %}
+              <div class="card project-ui">
+                <a href="{% url 'project' project.id %}" class="project-ui">
+                  <img class="project__thumbnail" src="{{project.project_image.url}}" alt="project thumbnail" />
+                  <div class="card__body">
+                    <h3 class="project__title">{{project.title}}</h3>
+                    <p class="">
+                        <a href="" class="project-owner">
+                            <img
+                            src="https://images.unsplash.com/photo-1516542076529-1ea3854896f2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80"
+                            alt=""
+                            class="project-owner-img"
+                            />
+                            John Doe
+                        </a>
+                    </p>
+                    <p class="project--rating" style="margin: 0.5rem 0;">
+                       {{project.votes_count}} Vote{{project.votes_count|pluralize:"s"}} || <i class="fas fa-face-smile text-primary"></i> <span style="font-weight: bold;">{{project.votes_ratio}}%</span>
+                    </p>
+                    <div class="project__tags">
+                      {% for tag in project.tags.all %}
+                        <span class="tag tag--pill tag--main">
+                          <small style="font-size: 0.9rem;">{{tag}}</small>
+                        </span>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </a>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </section>
+      </main>
 {% endblock content %}
