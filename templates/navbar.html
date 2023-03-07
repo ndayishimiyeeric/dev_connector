@@ -1,2 +1,57 @@
-<h1>Logo</h1>
-<hr>
+{% load static %}
+
+<nav class="navbar bg-dark">
+    <h1>
+      <a href="{% url 'projects' %}">
+        <i class="fas fa-code"></i>
+        DevConnector
+      </a>
+    </h1>
+    <!-- Nav links -->
+    <ul>
+      <!-- Visible when user is authanticated -->
+      <li>
+        <a href="">
+          <i class="fab fa-connectdevelop"></i>
+          <span class="hide-sm">Developers</span>
+        </a>
+      </li>
+      <li>
+        <a href="{% url 'projects' %}">
+          <i class="fa fa-diagram-project"></i>
+          <span class="hide-sm">Projects</span>
+        </a>
+      </li>
+      <li>
+        <a href="">
+          <i class="fas fa-user"></i>
+          <span class="hide-sm">Dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a href="{% url 'create-project' %}">
+          <i class="fas fa-sign-out-alt"></i>
+          <span class="hide-sm">Add</span>
+        </a>
+      </li>
+      <li>
+        <a href="Login.html">
+          <i class="fas fa-sign-out-alt"></i>
+          <span class="hide-sm">Logout</span>
+        </a>
+      </li>
+      <!-- Visible when user not authanticated -->
+      <!-- <li>
+        <a href="Register.html">
+          <i class="fas fa-user-alt"></i>
+          <span class="hide-sm">Register</span>
+        </a>
+      </li>
+      <li>
+        <a href="Login.html">
+          <i class="fas fa-sign-in-alt"></i>
+          <span class="hide-sm">Login</span>
+        </a>
+      </li> -->
+    </ul>
+</nav>
