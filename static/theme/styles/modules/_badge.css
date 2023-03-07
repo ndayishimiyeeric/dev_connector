@@ -1,0 +1,75 @@
+.tag {
+    display: inline-flex;
+    align-items: center;
+    background-color: var(--color-sub);
+    height: -webkit-fit-content;
+    height: -moz-fit-content;
+    height: fit-content;
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    width: fit-content;
+    border-radius: 0.5rem;
+    padding: 0.2rem 1.2rem;
+    font-size: 0.5rem;
+    cursor: pointer;
+  }
+
+  .badges {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.1rem
+  }
+
+  .badges li {
+    border-radius: 0.3rem;
+    padding: 0.2rem;
+  }
+  
+  .tag:not(:last-child) {
+    margin-right: 0.25rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .tag > small {
+    color: var(--color-white);
+  }
+  
+  .tag--outline > small {
+    color: var(--color-sub);
+  }
+  
+  .tag--outline {
+    border: 2px solid var(--color-sub);
+    background-color: transparent;
+    padding: 0.4rem 1rem;
+  }
+  
+  .tag--pill {
+    border-radius: 2rem;
+  }
+  
+  .tag--main,
+  .tag--main > small {
+    background: var(--color-main-light);
+    color: var(--color-main);
+    font-weight: 500;
+  }
+  
+  .tag--sub,
+  .tag--sub > small {
+    background: var(--color-sub-lighter);
+    color: var(--color-sub-light);
+    font-weight: 500;
+  }
+  
+  .tag--lg {
+    padding: 0.8rem 3rem;
+    font-size: 1.4rem;
+  }
+  
+  .tag--lg:not(:last-child) {
+    margin-right: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  
