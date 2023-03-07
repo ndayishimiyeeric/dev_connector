@@ -1,6 +1,115 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
-<h1>Single projects template</h1>
-<p>{{project.title}}</p>
-<p>{{project.description}}</p>
+
+<section class="container">
+    <!-- Link back to posts -->
+    <a href="#" class="btn">Back To Projects</a>
+    <!-- Delete project if you are owner -->
+    <a href="{% url 'update-project' project.id %}" class="btn btn-success sm-my-1">Update Project</a>
+    <!-- origin post -->
+    <div class="project bg-white p-1 my-1">
+      <div>
+        <!-- Link to profile -->
+        <a href="#">
+          <img
+            class="round-img"
+            src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200"
+            alt=""
+          />
+          <h4>John Doe</h4>
+        </a>
+        <div class="project-feedback">
+          <div class="project-votes">
+            <i class="fas fa-check-to-slot"></i>
+            <span>{{project.votes_count}}</span>
+          </div>
+          <div class="project-ratio">
+            <i class="fas fa-thumbs-up"></i>
+            <span>{{project.votes_ratio}}%</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="project-header">
+          <h4 class="project-title">{{project.title}}</h4>
+          <p class="project-date">Posted <span style="font-style: italic;">{{project.created_at|timesince}} ago</span></p>
+        </div>
+        <p class="project-description my-1">
+            {{project.description}}
+        </p>
+        <ul class="project-links">
+            {% if project.source_code%}
+                <li>
+                    <a href="{{project.source_code}}" target="_blank" rel="noopener noreferrer">
+                        <i class="fas fa-globe"></i> Website
+                    </a>
+                </li>
+            {% endif %}
+            {% if project.live_preview%}
+                <li>
+                    <a href="{{project.live_preview}}" target="_blank" rel="noopener noreferrer">
+                        <i class="fab fa-github"></i> Github
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+        <ul class="project-tags">
+          {% for tag in project.tags.all %}  
+            <li class="badge badge-gray">{{tag}}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Add Reviw form -->
+    <div class="post-form">
+      <div class="post-form-header bg-primary">
+        <h3>Leave A Review</h3>
+      </div>
+      <form class="form my-1">
+        <!-- dropdown -->
+        <select name="status" class="my-1">
+          <option value="0">* Vote</option>
+          <option value="up">Up Vote</option>
+          <option value="down">Down Vote</option>
+        </select>
+        <textarea
+          name="text"
+          cols="30"
+          rows="5"
+          placeholder="Leave a comment on this project"
+        ></textarea>
+        <input type="submit" class="btn btn-dark my-1" value="Submit" />
+      </form>
+    </div>
+
+    <!-- Reviews div -->
+    <div class="reviews">
+      <!-- Single review -->
+      <div class="review bg-white my-1">
+        <!-- enter icon -->
+        <i class="fas fa-arrow-turn-right turn-icon"></i>
+        <div class="review-body">
+          <a href="#" class="review-owner">
+            <img
+              class="round-img"
+              src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200"
+              alt=""
+            />
+            <h4>John Doe</h4>
+          </a>
+          <div>
+            <p class="review-comment">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint
+              possimus corporis sunt necessitatibus! Minus nesciunt soluta
+              suscipit nobis. Amet accusamus distinctio cupiditate blanditiis
+              dolor? Illo perferendis eveniet cum cupiditate aliquam?
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- End of single comment -->
+    </div>
+  </section>
 {% endblock content %}
