@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-3" id="p1">
+            <div class="card">
+                <div class="card-body">
+                    partie 1
+                </div>
+            </div>
+        </div>
+            <div class="col-md-7">
+                <div class="">
+                    <div class="">
+                        
+                           {% for i in projects %}
+                           <div class="container">
+                           <div class="card mb-4">
+                            <div class="m-3">
+                                <img src="static/images/avatar.jpg" alt="Avatar" class="avatar"> {{i.user.username}}
+                            </div>
+                            <div class="card-body">
+                              <h5 class="card-title"></h5>
+                              <p class="card-text">{{ i.description }}</p>
+                             
+                              <img src="{{ i.image.url }}" class="card-img-top m-2" alt="..." height="400">
+                              <p class="card-text m-2"><small class="text-muted">Last updated 3 mins ago</small></p>
+                            </div>
+                            <div class="card-header">
+                                <button class="btn btn-success ">
+                                   
+                                    <i class="fa-solid fa-heart"></i> {{ i.num_likes }}
+                                </button>
+                                <button class="btn">
+                                    <i class="fa fa-comment"></i> {{ i.num_comments }}
+                                </button>
+
+                            </div>
+                          </div>
+                        </div>
+                           {% endfor %}
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="col-md-2">
+                <div class="card">
+                    <div class="card-body">
+                        dernier partie
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script src="static/styles/js/jquery.js"></script>
+<script>
+    $(document).ready(function(){
+        $('#p1').show()
+    })
+    </script>
+{% endblock %}

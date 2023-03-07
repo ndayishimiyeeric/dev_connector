@@ -128,7 +128,7 @@ USE_TZ = True
 STATIC_URL = "static/"
 MEDIA_URL="/images-posts/"
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'images-posts'),
 )
 
 MEDIA_ROOT=os.path.join(BASE_DIR,'images-posts/')
@@ -139,4 +139,5 @@ MEDIA_ROOT=os.path.join(BASE_DIR,'images-posts/')
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "authentication.User"
 LOGIN_URL="authentication"
+LOGIN_REDIRECT_URL="homepage"
 

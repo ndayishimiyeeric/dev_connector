@@ -17,7 +17,7 @@ class Education(models.Model):
     date_to=models.DateField(null=True)
     is_current=models.BooleanField()
     degree=models.ForeignKey(Degree,on_delete=models.CASCADE)
-    user_id=models.ForeignKey(User,on_delete=models.CASCADE)
+    user=models.ForeignKey(User,on_delete=models.CASCADE,related_name="educations")
 
 
 

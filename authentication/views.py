@@ -18,18 +18,17 @@ def login_page(request):
        
         email=request.POST.get('login')
         password=request.POST.get('password')
-        print(email,password)
         #if forms.is_valid():
             #print(forms.cleaned_data['username'],forms.cleaned_data['password'])
         user =  authenticate(email=email,password=password)
-        print("#######################=>",user)
+       
         if user is not None:
             login(request,user)
             context['erreur'] = False
             #del context['login']
             #del context['mp']
             message = f'Bienvenue f{user.username}'
-            return redirect("my_profil")
+            return redirect("home_page")
         else:
             context['erreur'] = True
             context['login'] = email
@@ -47,10 +46,7 @@ def register(request):
         if forms.is_valid():
             user= forms.save()
             login(request,user)
-            return redirect("my_profil")
-        
-
-
+            return redirect("home_page")
     return render(request,'authenticate/registerUser.html',context={"forms":forms})
 
 
