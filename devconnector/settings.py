@@ -122,14 +122,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = "static/"
-<<<<<<< HEAD
 MEDIA_URL="/images-posts/"
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'images-posts'),
 )
-=======
-MEDIA_URL = "images/"
->>>>>>> a950353b98ca412e8ac5ee20873ddfd15369b7a6
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
@@ -142,10 +138,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-<<<<<<< HEAD
 AUTH_USER_MODEL = "authentication.User"
 LOGIN_URL="authentication"
 LOGIN_REDIRECT_URL="homepage"
 
-=======
->>>>>>> a950353b98ca412e8ac5ee20873ddfd15369b7a6
