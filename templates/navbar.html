@@ -10,6 +10,7 @@
     <!-- Nav links -->
     <ul>
       <!-- Visible when user is authanticated -->
+      {% if user.is_authenticated %}
       <li>
         <a href="{% url 'profiles' %}">
           <i class="fab fa-connectdevelop"></i>
@@ -29,29 +30,25 @@
         </a>
       </li>
       <li>
-        <a href="{% url 'create-project' %}">
-          <i class="fas fa-sign-out-alt"></i>
-          <span class="hide-sm">Add</span>
-        </a>
-      </li>
-      <li>
-        <a href="Login.html">
+        <a href="{% url 'logout' %}">
           <i class="fas fa-sign-out-alt"></i>
           <span class="hide-sm">Logout</span>
         </a>
       </li>
       <!-- Visible when user not authanticated -->
-      <!-- <li>
-        <a href="Register.html">
+      {% else %}
+      <li>
+        <a href="{% url 'register' %}">
           <i class="fas fa-user-alt"></i>
           <span class="hide-sm">Register</span>
         </a>
       </li>
       <li>
-        <a href="Login.html">
+        <a href="{% url 'login' %}">
           <i class="fas fa-sign-in-alt"></i>
           <span class="hide-sm">Login</span>
         </a>
-      </li> -->
+      </li>
+      {% endif %}
     </ul>
 </nav>

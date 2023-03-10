@@ -1,7 +1,76 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+from django.contrib.auth.models import User
 from .models import Profile
+from .forms import CustomerUserCreationForm
 
 # Create your views here.
+
+def userLogin(request):
+    if request.user.is_authenticated:
+        return redirect('profiles')
+    
+    page = 'login'
+
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        try:
+            user = User.objects.get(username=username)
+        except:
+            messages.error(request, "Username does not exist")
+        
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('profiles')
+        else:
+            messages.error(request, "Username or password is incorrect")
+
+    context = {
+        'page': page
+    }
+    return render(request, 'users/login_register.html', context)
+
+def userRegister(request):
+
+    if request.user.is_authenticated:
+        return redirect('profiles')
+    
+    form = CustomerUserCreationForm()
+    page = 'register'
+    
+    if request.method == 'POST':
+        form = CustomerUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            username = user.username.lower()
+            user.save()
+
+            messages.success(request, "Account was created for " + username)
+            login(request, user)
+
+            return redirect('profiles')
+        else:
+            for msg in form.error_messages:
+                messages.error(request, f"{msg}: {form.error_messages[msg]}")
+
+    context = {
+        'form': form,
+        'page': page
+    }
+
+    return render(request, 'users/login_register.html', context)
+
+def userLogout(request):
+    logout(request)
+    messages.success(request, "You have been logged out!")
+    return redirect('welcome')
+
+def userWelcome(request):
+    return render(request, 'users/welcome.html')
 
 def profiles(request):
     profiles = Profile.objects.all()
