@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<main class="home">
+  <section class="main_container hero hero-black bg-dark">
+    <div class="hero-showcase">
+      <p class="lead">
+        <!-- connectDevelop icon -->
+        <i class="fab fa-connectdevelop"></i>
+        Browse and connect with developers around the world
+      </p>
+    </div>
+    <div class="hero-search_form">
+      <form action="" class="search_form">
+        <input
+          type="text"
+          placeholder="Developer name"
+          name="title"
+          class="search_form-input"
+          required
+        />
+        <input
+          type="submit"
+          value="Search"
+          class="btn btn-primary"
+          style="min-width: 5%"
+        />
+      </form>
+    </div>
+  </section>
+  <section class="main_container profiles-grid">
+    {% for profile in profiles %}
+      <div class="profile-card bg-light">
+        <div class="profile-card__top">
+          <img src="{{profile.profile_image.url}}" alt="{{profile.name}}" />
+          <div>
+            <h2>{{profile.name}}</h2>
+            <p>{{profile.headline|truncatechars:15}}</p>
+            <p>{{profile.location|slice:"20"}}</p>
+            <a href="{% url 'user-profile' profile.id %}" class="btn btn-primary">View Profile</a>
+          </div>
+        </div>
+        <p class="hide-sm profile-desc">
+          {{profile.bio|truncatechars:150}}
+        </p>
+      <!-- Skills -->
+        <div class="hide-sm tags">
+          {% for skill in profile.skill_set.all|slice:5 %}
+            <span class="tag tag--outline"><small style="font-size: 13px;">{{skill}}</small></span>
+          {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
+  </section>
+  
+</main>
+
+{% endblock content %}

@@ -1,0 +1,140 @@
+{%  extends 'base.html' %}
+
+{% block content %}
+
+<section class="container">
+    <!-- Link back to Developers -->
+    <a href="{% url 'profiles' %}" class="btn">Back to profiles</a>
+
+    <div class="profile-grid my-1">
+      <div class="profile-top bg-primary p-2">
+        <img
+          src="{{profile.profile_image.url}}"
+          alt=""
+          class="round-img my-1"
+          width="200"
+          height="200"
+        />
+        <h1 class="large">{{profile.name}}</h1>
+        <p class="lead">{{profile.headline}}</p>
+        <p>{{profile.location}}</p>
+
+        <!-- profile social icons -->
+        <div class="icons my-1">
+          {% if profile.website %}
+            <a href="{{profile.website}}" target="_blank">
+             <i class="fas fa-globe fa-2x"></i>
+            </a>
+          {% endif %}
+          {% if profile.linkedin %}
+            <a href="{{profile.linkedin}}" target="_blank">
+             <i class="fab fa-linkedin fa-2x"></i>
+            </a>
+          {% endif %}
+          {% if profile.github %}
+            <a href="{{profile.github}}" target="_blank">
+              <i class="fab fa-github fa-2x"></i>
+            </a>
+          {% endif %}
+          {% if profile.twitter %}
+            <a href="{{profile.twitter}}" target="_blank">
+              <i class="fab fa-twitter fa-2x"></i>
+            </a>
+          {% endif %}
+          {% if profile.youtube %}
+            <a href="{{profile.youtube}}" target="_blank">
+              <i class="fab fa-youtube fa-2x"></i>
+            </a>
+          {% endif %}
+        </div>
+      </div>
+      <!-- About -->
+      <div class="profile-about bg-light p-2">
+        <h2 class="text-primary">{{profile.name}}'s Bio</h2>
+        <p>
+            {{profile.bio}}
+        </p>
+        <div class="line"></div>
+        <h2 class="text-primary">Skill set</h2>
+        <div class="skills" style="flex-direction: column;">
+            <div style="display: flex; flex-direction: column;">
+              {% for skill in mainSkills %}
+                <div class="p-1" style="display: flex; justify-content: space-between; gap: 0.8rem;">
+                  <span class="text-primary" style="width: 35%;"><i class="fa fa-check hide-sm"></i> {{skill.name}}</span>
+                  <p style="font-size: 13px; text-align: justify;">
+                    {{skill.description}}}
+                  </p>
+                </div>
+              {% endfor %}
+            </div>
+          <h3 class="hide-sm" style="align-self: flex-start; margin-left: 9%; font-size: 16px; color: var(--color-text); font-style: italic;">Other skills:</h3>
+          <div class="tags hide-sm" style="align-self: flex-start; margin-left: 20%;">
+            {% for skill in otherSkills %}
+              <span class="tag tag--pill"><small style="font-size: 12px;">{{skill.name}}</small></span>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <!-- Experience -->
+      <div class="profile-exp bg-white p-2">
+        <h2 class="text-primary">Experiences</h2>
+        {% for experience in experiences %}
+          <div>
+            <h3 style="text-transform: capitalize;">{{experience.company}}</h3>
+            <p>
+              {{experience.from_date|date:"M Y"}} -
+              {% if experience.to_date %}
+                {{experience.to_date|date:"M Y"}}
+              {% else %}
+                <span class="text-primary">Active</span>
+              {% endif %}
+            </p>
+            <p style="text-transform: capitalize;"><strong>Position: </strong>{{experience.title}}</p>
+            <p><strong>Description: </strong>{{experience.description}}</p>
+          </div>
+        {% endfor %}
+      </div>
+      <!-- Education -->
+      <div class="profile-edu bg-white p-2">
+        <h2 class="text-primary">Education</h2>
+        {% for education in educations %}
+          <div>
+            <h3 style="text-transform: capitalize;">{{education.school}}</h3>
+            <p>
+              {{education.from_date|date:"M Y"}} -
+              {% if education.to_date %}
+                {{education.to_date|date:"M Y"}}
+              {% else %}
+                <span class="text-primary">Active</span>
+              {% endif %}
+            <p style="text-transform: capitalize;"><strong>Degree: </strong>{{education.degree}}</p>
+            <p><strong>Field: </strong>{{education.field_of_study}}</p>
+            <p><strong>Description: </strong>{{education.description}}</p>
+          </div>
+        {% endfor %}
+      </div>
+      <!-- Projects Repos -->
+      <div class="profile-projects">
+        <h2 class="text-primary my-1">
+          <i class="fas fa-project-diagram"></i> Projects Created
+        </h2>
+        {% for project in profile.project_set.all %}
+          <div class="repo bg-white my-1 p-1">
+            <div>
+              <h4><a href="{% url 'project' project.id %}">{{project.title}}</a></h4>
+              <p>{{project.description|truncatechars:200}}</p>
+            </div>
+            <div>
+              <ul>
+                <li class="badge badge-primary">Review{{project.votes_count|pluralize:"s"}}: {{project.votes_count}}</li>
+                <li class="badge badge-dark">Ratio: {{project.votes_count}}</li>
+                <li class="badge">Created: {{project.created_at|date:"M Y"}}</li>
+              </ul>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+{% endblock %}
