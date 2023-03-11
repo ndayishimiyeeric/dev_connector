@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
 from .models import Profile
@@ -71,6 +72,7 @@ def userLogout(request):
 def userWelcome(request):
     return render(request, 'users/welcome.html')
 
+@login_required(login_url='login')
 def profiles(request):
     profiles = Profile.objects.all()
     context = {
@@ -78,6 +80,7 @@ def profiles(request):
     }
     return render(request, 'users/profiles.html', context)
 
+@login_required(login_url='login')
 def profile(request, pk):
     obj = Profile.objects.get(id=pk)
     mainSkills = obj.skill_set.exclude(description__exact="")
@@ -94,3 +97,19 @@ def profile(request, pk):
         'educations': educations
     }
     return render(request, 'users/profile.html', context)
+
+@login_required(login_url='login')
+def userDashboard(request):
+    profile = request.user.profile
+    userProjects = profile.project_set.all()
+    userExperiences = profile.experience_set.all().order_by('-is_current', '-to_date')
+    userEducations = profile.education_set.all().order_by('-is_current', '-to_date')
+    userSkills = profile.skill_set.all()
+    context = {
+        'profile': profile,
+        'userProjects': userProjects,
+        'userExperiences': userExperiences,
+        'userEducations': userEducations,
+        'userSkills': userSkills
+    }
+    return render(request, 'users/dashboard.html', context)

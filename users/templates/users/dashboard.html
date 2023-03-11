@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+
+<section class="container">
+    <p class="lead">
+      <!-- user icon -->
+      <i class="fas fa-user text-primary"></i>
+      Welcome {{ profile.name }}
+    </p>
+    <!-- Link buttons -->
+    <div class="dash-buttons">
+      <a href="EditProfile.html" class="btn">
+        <i class="fas fa-user-circle text-primary"></i>
+        Edit Profile</a
+      >
+      <a href="AddExperience.html" class="btn">
+        <i class="fab fa-black-tie text-primary"></i>
+        Add Experience</a
+      >
+      <a href="AddEducation.html" class="btn">
+        <i class="fas fa-graduation-cap text-primary"></i>
+        Add Education</a
+      >
+
+      <a href="AddProject.html" class="btn">
+        <i class="fas fa-diagram-project text-primary"></i>
+        Add Project</a
+      >
+    </div>
+    <h2 class="my-2">Experience Credentials</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Company</th>
+          <th class="hide-sm">Title</th>
+          <th class="hide-sm">Years</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for experience in userExperiences %}
+            <tr>
+            <td>{{experience.company}}</td>
+            <td class="hide-sm">{{experience.title}}</td>
+            <td class="hide-sm">
+                {{experience.from_date|date:"M Y"}} -
+                {% if experience.to_date %}
+                    {{experience.to_date|date:"M Y"}}
+                {% else %}
+                    <span class="text-primary">Active</span>
+                {% endif %}
+            </td>
+            <td>
+                <button class="btn btn-danger">Delete</button>
+            </td>
+            <td>
+                <button class="btn btn-success">Update</button>
+            </td>
+            </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+    <h2 class="my-2">Education Credentials</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Institution</th>
+          <th class="hide-sm">Degree</th>
+          <th class="hide-sm">Years</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for education in userEducations %}
+            <tr>
+                <td>{{education.school}}</td>
+                <td class="hide-sm" style="text-transform: capitalize;">{{education.degree}}</td>
+                <td class="hide-sm">
+                    {{education.from_date|date:"M Y"}} -
+                    {% if education.to_date %}
+                        {{education.to_date|date:"M Y"}}
+                    {% else %}
+                        <span class="text-primary">Active</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <button class="btn btn-danger">Delete</button>
+                </td>
+                <td>
+                    <button class="btn btn-success">Update</button>
+                </td>
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <h2 class="my-2">Projects Created</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th class="hide-sm">Votes</th>
+          <th class="hide-sm">Ratio</th>
+          <th class="hide-sm">Created</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for project in userProjects %}
+            <tr>
+                <td><a href="{% url 'project' project.id %}">{{project.title}}</a></td>
+                <td class="hide-sm">{{project.votes_count}}</td>
+                <td class="hide-sm">{{project.votes_ratio}}%</td>
+                <td class="hide-sm">{{project.created_at|date:"M Y"}}</td>
+                <td>
+                    <button class="btn btn-danger">Delete</button>
+                </td>
+                <td>
+                    <button class="btn btn-success">Update</button>
+                </td>
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <h2 class="my-2">Skills Credentials</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Skill</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for skill in userSkills %}
+                <tr>
+                    <td>{{skill.name}}</td>
+                    <td>
+                        <button class="btn btn-danger">Delete</button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="my-5">
+        <p class="my-1" style="color: red;">Danger Zone</p>
+        <button class="btn btn-danger">
+            <i class="fas fa-user-minus"></i>
+            Delete My Account
+        </button>
+    </div>
+  </section>
+
+{% endblock %}
