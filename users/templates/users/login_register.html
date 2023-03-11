@@ -2,22 +2,63 @@
 
 {% block content %}
 {% if page == 'register' %}
-<div class="container">
-    <form action="{% url 'register' %}" method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Register">
-    </form>
-</div>
+    <section class="container">
+        <p class="lead">
+        <!-- User account icon -->
+            <i class="fas fa-user text-primary"></i>
+            Create Your Account
+        </p>
+        <small>* = required field</small>
+        <form class="form" action="{% url 'register' %}" method="POST">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                <small>* {{field.label}}</small>
+                {{ field }}
+
+                <!-- Error message -->
+                {% if field.errors %}
+                    <p style="color: red;">
+                        {% for error in field.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </p>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <input type="submit" value="Register" class="btn btn-primary" />
+        </form>
+    <p class="my-1">
+      Already have an account?
+      <!-- Link to login -->
+      <a href="{% url 'login' %}">Sign In</a>
+    </p>
+  </section>
 {% else %}
-<div class="container">
-    <form action="{% url 'login' %}" method="POST">
-        {% csrf_token %}
-        <input type="text" name="username" placeholder="username">
-        <input type="password" name="password" placeholder="password">
-        <input type="submit" value="Login">
-    </form>
-</div>
+    <section class="container">
+        <!-- Alert (using material ui alert) -->
+        <p class="lead">
+        <!-- User account icon -->
+            <i class="fas fa-user text-primary"></i>
+            <span>Sign into your account</span>
+        </p>
+        <form class="form" action="{% url 'login' %}" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="text" name="username" placeholder="Username" required />
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" placeholder="Password" required />
+            </div>
+            <!-- Submit button to Home -->
+            <input type="submit" value="Login" class="btn btn-primary" />
+        </form>
+        <p class="my-1">
+            Don't have an account?
+            <!-- Link to register -->
+            <a href="{% url 'register' %}">Sign Up</a>
+        </p>
+    </section>
 {% endif %}
 
 {% endblock %}
