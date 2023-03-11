@@ -49,13 +49,12 @@ def userRegister(request):
             username = user.username.lower()
             user.save()
 
-            messages.success(request, "Account was created for " + username)
+            messages.success(request, "Registered successfully, Welcome" + username + "😁")
             login(request, user)
 
             return redirect('profiles')
         else:
-            for msg in form.error_messages:
-                messages.error(request, f"{msg}: {form.error_messages[msg]}")
+            messages.error(request, "An error has occured during registration.")
 
     context = {
         'form': form,
@@ -84,10 +83,8 @@ def profile(request, pk):
     mainSkills = obj.skill_set.exclude(description__exact="")
     otherSkills = obj.skill_set.filter(description__exact="")
 
-    # query all experiences sorted by is_current and then by to_date
     experiences = obj.experience_set.all().order_by('-is_current', '-to_date')
 
-    # query all educations sorted by is_current and then by to_date
     educations = obj.education_set.all().order_by('-is_current', '-to_date')
     context = {
         'profile': obj,
