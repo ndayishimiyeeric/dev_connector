@@ -12,7 +12,7 @@
     </p>
     <!-- Link buttons -->
     <div class="dash-buttons">
-      <a href="EditProfile.html" class="btn">
+      <a href="{% url 'edit-profile' %}" class="btn">
         <i class="fas fa-user-circle text-primary"></i>
         Edit Profile</a
       >
@@ -25,7 +25,7 @@
         Add Education</a
       >
 
-      <a href="AddProject.html" class="btn">
+      <a href="{% url 'create-project' %}" class="btn">
         <i class="fas fa-diagram-project text-primary"></i>
         Add Project</a
       >
@@ -119,10 +119,10 @@
                 <td class="hide-sm">{{project.votes_ratio}}%</td>
                 <td class="hide-sm">{{project.created_at|date:"M Y"}}</td>
                 <td>
-                    <button class="btn btn-danger">Delete</button>
+                    <a href="{% url 'delete-project' project.id %}" class="btn btn-danger">Delete</a>
                 </td>
                 <td>
-                    <button class="btn btn-success">Update</button>
+                    <a href="{% url 'update-project' project.id %}" class="btn btn-success">Update</a>
                 </td>
             </tr>
         {% endfor %}

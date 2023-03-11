@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+
+<section class="container">
+    <p class="lead">
+      <!-- user icon -->
+      <i class="fas fa-user text-primary"></i>
+      Let's get some information to make your profile stand out
+    </p>
+    <small>* = required field</small>
+    <form class="form" action="{% url 'edit-profile' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-group">
+            <small>{{ field.label }}</small>
+            {{ field }}
+        </div>
+        {% endfor %}
+        <input type="submit" class="btn btn-primary my-1" />
+        <a class="btn btn-light my-1" href="{% url 'dashboard' %}">Go Back</a>
+    </form>
+</section>
+
+{% endblock content %}

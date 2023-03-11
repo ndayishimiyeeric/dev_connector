@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
 from .models import Profile
-from .forms import CustomerUserCreationForm
+from .forms import CustomerUserCreationForm, ProfileForm
 
 # Create your views here.
 
@@ -53,7 +53,7 @@ def userRegister(request):
             messages.success(request, "Registered successfully, Welcome" + username + "😁")
             login(request, user)
 
-            return redirect('profiles')
+            return redirect('edit-profile')
         else:
             messages.error(request, "An error has occured during registration.")
 
@@ -113,3 +113,20 @@ def userDashboard(request):
         'userSkills': userSkills
     }
     return render(request, 'users/dashboard.html', context)
+
+@login_required(login_url='login')
+def editProfile(request):
+    profile = request.user.profile
+    form = ProfileForm(instance=profile)
+
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard')
+    
+    context = {
+        'profile': profile,
+        'form': form
+    }
+    return render(request, 'users/profile_form.html', context)
