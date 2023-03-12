@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<section class="container">
+    <div class="post-form">
+        <div class="post-form-header">
+            <h3 class="lead">Are you sure you want to delete {{object}}?</h3>
+        </div>
+        <form action="" method="POST" class="form my-1">
+            {% csrf_token %}
+            <a href="{{request.GET.next}}" class="btn">Go Back</a>
+            <input type="submit" value="Confirm" class="btn btn-danger my-1">
+        </form>
+    </div>
+</section>
+
+{% endblock %}

@@ -3,7 +3,7 @@ from django.forms import ModelForm
 from django import forms
 from django.forms.widgets import PasswordInput
 from django.contrib.auth.models import User
-from .models import Profile
+from .models import Profile, Skill
 
 
 
@@ -53,4 +53,15 @@ class ProfileForm(ModelForm):
             'website': forms.TextInput(attrs={'placeholder': 'Website URL'}),
             'twitter': forms.TextInput(attrs={'placeholder': 'Twitter URL'}),
             'youtube': forms.TextInput(attrs={'placeholder': 'YouTube URL'}),
+        }
+
+
+class SkillForm(ModelForm):
+    class Meta:
+        model = Skill
+        fields = ['name', 'description']
+
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Skill Name'}),
+            'description': forms.Textarea(attrs={'placeholder': 'Skill Description'}),
         }

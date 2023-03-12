@@ -29,6 +29,10 @@
         <i class="fas fa-diagram-project text-primary"></i>
         Add Project</a
       >
+      <a href="{% url 'create-skill' %}" class="btn">
+        <i class="fas fa-star-half-alt text-primary"></i>
+        Add Skill</a
+      >
     </div>
     <h2 class="my-2">Experience Credentials</h2>
     <table class="table">
@@ -119,7 +123,7 @@
                 <td class="hide-sm">{{project.votes_ratio}}%</td>
                 <td class="hide-sm">{{project.created_at|date:"M Y"}}</td>
                 <td>
-                    <a href="{% url 'delete-project' project.id %}" class="btn btn-danger">Delete</a>
+                    <a href="{% url 'delete-project' project.id %}?next=/dashboard" class="btn btn-danger">Delete</a>
                 </td>
                 <td>
                     <a href="{% url 'update-project' project.id %}" class="btn btn-success">Update</a>
@@ -139,9 +143,9 @@
         <tbody>
             {% for skill in userSkills %}
                 <tr>
-                    <td>{{skill.name}}</td>
+                    <td><a href="{% url 'update-skill' skill.id %}">{{skill.name}}</a></td>
                     <td>
-                        <button class="btn btn-danger">Delete</button>
+                        <a href="{% url 'delete-skill' skill.id %}?next=/dashboard" class="btn btn-danger">Delete</a>
                     </td>
                 </tr>
             {% endfor %}
