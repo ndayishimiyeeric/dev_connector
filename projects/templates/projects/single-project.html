@@ -6,18 +6,20 @@
     <!-- Link back to posts -->
     <a href="{% url 'projects' %}" class="btn">Back To Projects</a>
     <!-- Delete project if you are owner -->
-    <a href="{% url 'update-project' project.id %}" class="btn btn-success sm-my-1">Update Project</a>
+    {% if project.owner == request.user.profile %}
+        <a href="{% url 'update-project' project.id %}" class="btn btn-success sm-my-1">Update Project</a>
+    {% endif %}
     <!-- origin post -->
     <div class="project bg-white p-1 my-1">
       <div>
         <!-- Link to profile -->
-        <a href="#">
+        <a href="{% url 'user-profile' project.owner.id %}">
           <img
             class="round-img"
-            src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200"
+            src="{{project.owner.profile_image.url}}"
             alt=""
           />
-          <h4>John Doe</h4>
+          <h4>{{project.owner.name}}</h4>
         </a>
         <div class="project-feedback">
           <div class="project-votes">
