@@ -4,16 +4,16 @@
 
 <section class="container">
     <!-- Link back to posts -->
-    <a href="{% url 'projects' %}" class="btn">Back To Projects</a>
+    <a href="{{request.GET.next}}" class="btn">Back</a>
     <!-- Delete project if you are owner -->
     {% if project.owner == request.user.profile %}
-        <a href="{% url 'update-project' project.id %}" class="btn btn-success sm-my-1">Update Project</a>
+        <a href="{% url 'update-project' project.id %}" class="btn btn-success sm-my-1">Update</a>
     {% endif %}
     <!-- origin post -->
     <div class="project bg-white p-1 my-1">
       <div>
         <!-- Link to profile -->
-        <a href="{% url 'user-profile' project.owner.id %}">
+        <a href="{% url 'user-profile' project.owner.id %}?next=/projects/project/{{project.id}}">
           <img
             class="round-img"
             src="{{project.owner.profile_image.url}}"

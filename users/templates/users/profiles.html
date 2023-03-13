@@ -39,7 +39,7 @@
             <h2>{{profile.name}}</h2>
             <p>{{profile.headline|truncatechars:15}}</p>
             <p>{{profile.location|slice:"20"}}</p>
-            <a href="{% url 'user-profile' profile.id %}" class="btn btn-primary">View Profile</a>
+            <a href="{% url 'user-profile' profile.id %}?next=/" class="btn btn-primary">View Profile</a>
           </div>
         </div>
         <p class="hide-sm profile-desc">

@@ -4,7 +4,7 @@
 
 <section class="container">
     <!-- Link back to Developers -->
-    <a href="{% url 'profiles' %}" class="btn">Back to profiles</a>
+    <a href="{{request.GET.next}}" class="btn">Back</a>
 
     <div class="profile-grid my-1">
       <div class="profile-top bg-primary p-2">
@@ -121,7 +121,7 @@
         {% for project in profile.project_set.all %}
           <div class="repo bg-white my-1 p-1">
             <div>
-              <h4><a href="{% url 'project' project.id %}">{{project.title}}</a></h4>
+              <h4><a href="{% url 'project' project.id %}?next=/profile/{{profile.id}}">{{project.title}}</a></h4>
               <p>{{project.description|truncatechars:200}}</p>
             </div>
             <div>
