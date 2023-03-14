@@ -1,9 +1,9 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import ModelForm
 from django import forms
-from django.forms.widgets import PasswordInput
+from django.forms.widgets import PasswordInput, DateInput
 from django.contrib.auth.models import User
-from .models import Profile, Skill
+from .models import Profile, Skill, Experience, Education
 
 
 class PasswordInput(PasswordInput):
@@ -65,4 +65,26 @@ class SkillForm(ModelForm):
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': 'Skill Name'}),
             'description': forms.Textarea(attrs={'placeholder': 'Skill Description'}),
+        }
+
+
+class ExperienceForm(ModelForm):
+    class Meta:
+        model = Experience
+        fields = ['title', 'company', 'location', 'from_date', 'to_date', 'is_current', 'description']
+
+        labels = {
+            'from_date': 'From',
+            'to_date': 'To',
+            'is_current': 'Current Job',
+        }
+
+        widgets = {
+            'title': forms.TextInput(attrs={'placeholder': '* Job Title'}),
+            'company': forms.TextInput(attrs={'placeholder': '* Company Name'}),
+            'location': forms.TextInput(attrs={'placeholder': '* City & state suggested (eg. Boston, MA)'}),
+            'description': forms.Textarea(attrs={'placeholder': '* Job Description'}),
+            'from_date': DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),
+            'to_date': DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),
+            'is_current': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
