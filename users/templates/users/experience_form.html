@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <section class="container">
+      <p class="lead">
+        <!-- user icon -->
+        <i class="fas fa-code-branch text-primary"></i>
+        {{ text }}
+      </p>
+      <small>* = required field</small>
+      <form class="form" action="" method="POST">
+        {% csrf_token %}
+          {% for field in form %}
+            <div class="form-group">
+                {{ field.label }}
+                {{ field }}
+                {% if field.errors %}
+                    <p style="color: red;">
+                        {% for error in field.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </p>
+                {% endif %}
+            </div>
+          {% endfor %}
+        <input type="submit" class="btn btn-primary my-1" />
+        {% if page == 'update' %}
+            <a href="{% url 'delete-experience' experience.id %}?next=/dashboard" class="btn btn-danger my-1">Delete </a>
+        {% endif %}
+        <!-- go back to dashboard -->
+        <a class="btn my-1" href="{% url 'dashboard' %}">Go Back</a>
+      </form>
+    </section>
+{% endblock %}

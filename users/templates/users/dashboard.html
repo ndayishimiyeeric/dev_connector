@@ -8,7 +8,7 @@
     <p class="lead">
       <!-- user icon -->
       <i class="fas fa-user text-primary"></i>
-      Welcome {{ profile.name }}
+      Welcome <a href="{% url 'user-profile' profile.id %}?next=/dashboard">{{ profile.name }}</a>
     </p>
     <!-- Link buttons -->
     <div class="dash-buttons">
@@ -16,7 +16,7 @@
         <i class="fas fa-user-circle text-primary"></i>
         Edit Profile</a
       >
-      <a href="AddExperience.html" class="btn">
+      <a href="{% url 'add-experience' %}" class="btn">
         <i class="fab fa-black-tie text-primary"></i>
         Add Experience</a
       >
@@ -59,10 +59,10 @@
                 {% endif %}
             </td>
             <td>
-                <button class="btn btn-danger">Delete</button>
+                <a href="{% url 'delete-experience' experience.id %}?next=/dashboard" class="btn btn-danger">Delete</a>
             </td>
             <td>
-                <button class="btn btn-success">Update</button>
+                <a href="{% url 'update-experience' experience.id %}" class="btn btn-success">Update</a>
             </td>
             </tr>
         {% endfor %}
