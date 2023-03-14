@@ -2,10 +2,11 @@ from django.forms import ModelForm
 from django import forms
 from .models import Project, Review, Tag
 
+
 class ProjectForm(ModelForm):
     class Meta:
         model = Project
-        fields = ['title', 'description', 'project_image','source_code', 'live_preview', 'tags']
+        fields = ['title', 'description', 'project_image', 'source_code', 'live_preview', 'tags']
 
         widgets = {
             'title': forms.TextInput(attrs={'placeholder': '* Project title'}),

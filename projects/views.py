@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Project, Review, Tag
 from .forms import ProjectForm
 
+
 # Create your views here.
 
 @login_required(login_url="login")
@@ -12,6 +13,7 @@ def projects(request):
         "projects": projects
     }
     return render(request, "projects/projects.html", context)
+
 
 @login_required(login_url="login")
 def project(request, pk):
@@ -23,6 +25,7 @@ def project(request, pk):
         "tags": tags,
     }
     return render(request, "projects/single-project.html", context)
+
 
 @login_required(login_url="login")
 def createProject(request):
@@ -42,6 +45,7 @@ def createProject(request):
     }
     return render(request, "projects/project_form.html", context)
 
+
 @login_required(login_url="login")
 def updateProject(request, pk):
     profile = request.user.profile
@@ -59,6 +63,7 @@ def updateProject(request, pk):
         "page_title": f"Update {project.title}",
     }
     return render(request, "projects/project_form.html", context)
+
 
 @login_required(login_url="login")
 def deleteProject(request, pk):

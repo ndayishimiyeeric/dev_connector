@@ -6,17 +6,18 @@ from django.contrib.auth.models import User
 from .models import Profile, Skill
 
 
-
 class PasswordInput(PasswordInput):
     def __init__(self, attrs=None):
         super().__init__(attrs={'placeholder': '••••••••', **(attrs or {})})
 
+
 class CustomerUserCreationForm(UserCreationForm):
     password1 = forms.CharField(label='Password', widget=PasswordInput)
     password2 = forms.CharField(label='Confirm Password', widget=PasswordInput)
+
     class Meta:
         model = User
-        fields = ['first_name','username', 'email', 'password1', 'password2']
+        fields = ['first_name', 'username', 'email', 'password1', 'password2']
         labels = {
             'first_name': 'Name',
         }
@@ -31,7 +32,7 @@ class CustomerUserCreationForm(UserCreationForm):
 class ProfileForm(ModelForm):
     class Meta:
         model = Profile
-        fields = ['name','username', 'email', 'headline', 'bio',
+        fields = ['name', 'username', 'email', 'headline', 'bio',
                   'profile_image', 'location', 'linkedin', 'github',
                   'website', 'twitter', 'youtube']
         labels = {
@@ -39,7 +40,7 @@ class ProfileForm(ModelForm):
             'bio': 'About Me',
             'profile_image': 'Profile Picture',
         }
-        
+
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': 'Full Name'}),
             'username': forms.TextInput(attrs={'placeholder': 'Username'}),

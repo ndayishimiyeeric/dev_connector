@@ -1,7 +1,6 @@
 from django.urls import path
-from .views import profiles, profile, userLogin, userLogout, userWelcome, userRegister, userDashboard, editProfile, createSkill, updateSkill, deleteSkill
-
-
+from .views import profiles, profile, userLogin, userLogout, userWelcome, userRegister, userDashboard, editProfile, \
+    createSkill, updateSkill, deleteSkill
 
 urlpatterns = [
     path('', profiles, name='profiles'),

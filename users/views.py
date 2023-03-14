@@ -6,12 +6,13 @@ from django.contrib.auth.models import User
 from .models import Profile
 from .forms import CustomerUserCreationForm, ProfileForm, SkillForm
 
+
 # Create your views here.
 
 def userLogin(request):
     if request.user.is_authenticated:
         return redirect('profiles')
-    
+
     page = 'login'
 
     if request.method == 'POST':
@@ -21,7 +22,7 @@ def userLogin(request):
             user = User.objects.get(username=username)
         except:
             messages.error(request, "Username does not exist")
-        
+
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
@@ -35,14 +36,14 @@ def userLogin(request):
     }
     return render(request, 'users/login_register.html', context)
 
-def userRegister(request):
 
+def userRegister(request):
     if request.user.is_authenticated:
         return redirect('profiles')
-    
+
     form = CustomerUserCreationForm()
     page = 'register'
-    
+
     if request.method == 'POST':
         form = CustomerUserCreationForm(request.POST)
         if form.is_valid():
@@ -64,13 +65,16 @@ def userRegister(request):
 
     return render(request, 'users/login_register.html', context)
 
+
 def userLogout(request):
     logout(request)
     messages.success(request, "You have been logged out!")
     return redirect('welcome')
 
+
 def userWelcome(request):
     return render(request, 'users/welcome.html')
+
 
 @login_required(login_url='login')
 def profiles(request):
@@ -79,6 +83,7 @@ def profiles(request):
         'profiles': profiles
     }
     return render(request, 'users/profiles.html', context)
+
 
 @login_required(login_url='login')
 def profile(request, pk):
@@ -98,6 +103,7 @@ def profile(request, pk):
     }
     return render(request, 'users/profile.html', context)
 
+
 @login_required(login_url='login')
 def userDashboard(request):
     profile = request.user.profile
@@ -114,6 +120,7 @@ def userDashboard(request):
     }
     return render(request, 'users/dashboard.html', context)
 
+
 @login_required(login_url='login')
 def editProfile(request):
     profile = request.user.profile
@@ -124,7 +131,7 @@ def editProfile(request):
         if form.is_valid():
             form.save()
             return redirect('dashboard')
-    
+
     context = {
         'profile': profile,
         'form': form
@@ -145,7 +152,7 @@ def createSkill(request):
             skill.save()
             messages.success(request, "Skill created successfully")
             return redirect('dashboard')
-    
+
     context = {
         'profile': profile,
         'form': form,
@@ -167,7 +174,7 @@ def updateSkill(request, pk):
             form.save()
             messages.success(request, "Skill updated successfully")
             return redirect('dashboard')
-    
+
     context = {
         'profile': profile,
         'form': form,
@@ -185,7 +192,7 @@ def deleteSkill(request, pk):
     if request.method == "POST":
         skill.delete()
         messages.success(request, "Skill deleted successfully")
-        return redirect('dashboard') 
+        return redirect('dashboard')
     context = {
         "object": skill,
     }
