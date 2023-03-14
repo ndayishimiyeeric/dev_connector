@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
 from .models import Profile
-from .forms import CustomerUserCreationForm, ProfileForm, SkillForm
+from .forms import CustomerUserCreationForm, ProfileForm, SkillForm, ExperienceForm
 
 
 # Create your views here.
@@ -196,4 +196,73 @@ def deleteSkill(request, pk):
     context = {
         "object": skill,
     }
+    return render(request, "delete_component.html", context)
+
+
+@login_required(login_url='login')
+def addExperience(request):
+    profile = request.user.profile
+    form = ExperienceForm()
+
+    if request.method == 'POST':
+        form = ExperienceForm(request.POST)
+
+        if form.is_valid():
+            experience = form.save(commit=False)
+            experience.owner = profile
+            experience.save()
+            messages.success(request, "Experience created successfully")
+            return redirect('dashboard')
+        else:
+            messages.error(request, "An error has occurred during experience creation 😔 try again")
+
+    context = {
+        'profile': profile,
+        'form': form,
+        'text': 'Add any developer/programming position that you have had in the past',
+        'page': 'Add'
+    }
+
+    return render(request, 'users/experience_form.html', context)
+
+
+@login_required(login_url='login')
+def updateExperience(request, pk):
+    profile = request.user.profile
+    experience = profile.experience_set.get(id=pk)
+    form = ExperienceForm(instance=experience)
+
+    if request.method == 'POST':
+        form = ExperienceForm(request.POST, instance=experience)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Experience updated successfully")
+            return redirect('dashboard')
+        else:
+            messages.error(request, "An error has occurred during experience update 😔 try again")
+
+    context = {
+        'profile': profile,
+        'form': form,
+        'text': f'Update experience ({experience.title})',
+        'page': 'update',
+        'experience': experience,
+    }
+    return render(request, 'users/experience_form.html', context)
+
+
+@login_required(login_url='login')
+def deleteExperience(request, pk):
+    profile = request.user.profile
+    experience = profile.experience_set.get(id=pk)
+
+    if request.method == "POST":
+        experience.delete()
+        messages.success(request, "Experience deleted successfully")
+        return redirect('dashboard')
+
+    context = {
+        "object": experience,
+    }
+
     return render(request, "delete_component.html", context)

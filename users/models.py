@@ -53,6 +53,8 @@ class Experience(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
 
     def clean(self):
+        if self.is_current:
+            self.to_date = None
         if (self.is_current and self.to_date is not None) or self.from_date is None or (
                 self.to_date is None and not self.is_current) or (self.to_date == self.from_date):
             raise ValidationError('Invalid date range, please check your dates.')
@@ -91,6 +93,8 @@ class Education(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
 
     def clean(self):
+        if self.is_current:
+            self.to_date = None
         if (self.is_current and self.to_date is not None) or self.from_date is None or (
                 self.to_date is None and not self.is_current) or (self.to_date == self.from_date):
             raise ValidationError('Invalid date range, please check your dates.')
