@@ -31,9 +31,11 @@
     <section class="projects-grid main_container">
       {% for project in projects %}
         <div class="wrapper">
-          <div class="pic">
-            <img src="{{project.project_image.url}}" alt="project image" />
-          </div>
+          <a href="{% url 'project' project.id %}?next=/projects">
+            <div class="pic">
+                <img src="{{project.project_image.url}}" alt="project image" />
+            </div>
+          </a>
           <a href="{% url 'project' project.id %}?next=/projects" class="header">{{project.title|truncatechars:27}}</a>
           <div class="content">
             <a href="{% url 'user-profile' project.owner.id %}?next=/projects" class="project-owner">
@@ -53,11 +55,6 @@
               {% endfor %}
             </div>
           </div>
-          <a href="{% url 'project' project.id %}?next=/projects">
-            <div class="readmore">
-              <b>View more</b> <i class="fas fa-angle-right"></i>
-            </div>
-          </a>
         </div>
       {% endfor %}
     </section>

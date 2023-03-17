@@ -3,13 +3,11 @@
 {% block content %}
 
 <section class="container">
-    <p class="lead">
-      <!-- user icon -->
-      <i class="fas fa-diagram-project text-primary"></i>
-      {{page_title}}
-    </p>
+    <a class="btn my-1" href="{% url 'dashboard' %}">Go Back</a>
     <div class="post-form">
-      <small>* = required field</small>
+      <div class="post-form-header bg-primary">
+          <h3><i class="fas fa-diagram-project"></i> {{page_title}}</h3>
+      </div>
       <form class="form my-1" method="POST" action="" enctype="multipart/form-data">
         {% csrf_token %}
 
