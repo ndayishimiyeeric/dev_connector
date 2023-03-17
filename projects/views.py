@@ -60,7 +60,7 @@ def updateProject(request, pk):
 
     context = {
         "form": form,
-        "page_title": f"Update {project.title}",
+        "page_title": f"Update ({project.title})",
     }
     return render(request, "projects/project_form.html", context)
 
