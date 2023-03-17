@@ -3,12 +3,9 @@
 {% block content %}
 {% if page == 'register' %}
     <section class="container">
-        <p class="lead">
-        <!-- User account icon -->
-            <i class="fas fa-user text-primary"></i>
-            Create Your Account
-        </p>
-        <small>* = required field</small>
+        <div class="post-form-header bg-primary">
+          <h3><i class="fas fa-user"></i> Create Your Account</h3>
+        </div>
         <form class="form" action="{% url 'register' %}" method="POST">
             {% csrf_token %}
             {% for field in form %}
@@ -36,12 +33,9 @@
   </section>
 {% else %}
     <section class="container">
-        <!-- Alert (using material ui alert) -->
-        <p class="lead">
-        <!-- User account icon -->
-            <i class="fas fa-user text-primary"></i>
-            <span>Sign into your account</span>
-        </p>
+        <div class="post-form-header bg-primary">
+          <h3><i class="fas fa-user"></i> <span>Sign Into Your Account</span></h3>
+        </div>
         <form class="form" action="{% url 'login' %}" method="POST">
             {% csrf_token %}
             <div class="form-group">

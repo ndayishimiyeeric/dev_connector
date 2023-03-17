@@ -20,7 +20,7 @@
         <i class="fab fa-black-tie text-primary"></i>
         Add Experience</a
       >
-      <a href="AddEducation.html" class="btn">
+      <a href="{% url 'add-education' %}" class="btn">
         <i class="fas fa-graduation-cap text-primary"></i>
         Add Education</a
       >
@@ -94,10 +94,10 @@
                     {% endif %}
                 </td>
                 <td>
-                    <button class="btn btn-danger">Delete</button>
+                    <a href="{% url 'delete-education' education.id %}?next=/dashboard" class="btn btn-danger">Delete</a>
                 </td>
                 <td>
-                    <button class="btn btn-success">Update</button>
+                    <a href="{% url 'update-education' education.id %}" class="btn btn-success">Update</a>
                 </td>
             </tr>
         {% endfor %}
@@ -118,7 +118,7 @@
       <tbody>
         {% for project in userProjects %}
             <tr>
-                <td><a href="{% url 'project' project.id %}">{{project.title}}</a></td>
+                <td><a href="{% url 'project' project.id %}?next=/dashboard">{{project.title}}</a></td>
                 <td class="hide-sm">{{project.votes_count}}</td>
                 <td class="hide-sm">{{project.votes_ratio}}%</td>
                 <td class="hide-sm">{{project.created_at|date:"M Y"}}</td>
