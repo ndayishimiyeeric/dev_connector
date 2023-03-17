@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
 from .models import Profile
-from .forms import CustomerUserCreationForm, ProfileForm, SkillForm, ExperienceForm
+from .forms import CustomerUserCreationForm, ProfileForm, SkillForm, ExperienceForm, EducationForm
 
 
 # Create your views here.
@@ -219,7 +219,7 @@ def addExperience(request):
     context = {
         'profile': profile,
         'form': form,
-        'text': 'Add any developer/programming position that you have had in the past',
+        'text': ' Add any developer/programming position that you have had in the past',
         'page': 'Add'
     }
 
@@ -244,7 +244,7 @@ def updateExperience(request, pk):
     context = {
         'profile': profile,
         'form': form,
-        'text': f'Update experience ({experience.title})',
+        'text': f' Update experience ({experience.title})',
         'page': 'update',
         'experience': experience,
     }
@@ -266,3 +266,71 @@ def deleteExperience(request, pk):
     }
 
     return render(request, "delete_component.html", context)
+
+
+@login_required(login_url='login')
+def addEducation(request):
+    profile = request.user.profile
+    form = EducationForm()
+
+    if request.method == 'POST':
+        form = EducationForm(request.POST)
+
+        if form.is_valid():
+            education = form.save(commit=False)
+            education.owner = profile
+            education.save()
+            messages.success(request, "Education created successfully")
+            return redirect("dashboard")
+        else:
+            messages.error(request, "An error has occurred during education creation 😔 try again")
+    context = {
+        'profile': profile,
+        'form': form,
+        'text': ' Add any school, bootcamp, etc that you have attended',
+        'page': 'Add'
+    }
+    return render(request, "users/education_form.html", context)
+
+
+@login_required(login_url='login')
+def updateEducation(request, pk):
+    profile = request.user.profile
+    education = profile.education_set.get(id=pk)
+    form = EducationForm(instance=education)
+
+    if request.method == 'POST':
+        form = EducationForm(request.POST, instance=education)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Education updated successfully")
+            return redirect("dashboard")
+        else:
+            messages.error(request, "An error has occurred during education update 😔 try again")
+
+    context = {
+        'form': form,
+        'text': f' Update education ({education})',
+        'page': 'update',
+        'profile': profile,
+        'education': education
+    }
+
+    return render(request, 'users/education_form.html', context)
+
+
+@login_required(login_url='login')
+def deleteEducation(request, pk):
+    profile = request.user.profile
+    education = profile.education_set.get(id=pk)
+
+    if request.method == 'POST':
+        education.delete()
+        messages.success(request, "Education deleted successfully")
+        return redirect('dashboard')
+
+    context = {
+        'object': education,
+    }
+    return render(request, 'delete_component.html', context)
