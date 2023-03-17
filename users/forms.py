@@ -88,3 +88,25 @@ class ExperienceForm(ModelForm):
             'to_date': DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),
             'is_current': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
+
+
+class EducationForm(ModelForm):
+    class Meta:
+        model = Education
+        fields = ['school', 'degree', 'field_of_study', 'from_date', 'to_date', 'is_current', 'description']
+
+        labels = {
+            'from_date': 'From',
+            'to_date': 'To',
+            'is_current': 'Current School',
+        }
+
+        widgets = {
+            'school': forms.TextInput(attrs={'placeholder': '* School Name'}),
+            'degree': forms.Select(attrs={'placeholder': '* Degree or Certification'}),
+            'field_of_study': forms.TextInput(attrs={'placeholder': '* Field of Study'}),
+            'description': forms.Textarea(attrs={'placeholder': '* Description'}),
+            'from_date': DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),
+            'to_date': DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),
+            'is_current': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }
