@@ -725,8 +725,8 @@ img {
   width: auto;
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start;
-  gap: 1rem;
+  justify-content: space-evenly;
+  gap: 1.5rem;
   padding: 1rem;
 }
 .profiles-grid .profile-card {
@@ -736,6 +736,7 @@ img {
   gap: 0.5rem;
   padding: 1rem;
   border-radius: 0.5rem;
+  box-shadow: 0px 0px 10px #999;
 }
 @media (max-width: 540px) {
   .profiles-grid .profile-card {
@@ -786,8 +787,8 @@ img {
   justify-content: flex-start;
   align-items: center;
 }
-@media (max-width: 849px) {
-  .profiles-grid .profile-card ul {
+@media (max-width: 745px) {
+  .profiles-grid .profile-card .hide-m {
     display: none;
   }
 }
@@ -828,11 +829,12 @@ img {
   transform: scale(1.1);
 }
 
-a.header {
-  padding: 0 20px;
+.header {
+  margin-left: 20px;
   font-size: 18px;
   font-weight: bold;
   font-style: italic;
+  text-align: justify;
 }
 
 div.content {
@@ -906,9 +908,9 @@ a .readmore:hover i {
   width: auto;
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start;
-  gap: 1rem;
-  padding: 1rem;
+  justify-content: space-evenly;
+  gap: 1.5rem;
+  padding: 1rem 2rem;
 }
 
 .pagination {
