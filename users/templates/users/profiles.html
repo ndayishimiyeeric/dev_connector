@@ -13,13 +13,13 @@
       </p>
     </div>
     <div class="hero-search_form">
-      <form action="" class="search_form">
+      <form action="{% url 'profiles' %}" method="get" class="search_form">
         <input
           type="text"
-          placeholder="Developer name"
-          name="title"
+          placeholder="Developer by name, skill, headline"
+          name="query"
           class="search_form-input"
-          required
+          value="{{search_query}}"
         />
         <input
           type="submit"
@@ -39,14 +39,14 @@
             <h2>{{profile.name}}</h2>
             <p>{{profile.headline|truncatechars:15}}</p>
             <p>{{profile.location|slice:"20"}}</p>
-            <a href="{% url 'user-profile' profile.id %}?next=/" class="btn btn-primary">View Profile</a>
+            <a href="{% url 'user-profile' profile.id %}?next=/?query={{ search_query }}" class="btn btn-primary">View Profile</a>
           </div>
         </div>
         <p class="hide-sm profile-desc">
           {{profile.bio|truncatechars:150}}
         </p>
       <!-- Skills -->
-        <div class="hide-sm tags">
+        <div class="hide-sm hide-m tags">
           {% for skill in profile.skill_set.all|slice:5 %}
             <span class="tag tag--outline"><small style="font-size: 13px;">{{skill}}</small></span>
           {% endfor %}
