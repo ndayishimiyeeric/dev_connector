@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from .models import Profile
 from .forms import CustomerUserCreationForm, ProfileForm, SkillForm, ExperienceForm, EducationForm
+from .utils import searchProfiles
 
 
 # Create your views here.
@@ -78,9 +79,10 @@ def userWelcome(request):
 
 @login_required(login_url='login')
 def profiles(request):
-    profiles = Profile.objects.all()
+    search_query, profiles = searchProfiles(request)
     context = {
-        'profiles': profiles
+        'profiles': profiles,
+        'search_query': search_query
     }
     return render(request, 'users/profiles.html', context)
 
