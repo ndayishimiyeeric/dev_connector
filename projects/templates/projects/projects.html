@@ -3,26 +3,26 @@
 {% block content %}
 
  <main class="home">
-    <section class="main_container hero bg-light">
+    <section class="main_container hero hero-black">
         <div class="hero-showcase">
-          <p class="lead">
+          <p class="lead text-gradient">
             <i class="fa fa-diagram-project"></i>
             Welcome to the developers community
           </p>
         </div>
         <div class="hero-search_form">
-          <form action="" class="search_form">
+          <form action="{% url 'projects' %}" method="get" class="search_form">
             <input
               type="text"
-              placeholder="Project title"
-              name="title"
+              placeholder="Project by title, owner, description"
+              name="query"
               class="search_form-input"
-              required
+              value="{{search_query}}"
             />
             <input
               type="submit"
               value="Search"
-              class="btn btn-dark"
+              class="btn btn-accent-gradient"
               style="min-width: 5%"
             />
           </form>
@@ -31,12 +31,12 @@
     <section class="projects-grid main_container">
       {% for project in projects %}
         <div class="wrapper">
-          <a href="{% url 'project' project.id %}?next=/projects">
+          <a href="{% url 'project' project.id %}?next=/projects/?query={{ search_query }}">
             <div class="pic">
                 <img src="{{project.project_image.url}}" alt="project image" />
             </div>
           </a>
-          <a href="{% url 'project' project.id %}?next=/projects" class="header">{{project.title|truncatechars:27}}</a>
+          <p class="header"><a href="{% url 'project' project.id %}?next=/projects/?query={{ search_query }}">{{project.title|truncatechars:27}}</a></p>
           <div class="content">
             <a href="{% url 'user-profile' project.owner.id %}?next=/projects" class="project-owner">
               <img
