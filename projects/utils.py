@@ -24,7 +24,7 @@ def projectsPagination(request, projects, results):
         rightIndex = pagination.num_pages + 1
 
     custom_range = range(leftIndex, rightIndex)
-    return custom_range, projects
+    return page, custom_range, projects
 
 
 def searchProjects(request):

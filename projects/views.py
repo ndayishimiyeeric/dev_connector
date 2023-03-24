@@ -12,12 +12,13 @@ from .utils import searchProjects, projectsPagination
 def projects(request):
     search_query, projects = searchProjects(request)
     # pagination
-    custom_range, projects = projectsPagination(request, projects, 5)
+    page, custom_range, projects = projectsPagination(request, projects, 5)
 
     context = {
         "projects": projects,
         "search_query": search_query,
         "custom_range": custom_range,
+        "page": page,
     }
     return render(request, "projects/projects.html", context)
 

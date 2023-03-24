@@ -85,29 +85,27 @@
     <!-- Reviews div -->
     <div class="reviews">
       <!-- Single review -->
+      {% for review in project.review_set.all %}
       <div class="review bg-white my-1">
-        <!-- enter icon -->
         <i class="fas fa-arrow-turn-right turn-icon"></i>
         <div class="review-body">
-          <a href="#" class="review-owner">
+          <a href="{% url 'user-profile' review.owner.id %}?next=/projects/project/{{ project.id }}/" class="review-owner">
             <img
               class="round-img"
-              src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200"
+              src="{{review.owner.profile_image.url}}"
               alt=""
             />
-            <h4>John Doe</h4>
+            <h4>{{ review.owner.name }}</h4>
           </a>
           <div>
             <p class="review-comment">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint
-              possimus corporis sunt necessitatibus! Minus nesciunt soluta
-              suscipit nobis. Amet accusamus distinctio cupiditate blanditiis
-              dolor? Illo perferendis eveniet cum cupiditate aliquam?
+                {{review.body}}
             </p>
           </div>
         </div>
       </div>
       <!-- End of single comment -->
+      {% endfor %}
     </div>
   </section>
 {% endblock content %}

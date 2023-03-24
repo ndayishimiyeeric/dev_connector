@@ -38,7 +38,7 @@
           </a>
           <p class="header"><a href="{% url 'project' project.id %}?next=/projects/?query={{ search_query }}">{{project.title|truncatechars:27}}</a></p>
           <div class="content">
-            <a href="{% url 'user-profile' project.owner.id %}?next=/projects" class="project-owner">
+            <a href="{% url 'user-profile' project.owner.id %}?next=/projects/?query={{ search_query }}&page={{ page }}" class="project-owner">
               <img
                 src="{{project.owner.profile_image.url}}"
                 alt="{{project.owner.name}}}"
