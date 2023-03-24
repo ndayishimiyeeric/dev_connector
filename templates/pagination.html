@@ -12,7 +12,7 @@
             {% endif %}
         {% endfor %}
 
-        {% if projects.has_next %}
+        {% if queryset.has_next %}
             <li><a href="?page={{ queryset.next_page_number }}" class="btn">Next &#10095;</a></li>
         {% endif %}
     </ul>
