@@ -48,12 +48,14 @@
       <!-- Skills -->
         <div class="hide-sm hide-m tags">
           {% for skill in profile.skill_set.all|slice:5 %}
-            <span class="tag tag--outline"><small style="font-size: 13px;">{{skill}}</small></span>
+            <span class="tag tag--pill"><small style="font-size: 13px;">{{skill}}</small></span>
           {% endfor %}
         </div>
       </div>
     {% endfor %}
   </section>
+
+  {% include 'pagination.html' with queryset=profiles custom_range=custom_range %}
   
 </main>
 
