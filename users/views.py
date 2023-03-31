@@ -5,7 +5,8 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from .models import Profile
 from .forms import CustomerUserCreationForm, ProfileForm, SkillForm, ExperienceForm, EducationForm
-from .utils import searchProfiles, profilesPaginator
+from .utils import searchProfiles
+from constants.utils import customPaginator
 
 
 # Create your views here.
@@ -81,7 +82,7 @@ def userWelcome(request):
 def profiles(request):
     search_query, profiles = searchProfiles(request)
     # pagination
-    custom_range, profiles = profilesPaginator(request, profiles, 3)
+    page, custom_range, profiles = customPaginator(request, profiles, 3)
 
     context = {
         'profiles': profiles,
@@ -96,6 +97,8 @@ def profile(request, pk):
     obj = Profile.objects.get(id=pk)
     mainSkills = obj.skill_set.exclude(description__exact="")
     otherSkills = obj.skill_set.filter(description__exact="")
+    userProjects = obj.project_set.all()
+    page, custom_range, userProjects = customPaginator(request, userProjects, 3)
 
     experiences = obj.experience_set.all().order_by('-is_current', '-to_date')
 
@@ -105,7 +108,9 @@ def profile(request, pk):
         'mainSkills': mainSkills,
         'otherSkills': otherSkills,
         'experiences': experiences,
-        'educations': educations
+        'educations': educations,
+        'userProjects': userProjects,
+        'custom_range': custom_range
     }
     return render(request, 'users/profile.html', context)
 
