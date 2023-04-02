@@ -24,6 +24,26 @@ class Project(models.Model):
     class Meta:
         ordering = ['created_at']
 
+    @property
+    def save_votes(self):
+        reviews = self.review_set.all()
+        voteCount = reviews.count()
+        upVoteCount = reviews.filter(value='up').count()
+
+        if voteCount > 0:
+            votes_ratio = (upVoteCount / voteCount) * 100
+        else:
+            votes_ratio = 0
+
+        self.votes_count = voteCount
+        self.votes_ratio = votes_ratio
+        self.save()
+
+    @property
+    def getReviewers(self):
+        reviewers = self.review_set.all().values_list('owner__id', flat=True)
+        return reviewers
+
 
 class Review(models.Model):
     REVIEW_CHOICES = (

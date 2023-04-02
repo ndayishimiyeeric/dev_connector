@@ -65,19 +65,15 @@
       <div class="post-form-header bg-primary">
         <h3>Leave A Review</h3>
       </div>
-      <form class="form my-1">
+      <form class="form my-1" action="{% url 'project' project.id %}" method="POST">
         <!-- dropdown -->
-        <select name="status" class="my-1">
-          <option value="0">* Vote</option>
-          <option value="up">Up Vote</option>
-          <option value="down">Down Vote</option>
-        </select>
-        <textarea
-          name="text"
-          cols="30"
-          rows="5"
-          placeholder="Leave a comment on this project"
-        ></textarea>
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+                <small>{{field.label}}</small>
+                {{field}}
+            </div>
+        {% endfor %}
         <input type="submit" class="btn btn-dark my-1" value="Submit" />
       </form>
     </div>
@@ -86,24 +82,25 @@
     <div class="reviews">
       <!-- Single review -->
       {% for review in project.review_set.all %}
-      <div class="review bg-white my-1">
-        <i class="fas fa-arrow-turn-right turn-icon"></i>
-        <div class="review-body">
-          <a href="{% url 'user-profile' review.owner.id %}?next=/projects/project/{{ project.id }}/" class="review-owner">
-            <img
-              class="round-img"
-              src="{{review.owner.profile_image.url}}"
-              alt=""
-            />
-            <h4>{{ review.owner.name }}</h4>
-          </a>
-          <div>
-            <p class="review-comment">
-                {{review.body}}
-            </p>
+        {% if review.body %}
+            <div class="review bg-white my-1">
+          <!-- enter icon -->
+          <i class="fas fa-arrow-turn-right turn-icon"></i>
+          <div class="review-body" style="width: 100%;">
+            <a href="{% url 'user-profile' review.owner.id %}?next={{ request.path }}" class="review-owner">
+              <img
+                class="round-img"
+                src="{{review.owner.profile_image.url}}"
+                alt=""
+              />
+              <h4>{{ review.owner.name }}</h4>
+            </a>
+            <div>
+              <p class="review-comment">{{ review.body }}</p>
+            </div>
           </div>
         </div>
-      </div>
+        {% endif %}
       <!-- End of single comment -->
       {% endfor %}
     </div>

@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from .models import Project, Review, Tag
-from .forms import ProjectForm
+from .forms import ProjectForm, ReviewForm
 from .utils import searchProjects
 from constants.utils import customPaginator
 
@@ -27,10 +28,22 @@ def projects(request):
 def project(request, pk):
     obj = Project.objects.get(id=pk)
     tags = obj.tags.all()
+    form = ReviewForm()
+
+    if request.method == "POST":
+        form = ReviewForm(request.POST)
+        review = form.save(commit=False)
+        review.project = obj
+        review.owner = request.user.profile
+        review.save()
+        var = obj.save_votes
+        messages.success(request, f"successfully reviewed {obj}")
+        return redirect('project', obj.id)
 
     context = {
         "project": obj,
         "tags": tags,
+        "form": form,
     }
     return render(request, "projects/single-project.html", context)
 

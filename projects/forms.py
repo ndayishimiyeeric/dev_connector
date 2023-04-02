@@ -15,3 +15,18 @@ class ProjectForm(ModelForm):
             'live_preview': forms.TextInput(attrs={'placeholder': 'Live Preview'}),
             'tags': forms.CheckboxSelectMultiple(),
         }
+
+
+class ReviewForm(ModelForm):
+    class Meta:
+        model = Review
+        fields = ['value', 'body']
+
+        labels = {
+            'value': 'Vote',
+            'body': 'Comment',
+        }
+
+        widgets = {
+            'body': forms.Textarea(attrs={'cols': 30, 'rows': 5, 'placeholder': 'Leave a comment'}),
+        }
