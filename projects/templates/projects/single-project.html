@@ -60,23 +60,37 @@
       </div>
     </div>
 
-    <!-- Add Reviw form -->
-    <div class="post-form">
-      <div class="post-form-header bg-primary">
-        <h3>Leave A Review</h3>
-      </div>
-      <form class="form my-1" action="{% url 'project' project.id %}" method="POST">
-        <!-- dropdown -->
-        {% csrf_token %}
-        {% for field in form %}
-            <div class="form-group">
-                <small>{{field.label}}</small>
-                {{field}}
-            </div>
-        {% endfor %}
-        <input type="submit" class="btn btn-dark my-1" value="Submit" />
-      </form>
-    </div>
+    <!-- Add Review form -->
+    {% if request.user.profile.id in project.getReviewers %}
+        <div class="post-form-header bg-primary">
+            <h3>You have already reviewed the project</h3>
+        </div>
+    {% elif request.user.profile == project.owner %}
+        <div class="post-form-header bg-primary">
+            <h3>You can't review your own project</h3>
+        </div>
+    {% elif request.user.is_authenticated %}
+        <div class="post-form">
+          <div class="post-form-header bg-primary">
+            <h3>Leave A Review</h3>
+          </div>
+          <form class="form my-1" action="{% url 'project' project.id %}" method="POST">
+            <!-- dropdown -->
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    <small>{{field.label}}</small>
+                    {{field}}
+                </div>
+            {% endfor %}
+            <input type="submit" class="btn btn-dark my-1" value="Submit" />
+          </form>
+        </div>
+    {% else %}
+        <div class="post-form-header bg-primary">
+            <a href="{% url 'login' %}?next={{ request.path }}" style="color: white"><h3>Login to review and comment on this project</h3></a>
+        </div>
+    {% endif %}
 
     <!-- Reviews div -->
     <div class="reviews">

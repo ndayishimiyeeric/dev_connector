@@ -5,6 +5,10 @@
 <section class="container">
     <!-- Link back to Developers -->
     <a href="{{request.GET.next}}" class="btn">Back</a>
+    <!-- contact -->
+    {% if request.user.profile != profile %}
+        <a href="" class="btn btn-success">Contact</a>
+    {% endif %}
 
     <div class="profile-grid my-1">
       <div class="profile-top bg-primary p-2">
@@ -116,7 +120,7 @@
       <!-- Projects Repos -->
       <div class="profile-projects">
         <h2 class="text-primary my-1">
-          <i class="fas fa-project-diagram"></i> Projects Created
+          <i class="fas fa-project-diagram"></i> Project{{ count|pluralize:'s' }} Created ({{count}})
         </h2>
         {% for project in userProjects%}
           <div class="repo bg-white my-1 p-1">
@@ -127,7 +131,7 @@
             <div>
               <ul>
                 <li class="badge badge-primary">Review{{project.votes_count|pluralize:"s"}}: {{project.votes_count}}</li>
-                <li class="badge badge-dark">Ratio: {{project.votes_count}}</li>
+                <li class="badge badge-dark">Ratio: {{project.votes_ratio}}%</li>
                 <li class="badge">Created: {{project.created_at|date:"M Y"}}</li>
               </ul>
             </div>

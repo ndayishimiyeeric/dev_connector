@@ -9,11 +9,10 @@ from constants.utils import customPaginator
 
 # Create your views here.
 
-@login_required(login_url="login")
 def projects(request):
     search_query, projects = searchProjects(request)
     # pagination
-    page, custom_range, projects = customPaginator(request, projects, 5)
+    page, custom_range, projects, count = customPaginator(request, projects, 5)
 
     context = {
         "projects": projects,
@@ -24,7 +23,6 @@ def projects(request):
     return render(request, "projects/projects.html", context)
 
 
-@login_required(login_url="login")
 def project(request, pk):
     obj = Project.objects.get(id=pk)
     tags = obj.tags.all()

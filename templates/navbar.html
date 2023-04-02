@@ -2,16 +2,21 @@
 
 <nav class="navbar bg-dark">
     <h1>
-      <a href="{% url 'projects' %}">
+      {% if user.is_authenticated %}
+        <a href="{% url 'profiles' %}">
         <i class="fas fa-code"></i>
         DevConnector
-      </a>
+         </a>
+      {% else %}
+        <a href="{% url 'welcome' %}">
+        <i class="fas fa-code"></i>
+        DevConnector
+        </a>
+      {% endif %}
     </h1>
     <!-- Nav links -->
     <ul>
-      <!-- Visible when user is authanticated -->
-      {% if user.is_authenticated %}
-      <li>
+    <li>
         <a href="{% url 'profiles' %}">
           <i class="fab fa-connectdevelop"></i>
           <span class="hide-sm">Developers</span>
@@ -23,6 +28,8 @@
           <span class="hide-sm">Projects</span>
         </a>
       </li>
+      <!-- Visible when user is authenticated -->
+      {% if user.is_authenticated %}
       <li>
         <a href="{% url 'dashboard' %}">
           <i class="fas fa-user"></i>
@@ -35,7 +42,7 @@
           <span class="hide-sm">Logout</span>
         </a>
       </li>
-      <!-- Visible when user not authanticated -->
+      <!-- Visible when user not authenticated -->
       {% else %}
       <li>
         <a href="{% url 'register' %}">

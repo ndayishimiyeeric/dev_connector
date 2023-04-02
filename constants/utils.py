@@ -14,7 +14,7 @@ def customPaginator(request, queryset, results):
         page = pagination.num_pages
         queryset = pagination.page(page)
 
-    leftIndex = (int(page) - 1)
+    leftIndex = (int(page) - 2)
     if leftIndex < 1:
         leftIndex = 1
 
@@ -24,4 +24,4 @@ def customPaginator(request, queryset, results):
 
     custom_range = range(leftIndex, rightIndex)
 
-    return page, custom_range, queryset
+    return page, custom_range, queryset, pagination.count

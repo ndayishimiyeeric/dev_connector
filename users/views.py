@@ -13,12 +13,12 @@ from constants.utils import customPaginator
 
 def userLogin(request):
     if request.user.is_authenticated:
-        return redirect('profiles')
+        return redirect('dashboard')
 
     page = 'login'
 
     if request.method == 'POST':
-        username = request.POST.get('username')
+        username = request.POST.get('username').lower()
         password = request.POST.get('password')
         try:
             user = User.objects.get(username=username)
@@ -29,7 +29,7 @@ def userLogin(request):
 
         if user is not None:
             login(request, user)
-            return redirect('profiles')
+            return redirect(request.GET['next'] if 'next' in request.GET else 'dashboard')
         else:
             messages.error(request, "Username or password is incorrect")
 
@@ -78,11 +78,10 @@ def userWelcome(request):
     return render(request, 'users/welcome.html')
 
 
-@login_required(login_url='login')
 def profiles(request):
     search_query, profiles = searchProfiles(request)
     # pagination
-    page, custom_range, profiles = customPaginator(request, profiles, 3)
+    page, custom_range, profiles, count = customPaginator(request, profiles, 3)
 
     context = {
         'profiles': profiles,
@@ -92,13 +91,12 @@ def profiles(request):
     return render(request, 'users/profiles.html', context)
 
 
-@login_required(login_url='login')
 def profile(request, pk):
     obj = Profile.objects.get(id=pk)
     mainSkills = obj.skill_set.exclude(description__exact="")
     otherSkills = obj.skill_set.filter(description__exact="")
     userProjects = obj.project_set.all()
-    page, custom_range, userProjects = customPaginator(request, userProjects, 3)
+    page, custom_range, userProjects, count = customPaginator(request, userProjects, 3)
 
     experiences = obj.experience_set.all().order_by('-is_current', '-to_date')
 
@@ -110,7 +108,8 @@ def profile(request, pk):
         'experiences': experiences,
         'educations': educations,
         'userProjects': userProjects,
-        'custom_range': custom_range
+        'custom_range': custom_range,
+        'count': count,
     }
     return render(request, 'users/profile.html', context)
 

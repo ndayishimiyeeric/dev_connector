@@ -36,7 +36,7 @@
         <div class="post-form-header bg-primary">
           <h3><i class="fas fa-user"></i> <span>Sign Into Your Account</span></h3>
         </div>
-        <form class="form" action="{% url 'login' %}" method="POST">
+        <form class="form" action="" method="POST">
             {% csrf_token %}
             <div class="form-group">
                 <input type="text" name="username" placeholder="Username" required />

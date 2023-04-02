@@ -22,7 +22,7 @@ class Project(models.Model):
         return self.title
 
     class Meta:
-        ordering = ['created_at']
+        ordering = ['-votes_count', '-votes_ratio', 'title', '-created_at']
 
     @property
     def save_votes(self):
