@@ -1,0 +1,52 @@
+{% include 'base.html' %}
+
+{% block content %}
+    <section class="container">
+        <div class="post-form-header bg-dark" style="display: flex; justify-content: space-between; border-top-left-radius: 0.7rem; border-top-right-radius: 0.7rem;">
+            <h3>Messages (<span class="text-primary">2</span>)</h3>
+            <!-- email paginator -->
+            <div class="email--paginator">
+                    <a href="" class="btn btn-dark">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"></path>
+                        </svg>
+                    </a>
+                    <a href="" class="btn btn-dark">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"></path>
+                        </svg>
+                    </a>
+            </div>
+        </div>
+        <div class="messages" style="border-top-left-radius: 0; border-top-right-radius: 0;">
+            <div class="message message--unread">
+              <a href="{% url 'message' %}">
+                <span class="message__author">Emmy Tester</span>
+                <span class="message__subject">five centuries, but also the leap into electronic</span>
+                <span class="message__date">3 days ago</span>
+              </a>
+            </div>
+            <div class="message message--seen">
+              <a href="">
+                <span class="message__author">John doe</span>
+                <span class="message__subject">survived not only five centuries, but also the leap</span>
+                <span class="message__date">3 days ago</span>
+              </a>
+            </div>
+            <div class="message message--unread">
+              <a href="">
+                <span class="message__author">Jane doe</span>
+                <span class="message__subject">survived not only five centuries, but also the leap</span>
+                <span class="message__date">3 days ago</span>
+              </a>
+            </div>
+            <div class="message message--unread">
+              <a href="">
+                <span class="message__author">Anonymous</span>
+                <span class="message__subject">survived not only five also the leap electronic</span>
+                <span class="message__date">3 days ago</span>
+              </a>
+            </div>
+      </div>
+    </section>
+{% endblock %}
