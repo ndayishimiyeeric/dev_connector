@@ -2,61 +2,90 @@
 
 
 {% block content %}
-
-<main class="home">
-  <section class="main_container hero hero-black bg-dark">
-    <div class="hero-showcase">
-      <p class="lead">
-        <!-- connectDevelop icon -->
-        <i class="fab fa-connectdevelop"></i>
-        Browse and connect with developers around the world
-      </p>
-    </div>
-    <div class="hero-search_form">
-      <form action="{% url 'profiles' %}" method="get" class="search_form" id="searchForm">
-        <input
-          type="text"
-          placeholder="Developer by name, skill, headline"
-          name="query"
-          class="search_form-input"
-          value="{{search_query}}"
-        />
-        <input
-          type="submit"
-          value="Search"
-          class="btn btn-primary"
-          style="min-width: 5%"
-        />
-      </form>
-    </div>
-  </section>
-  <section class="main_container profiles-grid">
-    {% for profile in profiles %}
-      <div class="profile-card bg-light">
-        <div class="profile-card__top">
-          <img src="{{profile.profile_image.url}}" alt="{{profile.name}}" />
-          <div>
-            <h2>{{profile.name}}</h2>
-            <p>{{profile.headline|truncatechars:15}}</p>
-            <p>{{profile.location|slice:"20"}}</p>
-            <a href="{% url 'user-profile' profile.id %}?next={{ request.path }}" class="btn btn-primary">View Profile</a>
-          </div>
-        </div>
-        <p class="hide-sm profile-desc">
-          {{profile.bio|truncatechars:150}}
+    <section class="font-sans">
+      <div
+        class="flex flex-col align-middle justify-center py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12"
+      >
+        <h1
+          class="mb-4 text-xl font-extrabold tracking-tight leading-none text-gray-900 md:text-2xl lg:text-3xl dark:text-white"
+        >
+          <i class="bi bi-globe"></i> Browse and connect with developers around the
+          world
+        </h1>
+        <p
+          class="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400"
+        >
+          Find Your Next Coding Partner: Connect with Developers Across the Globe
+          and Expand Your Network Collaborate with Developers Worldwide
         </p>
-      <!-- Skills -->
-        <div class="hide-sm hide-m tags">
-          {% for skill in profile.skill_set.all|slice:5 %}
-            <span class="tag tag--pill"><small style="font-size: 13px;">{{skill}}</small></span>
-          {% endfor %}
+
+        <div class="self-center w-[500px]">
+          <form action="{% url 'profiles' %}" method="get" id="searchForm">
+            <label
+              for="default-search"
+              class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+              >Search</label
+            >
+            <div class="relative">
+              <div
+                class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+              >
+                <i class="bi bi-search"></i>
+              </div>
+              <input
+                type="search"
+                id="default-search"
+                class="block z-0 w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-gray-700 focus:border-gray-700 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Search developers by name, skills..."
+                name="query"
+                value="{{search_query}}"
+              />
+              <button
+                type="submit"
+                class="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                Search
+              </button>
+            </div>
+          </form>
         </div>
       </div>
-    {% endfor %}
-  </section>
+</section>
 
-  {% include 'pagination.html' with queryset=profiles custom_range=custom_range %}
-  
-</main>
+    <section class="mx-auto grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-2">
+        {% for profile in profiles %}
+          <div
+            class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+          >
+                 <div class="flex flex-col items-center pb-10 mt-3">
+              <img
+                class="w-24 h-24 mb-3 rounded-full shadow-lg"
+                src="{{profile.profile_image.url}}"
+                alt="{{profile.name}}"
+              />
+              <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">
+                {{profile.name}}
+              </h5>
+              <span class="text-sm text-gray-500 dark:text-gray-400"
+                >{{profile.headline}}</span
+              >
+              <div class="flex mt-4 space-x-3 md:mt-6">
+                <a
+                  href="{% url 'user-profile' profile.id %}"
+                  class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  >View profile</a
+                >
+                <a
+                  href="#"
+                  class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-700 dark:focus:ring-gray-700"
+                  >Message</a
+                >
+              </div>
+            </div>
+
+          </div>
+    {% endfor %}
+</section>
+{% include 'pagination.html' with queryset=profiles custom_range=custom_range %}
 
 {% endblock content %}
