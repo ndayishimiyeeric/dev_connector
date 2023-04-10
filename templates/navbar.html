@@ -1,61 +1,217 @@
 {% load static %}
 
-<nav class="navbar bg-dark">
-    <h1>
-      {% if user.is_authenticated %}
-        <a href="{% url 'profiles' %}">
-        <i class="fas fa-code"></i>
-        DevConnector
-         </a>
-      {% else %}
-        <a href="{% url 'welcome' %}">
-        <i class="fas fa-code"></i>
-        DevConnector
-        </a>
-      {% endif %}
-    </h1>
-    <!-- Nav links -->
-    <ul>
-    <li>
-        <a href="{% url 'profiles' %}">
-          <i class="fab fa-connectdevelop"></i>
-          <span class="hide-sm">Developers</span>
-        </a>
-      </li>
-      <li>
-        <a href="{% url 'projects' %}">
-          <i class="fa fa-diagram-project"></i>
-          <span class="hide-sm">Projects</span>
-        </a>
-      </li>
-      <!-- Visible when user is authenticated -->
-      {% if user.is_authenticated %}
-      <li>
-        <a href="{% url 'dashboard' %}">
-          <i class="fas fa-user"></i>
-          <span class="hide-sm">Dashboard</span>
-        </a>
-      </li>
-      <li>
-        <a href="{% url 'logout' %}">
-          <i class="fas fa-sign-out-alt"></i>
-          <span class="hide-sm">Logout</span>
-        </a>
-      </li>
-      <!-- Visible when user not authenticated -->
-      {% else %}
-      <li>
-        <a href="{% url 'register' %}">
-          <i class="fas fa-user-alt"></i>
-          <span class="hide-sm">Register</span>
-        </a>
-      </li>
-      <li>
-        <a href="{% url 'login' %}">
-          <i class="fas fa-sign-in-alt"></i>
-          <span class="hide-sm">Login</span>
-        </a>
-      </li>
-      {% endif %}
-    </ul>
+<nav class="border-gray-200 w-full dark:border-gray-600 font-sans z-50">
+  <div
+    class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl p-4"
+  >
+    <a
+      href="{% url 'profiles' %}"
+      class="flex items-center text-gray-800 dark:text-white hover:text-blue-600 dark:hover:text-purple-600 z-50"
+    >
+      <i class="bi bi-code-slash text-2xl"></i>
+      <span class="self-center text-2xl font-normal whitespace-nowrap uppercase"
+        >DevConnector</span
+      >
+    </a>
+    <button
+      data-collapse-toggle="mega-menu-full"
+      type="button"
+      class="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+      aria-controls="mega-menu-full"
+      aria-expanded="false"
+    >
+      <i class="bi bi-chevron-down"></i>
+    </button>
+    <div
+      id="mega-menu-full"
+      class="items-center justify-between font-medium hidden w-full md:flex md:w-auto md:order-1"
+    >
+      <ul
+        class="flex flex-col items-center p-4 md:p-0 mt-4 border border-gray-100 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:border-0 dark:border-gray-700 z-50"
+      >
+        <li>
+          <a
+            href="{% url 'profiles' %}"
+            class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700"
+            aria-current="page"
+            ><i class="bi bi-people"></i> Developers</a
+          >
+        </li>
+        <li>
+          <a
+            href="{% url 'projects' %}"
+            class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700"
+            ><i class="bi bi-stack"></i> Projects</a
+          >
+        </li>
+        {% if user.is_authenticated %}
+        <li>
+          <a
+            href="#"
+            class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700"
+            ><i class="bi bi-inbox"></i> Inbox (2)</a
+          >
+        </li>
+        <li>
+          <button
+            id="dropdownHelperButton"
+            data-dropdown-toggle="dropdownHelper"
+            class="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800"
+            type="button"
+          >
+            Actions <i class="bi bi-chevron-down ml-1"></i>
+          </button>
+
+          <!-- Actions Dropdown menu -->
+          <div
+            id="dropdownHelper"
+            class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-60 dark:bg-gray-700 dark:divide-gray-600"
+          >
+            <ul
+              class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200"
+              aria-labelledby="dropdownHelperButton"
+            >
+              <li>
+                <a
+                  href="{% url 'add-experience' %}"
+                  class="block p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-500"
+                >
+                  <div
+                    class="font-semibold hover:text-blue-600 dark:hover:text-purple-600"
+                  >
+                    <i class="bi bi-rocket-takeoff"></i> Add Experience
+                  </div>
+                  <span class="text-xs italic text-gray-500 dark:text-gray-400"
+                    >Showcase Your Expertise</span
+                  >
+                </a>
+              </li>
+              <li>
+                <a
+                  href="{% url 'add-education' %}"
+                  class="block p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-500"
+                >
+                  <div
+                    class="font-semibold hover:text-blue-600 dark:hover:text-purple-600"
+                  >
+                    <i class="bi bi-award"></i> Add Education
+                  </div>
+                  <span class="text-xs italic text-gray-500 dark:text-gray-400"
+                    >Elevate Your Profile</span
+                  >
+                </a>
+              </li>
+              <li>
+                <a
+                  href="{% url 'create-project' %}"
+                  class="block p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-500"
+                >
+                  <div
+                    class="font-semibold hover:text-blue-600 dark:hover:text-purple-600"
+                  >
+                    <i class="bi bi-layers"></i> Add Project
+                  </div>
+                  <span class="text-xs italic text-gray-500 dark:text-gray-400"
+                    >Highlight Your Talent</span
+                  >
+                </a>
+              </li>
+              <li>
+                <a
+                  href="{% url 'create-skill' %}"
+                  class="block p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-500"
+                >
+                  <div
+                    class="font-semibold hover:text-blue-600 dark:hover:text-purple-600"
+                  >
+                    <i class="bi bi-stars"></i> Add Skill
+                  </div>
+                  <span class="text-xs italic text-gray-500 dark:text-gray-400"
+                    >Let Your Skills Shine</span
+                  >
+                </a>
+              </li>
+            </ul>
+          </div>
+        </li>
+        <li class="flex items-center md:order-2">
+          <button
+            type="button"
+            class="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+            id="user-menu-button"
+            aria-expanded="false"
+            data-dropdown-toggle="user-dropdown"
+            data-dropdown-placement="bottom"
+          >
+            <span class="sr-only">Open user menu</span>
+            <img
+              class="w-8 h-8 rounded-full"
+              src="{{ user.profile.profile_image.url }}"
+              alt="user photo"
+            />
+          </button>
+          <!-- User Dropdown menu -->
+          <div
+            class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
+            id="user-dropdown"
+          >
+            <div class="px-4 py-3">
+              <span class="block text-sm text-gray-900 dark:text-white"
+                >{{ user.profile.name }}</span
+              >
+              <span
+                class="block text-sm text-gray-500 truncate dark:text-gray-400"
+                >{{ user.profile.email }}</span
+              >
+            </div>
+            <ul class="py-2" aria-labelledby="user-menu-button">
+              <li>
+                <a
+                  href="{% url 'dashboard' %}"
+                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                  ><i class="bi bi-view-list"></i> Dashboard</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                  ><i class="bi bi-gear-wide-connected"></i> Settings</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{% url 'logout' %}"
+                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                  ><i class="bi bi-box-arrow-left"></i> Sign out</a
+                >
+              </li>
+              <li>
+                <button
+                  id="theme-toggle"
+                  type="button"
+                  class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white w-full"
+                >
+                  <span id="theme-toggle-dark-icon" class="hidden">
+                    <i class="bi bi-moon-fill"></i> Dark mode
+                  </span>
+                  <span id="theme-toggle-light-icon" class="hidden">
+                    <i class="bi bi-lightbulb-fill"></i> Light mode
+                  </span>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </li>
+       {%  else %}
+       <li>
+           <a href="{% url 'login' %}" class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                Login/Signup
+            </a>
+       </li>
+       {% endif %}
+
+      </ul>
+    </div>
+  </div>
 </nav>
