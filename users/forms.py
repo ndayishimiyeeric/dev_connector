@@ -66,7 +66,8 @@ class ProfileForm(ModelForm):
         super(ProfileForm, self).__init__(*args, **kwargs)
         for name, field in self.fields.items():
             if name != 'profile_image':
-                field.widget.attrs.update({'class': 'block w-full rounded-md py-1.5 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'})
+                field.widget.attrs.update({
+                                              'class': 'block w-full rounded-md py-1.5 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'})
             if name == 'profile_image':
                 field.widget.attrs.update({'accept': 'image/*'})
                 field.widget.attrs.update({'class': 'sr-only'})
@@ -81,6 +82,15 @@ class SkillForm(ModelForm):
             'name': forms.TextInput(attrs={'placeholder': 'Skill Name'}),
             'description': forms.Textarea(attrs={'placeholder': 'Skill Description'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super(SkillForm, self).__init__(*args, **kwargs)
+        for name, field in self.fields.items():
+            if name == 'name':
+                field.widget.attrs.update({'class': 'block w-full rounded-md py-1.5 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'})
+            if name == 'description':
+                field.widget.attrs.update({'class': 'block w-full rounded-md bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 sm:py-1.5 sm:text-sm sm:leading-6'})
+                field.widget.attrs.update({'rows': '3'})
 
 
 class ExperienceForm(ModelForm):
