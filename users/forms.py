@@ -4,11 +4,7 @@ from django import forms
 from django.forms.widgets import PasswordInput, DateInput
 from django.contrib.auth.models import User
 from .models import Profile, Skill, Experience, Education
-
-# style classes for form fields
-input_classes = 'block w-full rounded-md py-1.5 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
-textarea = 'block w-full rounded-md bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 sm:py-1.5 sm:text-sm sm:leading-6'
-checkbox = 'w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
+from constants.utils import input_classes, checkbox, textarea
 
 
 class PasswordInput(PasswordInput):
