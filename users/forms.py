@@ -8,7 +8,9 @@ from .models import Profile, Skill, Experience, Education
 
 class PasswordInput(PasswordInput):
     def __init__(self, attrs=None):
-        super().__init__(attrs={'placeholder': '••••••••', **(attrs or {})})
+        super().__init__(attrs={'placeholder': '••••••••',
+                                'class': 'block w-full p-2.5 border-0 bg-transparent text-[#ffffff] focus:ring-0',
+                                **(attrs or {})})
 
 
 class CustomerUserCreationForm(UserCreationForm):
@@ -20,12 +22,16 @@ class CustomerUserCreationForm(UserCreationForm):
         fields = ['first_name', 'username', 'email', 'password1', 'password2']
         labels = {
             'first_name': 'Name',
+            'password1': 'Create Password',
         }
 
         widgets = {
-            'first_name': forms.TextInput(attrs={'placeholder': 'Full Name'}),
-            'username': forms.TextInput(attrs={'placeholder': 'Username'}),
-            'email': forms.TextInput(attrs={'placeholder': 'Email'}),
+            'first_name': forms.TextInput(attrs={'placeholder': 'Full Name',
+                                                 'class': 'block w-full p-2.5 border-0 bg-transparent text-[#ffffff] focus:ring-0'}),
+            'username': forms.TextInput(attrs={'placeholder': 'Username',
+                                               'class': 'block w-full p-2.5 border-0 bg-transparent text-[#ffffff] focus:ring-0'}),
+            'email': forms.TextInput(attrs={'placeholder': 'Email',
+                                            'class': 'block w-full p-2.5 border-0 bg-transparent text-[#ffffff] focus:ring-0'}),
         }
 
 
