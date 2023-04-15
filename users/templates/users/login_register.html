@@ -1,58 +1,228 @@
-{% extends 'base.html' %}
+{% load compress %} {% load static %}
 
-{% block content %}
-{% if page == 'register' %}
-    <section class="container">
-        <div class="post-form-header bg-primary">
-          <h3><i class="fas fa-user"></i> Create Your Account</h3>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>My theme</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    {% compress css %}
+    <link rel="stylesheet" href="{% static 'src/output.css' %}" />
+    {% endcompress %}
+    <script>
+      // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+      if (
+        localStorage.getItem("color-theme") === "dark" ||
+        (!("color-theme" in localStorage) &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches)
+      ) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    </script>
+  </head>
+  <body class="bg-[#ffffff] dark:bg-[#0d1117]">
+  {% if page == 'register' %}
+    <div class="bg-[#0d1117] text-[#ffffff] h-screen overflow-hidden">
+      <header class="absolute inset-x-0 top-0 z-50">
+        <nav class="flex items-center justify-around p-6 px-8">
+          <div class="flex">
+            <a
+              class="flex flex-shrink-0 justify-center items-center p-4 z-50 w-[50px] h-[50px] rounded-full bg-transparent text-[#ffffff]"
+            >
+              <i class="bi bi-window-stack text-4xl"></i>
+            </a>
+          </div>
+          <div class="flex flex-col sm:flex-row sm:items-center text-base">
+            <p class="text-[#8193b2] mr-[8px] break-keep">
+              Already have an account?
+            </p>
+            <a
+              href="{% url 'login' %}"
+              class="font-semibold leading-6 text-[#ffffff]"
+              >Log in <span aria-hidden="true">&rarr;</span></a
+            >
+          </div>
+        </nav>
+      </header>
+
+      <div class="relative isolate px-6 pt-14 lg:px-8">
+        <div
+          class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
+          aria-hidden="true"
+        >
+          <div
+            class="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr to-[#03265d] from-[#031a41] opacity-90 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
+            style="
+              clip-path: polygon(
+                74.1% 44.1%,
+                100% 61.6%,
+                97.5% 26.9%,
+                85.5% 0.1%,
+                80.7% 2%,
+                72.5% 32.5%,
+                60.2% 62.4%,
+                52.4% 68.1%,
+                47.5% 58.3%,
+                45.2% 34.5%,
+                27.5% 76.7%,
+                0.1% 64.9%,
+                17.9% 100%,
+                27.6% 76.8%,
+                76.1% 97.7%,
+                74.1% 44.1%
+              );
+            "
+          ></div>
         </div>
-        <form class="form" action="{% url 'register' %}" method="POST">
-            {% csrf_token %}
-            {% for field in form %}
-            <div class="form-group">
-                <small>* {{field.label}}</small>
+        <div
+          class="mx-auto max-w-[654px] bg-[#0c162d] text-[#1f2328] p-[24px] rounded-[6px] shadow leading-[1.5] my-28 lg:my-24 border border-[#202637] font-mono"
+        >
+          <form action="{% url 'register' %}" method="POST">
+              {% csrf_token %}
+            <h3 class="mb-4 text-lg font-medium leading-none text-[#8193b2]">
+              Welcome to DevConnect!
+              <span class="block mt-2"> Let’s begin the adventure</span>
+            </h3>
+            <div class="grid gap-4 mb-4 sm:grid-cols-1">
+                {% for field in form %}
+                    <div class="col-span-full">
+                <div
+                  class="block mb-2 text-xl font-medium text-[#00cfc8]"
+                  >{{ field.label }}</div
+                >
                 {{ field }}
-
-                <!-- Error message -->
-                {% if field.errors %}
-                    <p style="color: red;">
-                        {% for error in field.errors %}
-                            {{ error }}
-                        {% endfor %}
-                    </p>
-                {% endif %}
+              </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-            <input type="submit" value="Register" class="btn btn-primary" />
-        </form>
-    <p class="my-1">
-      Already have an account?
-      <!-- Link to login -->
-      <a href="{% url 'login' %}">Sign In</a>
-    </p>
-  </section>
-{% else %}
-    <section class="container">
-        <div class="post-form-header bg-primary">
-          <h3><i class="fas fa-user"></i> <span>Sign Into Your Account</span></h3>
+            <button
+              type="submit"
+              class="w-full text-[#1f883d] border border-[#1f883d] bg-transparent focus:ring-0 font-medium rounded-lg text-sm py-[8px] text-center"
+            >
+              Create account
+            </button>
+          </form>
         </div>
-        <form class="form" action="" method="POST">
-            {% csrf_token %}
-            <div class="form-group">
-                <input type="text" name="username" placeholder="Username" required />
-            </div>
-            <div class="form-group">
-                <input type="password" name="password" placeholder="Password" required />
-            </div>
-            <!-- Submit button to Home -->
-            <input type="submit" value="Login" class="btn btn-primary" />
-        </form>
-        <p class="my-1">
-            Don't have an account?
-            <!-- Link to register -->
-            <a href="{% url 'register' %}">Sign Up</a>
-        </p>
-    </section>
-{% endif %}
+        <div
+          class="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
+          aria-hidden="true"
+        >
+          <div
+            class="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#042b68] to-[#0c162d] opacity-90 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"
+            style="
+              clip-path: polygon(
+                74.1% 44.1%,
+                100% 61.6%,
+                97.5% 26.9%,
+                85.5% 0.1%,
+                80.7% 2%,
+                72.5% 32.5%,
+                60.2% 62.4%,
+                52.4% 68.1%,
+                47.5% 58.3%,
+                45.2% 34.5%,
+                27.5% 76.7%,
+                0.1% 64.9%,
+                17.9% 100%,
+                27.6% 76.8%,
+                76.1% 97.7%,
+                74.1% 44.1%
+              );
+            "
+          ></div>
+        </div>
+      </div>
+    </div>
+  {% else %}
+      <section
+      class="container flex flex-col justify-center items-center mt-10 mx-auto max-w-4xl font-sans2"
+      >
+          <div class="flex flex-col items-center gap-6 mb-4">
+            <a
+              class="flex flex-shrink-0 justify-center items-center p-4 text-black z-50 w-[50px] h-[50px] rounded-full bg-white dark:bg-[#0d1117] dark:text-[#ffffff]"
+            >
+              <i class="bi bi-window-stack text-4xl"></i>
+            </a>
+            <h5 class="text-2xl font-medium text-gray-900 dark:text-white">
+              Sign in to DevConnect
+            </h5>
+          </div>
 
-{% endblock %}
+          <div
+            class="w-full max-w-xs p-4 bg-[#f6f8fa] border border-[#C2D1E0] rounded-lg dark:bg-[#161b22] dark:border-[#21262d]"
+          >
+            <form class="space-y-6" action="" method="POST">
+                {% csrf_token %}
+              <div>
+                <label
+                  for="username"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >Username</label
+                >
+                <input
+                  type="text"
+                  name="username"
+                  id="username"
+                  class="leading-[20px] text-[14px] dark:text-[#e6edf3] bg-[#ffffff] border border-[#d0d7de] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-1.5 dark:bg-[#0d1117] dark:border-[#30363d]"
+                  required
+                />
+              </div>
+              <div>
+                <div class="flex items-start">
+                  <label
+                    for="password"
+                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >Password</label
+                  >
+                  <a href="" class="ml-auto text-sm text-[#2f81f7] hover:underline"
+                    >Forgot Password?</a
+                  >
+                </div>
+
+                <input
+                  type="password"
+                  name="password"
+                  id="password"
+                  class="leading-[20px] text-[14px] dark:text-[#e6edf3] bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-1.5 dark:bg-[#0d1117] dark:border-[#30363d]"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                class="w-full text-[#ffffff] bg-[#238636] hover:bg-[#299b40] focus:outline-none font-medium rounded-lg text-sm px-5 py-1.5 text-center"
+              >
+                Sign in
+              </button>
+            </form>
+          </div>
+          <div
+            class="w-full text-center mt-4 max-w-xs p-4 px-5 border border-[#d0d7de] rounded-lg dark:border-[#30363d]"
+          >
+            <div class="text-sm font-medium text-gray-500 dark:text-gray-300">
+              New to DevConnect?
+              <a href="{% url 'register' %}" class="text-[#2f81f7] hover:underline"
+                >Create an account.</a
+              >
+            </div>
+          </div>
+    </section>
+  {% endif %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.4/flowbite.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/datepicker.min.js"></script>
+    <script src="{% static 'js/app.js' %}"></script>
+  </body>
+</html>
