@@ -43,7 +43,7 @@ class ProfileForm(ModelForm):
                   'website', 'twitter', 'youtube']
         labels = {
             'name': 'Name',
-            'bio': 'About Me',
+            'bio': 'About',
             'profile_image': 'Profile Picture',
         }
 
@@ -61,6 +61,15 @@ class ProfileForm(ModelForm):
             'twitter': forms.TextInput(attrs={'placeholder': 'Twitter URL'}),
             'youtube': forms.TextInput(attrs={'placeholder': 'YouTube URL'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super(ProfileForm, self).__init__(*args, **kwargs)
+        for name, field in self.fields.items():
+            if name != 'profile_image':
+                field.widget.attrs.update({'class': 'block w-full rounded-md py-1.5 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'})
+            if name == 'profile_image':
+                field.widget.attrs.update({'accept': 'image/*'})
+                field.widget.attrs.update({'class': 'sr-only'})
 
 
 class SkillForm(ModelForm):
