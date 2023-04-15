@@ -149,3 +149,13 @@ class EducationForm(ModelForm):
             'to_date': DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),
             'is_current': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super(EducationForm, self).__init__(*args, **kwargs)
+        for name, field in self.fields.items():
+            if name != 'is_current' or name == 'description':
+                field.widget.attrs.update({'class': input_classes})
+            if name == 'is_current':
+                field.widget.attrs.update({'class': checkbox})
+            if name == 'description':
+                field.widget.attrs.update({'class': textarea})
