@@ -4,7 +4,7 @@
 {% block content %}
 
 <div class="grid grid-cols-1 md:grid-cols-12 min-h-screen font-display">
-{% include 'aside.html' with userProjects=userProjects request=request %}
+{% include 'aside.html' with userProjects=userProjects request=request query=query %}
   <div
     class="max-w-full bg-[#f6f8fa] dark:bg-[#0d1117] text-[#1f2328] lg:col-span-9 xl:col-span-10 md:col-span-8 grid grid-cols-1 xl:grid-cols-3 px-6"
   >

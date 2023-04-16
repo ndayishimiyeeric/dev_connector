@@ -2,62 +2,45 @@
 
 {% block content %}
 
- <main class="home">
-    <section class="main_container hero hero-black">
-        <div class="hero-showcase">
-          <p class="lead text-gradient">
-            <i class="fa fa-diagram-project"></i>
-            Welcome to the developers community
-          </p>
-        </div>
-        <div class="hero-search_form">
-          <form action="{% url 'projects' %}" method="get" class="search_form" id="searchForm">
-            <input
-              type="text"
-              placeholder="Project by title, owner, description"
-              name="query"
-              class="search_form-input"
-              value="{{search_query}}"
-            />
-            <input
-              type="submit"
-              value="Search"
-              class="btn btn-accent-gradient"
-              style="min-width: 5%"
-            />
-          </form>
-        </div>
-    </section>
-    <section class="projects-grid main_container">
-      {% for project in projects %}
-        <div class="wrapper">
-          <a href="{% url 'project' project.id %}?next=/projects/?query={{ search_query }}">
-            <div class="pic">
-                <img src="{{project.project_image.url}}" alt="project image" />
-            </div>
-          </a>
-          <p class="header"><a href="{% url 'project' project.id %}?next=/projects/?query={{ search_query }}">{{project.title|truncatechars:27}}</a></p>
-          <div class="content">
-            <a href="{% url 'user-profile' project.owner.id %}?next=/projects/?query={{ search_query }}&page={{ page }}" class="project-owner">
-              <img
-                src="{{project.owner.profile_image.url}}"
-                alt="{{project.owner.name}}}"
-                class="project-owner-img"
-              />
-              {{project.owner.name|truncatechars:22}}
-            </a>
-            <span class="project-feedback"
-              >{{project.votes_count}} Vote{{project.votes_count|pluralize:"s"}} <strong>{{project.votes_ratio}}</strong>% positive</span
-            >
-            <div class="tags">
-              {% for tag in project.tags.all %}
-              <span class="tag tag--main"><small style="font-size: 12px;">{{tag}}</small></span>
-              {% endfor %}
-            </div>
-          </div>
-        </div>
-      {% endfor %}
-    </section>
-    {% include 'pagination.html' with queryset=projects custom_range=custom_range %}
-</main>
+<div class="grid grid-cols-1 md:grid-cols-12 min-h-screen font-display">
+    {% include 'aside.html' with userProjects=filtered_projects request=request query=query %}
+  <div
+    class="max-w-full bg-[#f6f8fa] dark:bg-[#0d1117] text-[#656d76] dark:text-[#7d8590] lg:col-span-9 xl:col-span-10 md:col-span-8 grid grid-cols-1 xl:grid-cols-3 px-6"
+  >
+    <div class="xl:col-span-2 mt-8 xl:pr-12 font-sans2">
+        {% for project in projects %}
+            <div
+                class="grid grid-cols-1 gap-6 md:grid-cols-4 mb-8 border border-[hsla(210,18%,87%,1)] dark:border-[#30363d] p-4"
+              >
+                <img
+                  src="{{ project.project_image.url }}"
+                  class="hidden sm:block object-cover w-full h-40 md:h-full col-span-1 bg-center"
+                  alt="{{ project.title }}"
+                  loading="lazy"
+                />
+                <div class="col-span-1 md:col-span-3">
+                  <p class="mb-2 -mt-1 text-sm font-normal text-gray-500">
+                      {{ project.updated_at|date:"d M Y"}}
+                  </p>
+                  <h2 class="mb-2 text-xl font-extrabold leading-snug text-gray-800">
+                    <a href="{% url 'project' project.id%}" class="text-[#2f81f7]"
+                      >{{ project.title }}</a
+                    >
+                  </h2>
+                  <p class="mb-3 text-sm font-normal text-gray-500">
+                      {{ project.description}}
+                  </p>
+                </div>
+              </div>
+        {% endfor %}
+      {% include 'pagination.html' with queryset=projects custom_range=custom_range %}
+    </div>
+
+    <div class="hidden xl:block xl:col-span-1 mt-12">
+      <h2 class="dark:text-white text-sm font-bold mb-3">Latest News</h2>
+
+    {% include 'news.html'%}
+    </div>
+  </div>
+</div>
 {% endblock content %}

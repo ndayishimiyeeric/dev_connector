@@ -27,18 +27,19 @@
     <div
       class="font-display h-full p-4 md:p-0 overflow-y-auto border md:border-none border-[#d0d7de] dark:border-[#30363d] bg-white md:bg-none dark:bg-gray-800 md:dark:bg-[#0d1117]"
     >
-      <form class="rounded my-2" action="{% url 'profiles' %}" method="get" id="searchForm">
+      <form class="rounded my-2" action="" method="get" id="searchForm">
         <label for="query" class="hidden"></label>
         <input
           type="text"
           name="query"
+          value="{{ query }}"
           id="query"
           class="bg-[#f6f8fa] border border-[#d0d7de] text-[#1f2328] text-[14px] rounded focus:ring-blue-500 focus:border-blue-500 block w-full px-[12px] py-[5px]"
           placeholder="Find a repository..."
         />
       </form>
       {% for project in userProjects %}
-      <a href="" class="flex items-center gap-3 p-2">
+      <a href="{% url 'project' project.id %}" class="flex items-center gap-3 p-2">
         <img
           class="w-5 h-5 rounded-full"
           src="{{ project.owner.profile_image.url }}"
