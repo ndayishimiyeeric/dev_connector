@@ -46,7 +46,7 @@
     <!-- buttons -->
     <div class="mt-6 flex items-center justify-end gap-x-6">
       <a
-        href="{{ request.GET.next|default:'/profile/' }}{{ request.user.profile.id }}"
+        href="{{ request.GET.next }}"
         class="text-sm font-semibold leading-6 text-gray-900 dark:text-white"
       >
         Cancel
