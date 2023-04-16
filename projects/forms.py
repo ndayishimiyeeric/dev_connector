@@ -42,5 +42,13 @@ class ReviewForm(ModelForm):
         }
 
         widgets = {
-            'body': forms.Textarea(attrs={'cols': 30, 'rows': 5, 'placeholder': 'Leave a comment'}),
+            'body': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Leave a review with a comment'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super(ReviewForm, self).__init__(*args, **kwargs)
+        for name, field in self.fields.items():
+            if name != 'body':
+                field.widget.attrs.update({'class': 'mt-2 mb-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'})
+            if name == 'body':
+                field.widget.attrs.update({'class': textarea_classes})
