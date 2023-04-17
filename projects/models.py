@@ -17,6 +17,7 @@ class Project(models.Model):
     votes_ratio = models.IntegerField(default=0, blank=True, null=True)
     tags = models.ManyToManyField('Tag', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     def __str__(self):
         return self.title
