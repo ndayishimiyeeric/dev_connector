@@ -27,27 +27,40 @@
                   class="text-sm xl:text-xl font-semibold flex items-center justify-center gap-1"
                 >
                     {{ profile.name }}
-                  <span class="flex w-3 h-3 bg-green-500 rounded-full"></span>
+                    {% if profile.is_online %}
+                    <span class="flex w-3 h-3 bg-green-500 rounded-full"></span>
+                    {% endif %}
                 </h2>
                 <p class="px-5 text-xs text-gray-400">{{ profile.headline }}</p>
               </div>
+                {% if request.user.profile != profile %}
               <div
                 class="flex justify-center pt-2 align-center gap-3"
                 bis_skin_checked="1"
               >
-                <a
-                  href=""
+              {% if request.user.profile not in profile.followers.all %}
+                  <form action="{% url 'follow' profile.id %}?next={{ request.path }}" method="POST">
+                    {% csrf_token %}
+                    {{ formFollow.as_p }}
+                    <button type="submit" class="inline-flex w-full justify-center rounded-md bg-[#2f81f7] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#7aaef7] sm:ml-3 sm:w-auto">
+                      Follow
+                    </button>
+                {% else %}
+                  <a
+                  href="{% url 'unfollow' profile.id %}?next={{ request.path }}"
                   class="inline-flex w-full justify-center rounded-md bg-[#2f81f7] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#7aaef7] sm:ml-3 sm:w-auto"
                 >
-                  Follow
+                  Unfollow
                 </a>
+                {% endif %}
                 <a
                   href=""
                   class="inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
                 >
                   Message
                 </a>
-              </div>
+                </div>
+              {% endif %}
             </div>
           </div>
           <p
@@ -148,7 +161,7 @@
                 type="button"
                 role="tab"
                 aria-controls="about"
-                aria-selected="true"
+                aria-selected="{% if request.GET.tab == 'about' %}true{% else %}false{% endif %}"
                 class="inline-block p-4 text-blue-600 rounded-tl-lg hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-blue-500"
               >
                 <i class="bi bi-info-circle"></i> Overview
@@ -161,7 +174,7 @@
                 type="button"
                 role="tab"
                 aria-controls="services"
-                aria-selected="false"
+                aria-selected="{% if request.GET.tab == 'projects' %}true{% else %}false{% endif %}"
                 class="flex gap-1 p-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300"
               >
                 <svg
@@ -191,13 +204,13 @@
                 type="button"
                 role="tab"
                 aria-controls="followers"
-                aria-selected="false"
+                aria-selected="{% if request.GET.tab == 'followers' %}true{% else %}false{% endif %}"
                 class="inline-block p-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300"
               >
                 <i class="bi bi-people"></i> Followers
                 <span
                   class="inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-gray-800 bg-gray-100 border-2 rounded-lg dark:border-gray-900"
-                  >20</span
+                  >{{ followers.count }}</span
                 >
               </button>
             </li>
@@ -208,13 +221,13 @@
                 type="button"
                 role="tab"
                 aria-controls="following"
-                aria-selected="false"
+                aria-selected="{% if request.GET.tab == 'following' %}true{% else %}false{% endif %}"
                 class="inline-block p-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300"
               >
                 <i class="bi bi-people"></i> Following
                 <span
                   class="inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-gray-800 bg-gray-100 border-2 rounded-lg dark:border-gray-900"
-                  >20</span
+                  >{{ following.count }}</span
                 >
               </button>
             </li>
@@ -691,7 +704,7 @@
                       aria-label="Category"
                       >{{ tag }}</p
                     >{% endfor %}
-                    <span class="text-[#7d8590]">— 1 Feb 2020</span>
+                    <span class="text-[#7d8590] text-xs">Created {{ project.created_at|timesince }} ago</span>
                   </p>
                   <a
                     href="{% url 'project' project.id %}"
@@ -795,6 +808,7 @@
                   {% endif %}
                 </div>
                 {% endfor %}
+                {% include 'pagination.html' with queryset=userProjects custom_range=custom_range current_url=request.GET.path %}
               </div>
               <!-- End of projects grid -->
             </div>
@@ -809,42 +823,57 @@
               <div
                 class="grid max-w-full border-t border-[hsla(210,18%,87%,1)] dark:border-[#30363d]"
               >
+                {% for follower in followers %}
                 <div
                   class="flex sm:justify-between items-center bg-white dark:bg-[#0d1117] border-b border-[hsla(210,18%,87%,1)] dark:border-[#30363d]"
                 >
                   <div class="p-4">
                     <a
-                      href="/"
+                      href="{% url 'user-profile' follower.id %}"
                       aria-label="Article"
-                      title="Jingle Bells"
+                      title="{{ follower.name }}"
                       class="flex gap-2 mb-3 text-sm font-bold leading-5 text-[#2f81f7] transition-colors duration-200 hover:text-deep-purple-accent-400"
                     >
                       <img
-                        src="https://source.unsplash.com/150x150/?portrait?3"
-                        alt=""
+                        src="{{ follower.profile_image.url }}"
+                        alt="{{ follower.name }}"
                         class="h-8 w-8 rounded-full"
                       />
-                      Jingle Bells
-                      <span class="text-[#7d8590] text-sm">johndoe</span></a
+                      {{ follower.name }}
+                      <span class="text-[#7d8590] text-sm">{{ follower.username }}</span></a
                     >
                     <p
                       class="text-[#1f2328] dark:text-[#e6edf3] text-sm lg:w-[40rem]"
                     >
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                      Eligendi voluptatem vel, numquam id esse consequatur.
+                        {% if follower.bio %}
+                      {{ follower.bio|truncatechars:100 }}
+                        {% endif %}
                     </p>
                     <div class="text-xs text-[#878e95] mt-2">
-                      <span>France</span>
+                        {% if follower.location %}
+                      <span>{{ follower.location }}</span>
+                        {% endif %}
                     </div>
                   </div>
                   <div>
-                    <a
-                      href=""
-                      class="border mt-2 py-[3px] px-[12px] text-[12px] text-[#24292f] bg-[#f6f8fa] border-[rgb(31 35 40 / 15%)] dark:text-[#c9d1d9] dark:bg-[#21262d] dark:border-[#388bfd1a] rounded"
-                      >Follow</a
-                    >
+                     {% if request.user.profile in follower.followers.all %}
+                        <a href="{% url 'unfollow' follower.id %}?next={{ request.path }}" class="border mt-2 py-[3px] px-[12px] text-[12px] text-[#24292f] bg-[#f6f8fa] border-[rgb(31 35 40 / 15%)] dark:text-[#c9d1d9] dark:bg-[#21262d] dark:border-[#388bfd1a] rounded">
+                        Unfollow
+                        </a>
+                       {% endif %}
+                      {% if request.user.profile not in follower.followers.all and request.user.profile != follower %}
+                          <form method="POST" action="{% url 'follow' follower.id %}?next={{ request.path }}">
+                            {% csrf_token %}
+                            {{ formFollow.as_p }}
+                            <button type="submit" class="border mt-2 py-[3px] px-[12px] text-[12px] text-[#24292f] bg-[#f6f8fa] border-[rgb(31 35 40 / 15%)] dark:text-[#c9d1d9] dark:bg-[#21262d] dark:border-[#388bfd1a] rounded"
+                            >Follow
+                            </button>
+                          </form>
+                      {% endif %}
+
                   </div>
                 </div>
+                {% endfor %}
               </div>
               <!-- End of projects grid -->
             </div>
@@ -856,81 +885,62 @@
             aria-labelledby="following-tab"
           >
             <div class="bg-white dark:bg-[#0d1117] py-3 rounded-sm">
+
               <div
                 class="grid max-w-full border-t border-[hsla(210,18%,87%,1)] dark:border-[#30363d]"
               >
+                {% for follow in following %}
                 <div
                   class="flex sm:justify-between items-center bg-white dark:bg-[#0d1117] border-b border-[hsla(210,18%,87%,1)] dark:border-[#30363d]"
                 >
                   <div class="p-4">
                     <a
-                      href="/"
+                      href="{% url 'user-profile' follow.id %}"
                       aria-label="Article"
-                      title="Jingle Bells"
+                      title="{{ follow.name }}"
                       class="flex gap-2 mb-3 text-sm font-bold leading-5 text-[#2f81f7] transition-colors duration-200 hover:text-deep-purple-accent-400"
                     >
                       <img
-                        src="https://source.unsplash.com/150x150/?portrait?3"
+                        src="{{ follow.profile_image.url }}"
                         alt=""
                         class="h-8 w-8 rounded-full"
                       />
-                      Jingle Bells
-                      <span class="text-[#7d8590] text-sm">johndoe</span></a
+                        {{ follow.name }}
+                      <span class="text-[#7d8590] text-sm">{{ follow.username }}</span></a
                     >
                     <p
                       class="text-[#1f2328] dark:text-[#e6edf3] text-sm lg:w-[40rem]"
                     >
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                      Eligendi voluptatem vel, numquam id esse consequatur.
+                        {% if follow.bio %}
+                        {{ follow.bio|truncatechars:100 }}
+                        {% endif %}
                     </p>
                     <div class="text-xs text-[#878e95] mt-2">
-                      <span>France</span>
+                      <span>
+                        {% if follow.location %}
+                        {{ follow.location }}
+                        {% endif %}
+                      </span>
                     </div>
                   </div>
                   <div>
-                    <a
-                      href=""
-                      class="border mt-2 py-[3px] px-[12px] text-[12px] text-[#24292f] bg-[#f6f8fa] border-[rgb(31 35 40 / 15%)] dark:text-[#c9d1d9] dark:bg-[#21262d] dark:border-[#388bfd1a] rounded"
-                      >Follow</a
-                    >
+                      {% if request.user.profile in follow.followers.all %}
+                        <a href="{% url 'unfollow' follow.id %}?next={{ request.path }}" class="border mt-2 py-[3px] px-[12px] text-[12px] text-[#24292f] bg-[#f6f8fa] border-[rgb(31 35 40 / 15%)] dark:text-[#c9d1d9] dark:bg-[#21262d] dark:border-[#388bfd1a] rounded">
+                        Unfollow
+                        </a>
+                       {% endif %}
+                      {% if request.user.profile not in follow.followers.all and request.user.profile != follow %}
+                          <form method="POST" action="{% url 'follow' follow.id %}?next={{ request.path }}">
+                            {% csrf_token %}
+                            {{ formFollow.as_p }}
+                            <button type="submit" class="border mt-2 py-[3px] px-[12px] text-[12px] text-[#24292f] bg-[#f6f8fa] border-[rgb(31 35 40 / 15%)] dark:text-[#c9d1d9] dark:bg-[#21262d] dark:border-[#388bfd1a] rounded"
+                            >Follow
+                            </button>
+                          </form>
+                      {% endif %}
                   </div>
                 </div>
-                <div
-                  class="flex sm:justify-between items-center bg-white dark:bg-[#0d1117] border-b border-[hsla(210,18%,87%,1)] dark:border-[#30363d]"
-                >
-                  <div class="p-4">
-                    <a
-                      href="/"
-                      aria-label="Article"
-                      title="Jingle Bells"
-                      class="flex gap-2 mb-3 text-sm font-bold leading-5 text-[#2f81f7] transition-colors duration-200 hover:text-deep-purple-accent-400"
-                    >
-                      <img
-                        src="https://source.unsplash.com/150x150/?portrait?3"
-                        alt=""
-                        class="h-8 w-8 rounded-full"
-                      />
-                      Jingle Bells
-                      <span class="text-[#7d8590] text-sm">johndoe</span></a
-                    >
-                    <p
-                      class="text-[#1f2328] dark:text-[#e6edf3] text-sm lg:w-[40rem]"
-                    >
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                      Eligendi voluptatem vel, numquam id esse consequatur.
-                    </p>
-                    <div class="text-xs text-[#878e95] mt-2">
-                      <span>France</span>
-                    </div>
-                  </div>
-                  <div>
-                    <a
-                      href=""
-                      class="border mt-2 py-[3px] px-[12px] text-[12px] text-[#24292f] bg-[#f6f8fa] border-[rgb(31 35 40 / 15%)] dark:text-[#c9d1d9] dark:bg-[#21262d] dark:border-[#388bfd1a] rounded"
-                      >Follow</a
-                    >
-                  </div>
-                </div>
+                {% endfor %}
               </div>
               <!-- End of projects grid -->
             </div>
