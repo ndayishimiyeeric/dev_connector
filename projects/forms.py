@@ -28,7 +28,7 @@ class ProjectForm(ModelForm):
             if name == 'description':
                 field.widget.attrs.update({'class': textarea_classes})
             if name == 'tags':
-                field.widget.attrs.update({'class': checkbox_classes, 'type': 'checkbox'})
+                field.widget.attrs.update({'class': checkbox_classes})
 
 
 class ReviewForm(ModelForm):

@@ -4,7 +4,15 @@ from django import forms
 from django.forms.widgets import PasswordInput, DateInput
 from django.contrib.auth.models import User
 from .models import Profile, Skill, Experience, Education
-from constants.utils import input_classes, checkbox, textarea
+from constants.utils import input_classes, checkbox_classes, textarea_classes
+from .models import Follower
+
+
+class FollowForm(forms.ModelForm):
+    class Meta:
+        model = Follower
+        fields = ['receiver_profile']
+        widgets = {'receiver_profile': forms.HiddenInput()}
 
 
 class PasswordInput(PasswordInput):
@@ -89,7 +97,7 @@ class SkillForm(ModelForm):
             if name == 'name':
                 field.widget.attrs.update({'class': input_classes})
             if name == 'description':
-                field.widget.attrs.update({'class': textarea})
+                field.widget.attrs.update({'class': textarea_classes})
                 field.widget.attrs.update({'rows': '3'})
 
 
@@ -120,9 +128,9 @@ class ExperienceForm(ModelForm):
             if name != 'is_current' or name == 'description':
                 field.widget.attrs.update({'class': input_classes})
             if name == 'is_current':
-                field.widget.attrs.update({'class': checkbox})
+                field.widget.attrs.update({'class': checkbox_classes})
             if name == 'description':
-                field.widget.attrs.update({'class': textarea})
+                field.widget.attrs.update({'class': textarea_classes})
 
 
 class EducationForm(ModelForm):
@@ -152,6 +160,6 @@ class EducationForm(ModelForm):
             if name != 'is_current' or name == 'description':
                 field.widget.attrs.update({'class': input_classes})
             if name == 'is_current':
-                field.widget.attrs.update({'class': checkbox})
+                field.widget.attrs.update({'class': checkbox_classes})
             if name == 'description':
-                field.widget.attrs.update({'class': textarea})
+                field.widget.attrs.update({'class': textarea_classes})
