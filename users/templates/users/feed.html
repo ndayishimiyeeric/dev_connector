@@ -1,0 +1,340 @@
+{% include 'base.html' %}
+
+{% block content %}
+
+<div class="grid grid-cols-1 md:grid-cols-12 min-h-screen font-display">
+  {% include 'aside.html' with userProjects=userProjects request=request query=query %}
+
+  <div
+    class="max-w-full bg-[#f6f8fa] dark:bg-[#0d1117] text-[#1f2328] lg:col-span-9 xl:col-span-10 md:col-span-8 grid grid-cols-1 xl:grid-cols-3 px-6"
+  >
+    <div class="xl:col-span-2 mt-8 xl:pr-12">
+
+        <p class="mb-4 text-xl font-extrabold tracking-tight leading-none text-gray-900 dark:text-white uppercase font-mono">
+          <i class="bi bi-globe"></i> Explore
+        </p>
+        {% for item in feed_items %}
+        {% if item.object_type == 'ProjectCreated' %}
+        <div class="w-full mb-10">
+        <div class="flex items-center gap-3 p-2">
+          <img
+            class="w-7 h-7 rounded-full hover:cursor-pointer"
+            src="{{ item.owner.profile_image.url }}"
+            alt="user photo"
+          />
+          <p class="text-[#81888f] text-sm dark:text-gray-400">
+            <a class="text-[#2c3034] dark:text-gray-300 font-semibold" href="{% url 'user-profile' item.owner.id %}"
+              >{{ item.owner.name }}</a
+            >
+            created a project
+            <a class="text-[#2c3034] dark:text-gray-300 font-semibold" href="{% url 'project' item.id %}"
+              >{{ item.owner.username }}/{{ item.title }}</a
+            >
+            · {{ item.created_at|timesince }} ago
+          </p>
+        </div>
+        <div
+          class="p-4 border bg-white border-gray-200 rounded-lg shadow dark:bg-gray-900 dark:border-gray-700"
+        >
+          <div class="flex text-sm justify-between items-center">
+            <a class="text-[#1f2328] dark:text-gray-300 font-semibold" href="{% url 'project' item.id %}"
+              >{{ item.owner.username }}/{{ item.title }}</a
+            >
+            <div class="flex"></div>
+          </div>
+          <div class="mt-3 flex items-center gap-5">
+            <p class="text-sm text-[#9ea3a8]">{{ item.votes_count }}</p>
+            <p class="text-sm text-gray-400">⭐ {{ item.votes_ratio }}</p>
+            <p class="text-sm text-[#9ea3a8]">created {{ item.created_at|date:'M Y'}}</p>
+          </div>
+        </div>
+      </div>
+        {% elif item.object_type == 'ProjectUpdated' %}
+        <div class="w-full mb-10">
+        <div class="flex items-center gap-3 p-2">
+          <img
+            class="w-7 h-7 rounded-full hover:cursor-pointer"
+            src="{{ item.owner.profile_image.url }}"
+            alt="user photo"
+          />
+          <p class="text-[#81888f] text-sm dark:text-gray-400">
+            <a class="text-[#2c3034] dark:text-gray-300 font-semibold" href="{% url 'user-profile' item.owner.id %}"
+              >{{ item.owner.name }}</a
+            >
+            updated a project
+            <a class="text-[#2c3034] dark:text-gray-300 font-semibold" href="{% url 'project' item.id %}"
+              >{{ item.owner.username }}/{{ item.title }}</a
+            >
+            · {{ item.updated_at|timesince }} ago
+          </p>
+        </div>
+        <div
+          class="p-4 border bg-white border-gray-200 rounded-lg shadow dark:bg-gray-900 dark:border-gray-700"
+        >
+          <div class="flex text-sm justify-between items-center">
+            <a class="text-[#1f2328] dark:text-gray-300 font-semibold" href="{% url 'project' item.id %}"
+              >{{ item.owner.username }}/{{ item.title }}</a
+            >
+            <div class="flex"></div>
+          </div>
+          <div class="mt-3 flex items-center gap-5">
+            <p class="text-sm text-[#9ea3a8]">Vote{{ item.votes_count|pluralize:'s' }} {{ item.votes_count }}</p>
+            <p class="text-sm text-gray-400">⭐{{ item.votes_ratio }}%</p>
+            <p class="text-sm text-[#9ea3a8]">Updated {{ item.updated_at|date:'M Y' }}</p>
+          </div>
+        </div>
+      </div>
+        {% elif item.object_type == 'Follower' %}
+        <div class="w-full mb-10">
+        <div class="flex items-center gap-3 p-2">
+          <img
+            class="w-7 h-7 rounded-full hover:cursor-pointer"
+            src="{{ item.sender_profile.profile_image.url }}"
+            alt="user photo"
+          />
+          <p class="text-[#81888f] text-sm dark:text-gray-400">
+            <a class="text-[#2c3034] dark:text-gray-300 font-semibold" href="{% url 'user-profile' item.sender_profile.id %}"
+              >{{ item.sender_profile.username }}</a
+            >
+            started following
+            <span class="text-[#2c3034] dark:text-gray-300 font-semibold"
+              >
+                {% if item.receiver_profile == request.user.profile %}
+                You
+                {% else %}
+                {{ item.receiver_profile.username }}
+                {% endif %}
+            </span
+            >
+            · {{ item.created_at|timesince }} ago
+          </p>
+        </div>
+        <div
+          class="p-4 border bg-white border-gray-200 rounded-lg shadow dark:bg-gray-900 dark:border-gray-700"
+        >
+          <div class="flex text-sm justify-between items-center">
+            <div class="w-full flex items-center gap-2">
+              <img
+                class="w-8 h-8 rounded-full"
+                src="{{ item.receiver_profile.profile_image.url }}"
+                alt=""
+              />
+              <div class="flex flex-col gap-2">
+                <p class="text-[#81888f] text-sm dark:text-gray-400">
+                  <a
+                    class="text-[#2c3034] dark:text-gray-300 font-semibold"
+                    href="{% url 'user-profile' item.receiver_profile.id %}"
+                    >{{ item.receiver_profile.name }}</a
+                  >
+                  {{ item.receiver_profile.username }}
+                </p>
+                <div class="text-xs text-[#878e95]">
+                  <span>{{ item.receiver_profile.project_set.all.count }} project{{ item.receiver_profile.project_set.all.count|pluralize:'s' }}</span>
+                  <span>{{ item.receiver_profile.followers.count }} follower{{ item.receiver_profile.followers.count|pluralize:'s' }}</span>
+                </div>
+              </div>
+            </div>
+             {% if request.user.profile != item.receiver_profile %}
+                {% if request.user.profile not in item.receiver_profile.followers.all %}
+                 <form action="{% url 'follow' item.receiver_profile.id %}?next={{ request.path }}" method="POST">
+                    {% csrf_token %}
+                     {{ form.as_p }}
+                    <button
+                    type="submit"
+                    class="text-gray-900 bg-[#f6f8fa] dark:bg-slate-300 border border-[#d6d8db] hover:bg-gray-200 focus:outline-none font-normal rounded-lg text-xs px-3 py-2 text-center inline-flex items-center"
+                     >Follow
+                    </button>
+                 </form>
+                 {% else %}
+                     <a
+                        href="{% url 'unfollow' item.receiver_profile.id %}?next={{ request.path }}"
+                        class="text-gray-900 bg-[#f6f8fa] dark:bg-slate-300 border border-[#d6d8db] hover:bg-gray-200 focus:outline-none font-normal rounded-lg text-xs px-3 py-2 text-center inline-flex items-center"
+                         >
+                         Unfollow
+                    </a>
+                 {% endif %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+        {% elif item.object_type == 'Review' %}
+            <div class="w-full mb-10">
+            <div class="flex items-center gap-3 p-2">
+            <img
+            class="w-7 h-7 rounded-full hover:cursor-pointer"
+            src="{{ item.owner.profile_image.url }}"
+            alt="user photo"
+            />
+          <p class="text-[#81888f] text-sm dark:text-gray-400">
+            <a class="text-[#2c3034] dark:text-gray-300 font-semibold" href="{% url 'user-profile' item.owner.id %}"
+              >{{ item.owner.name }}</a
+            >
+            reviewed
+            <span class="text-[#2c3034] dark:text-gray-300 font-semibold"
+              >
+                {% if item.project.owner == request.user.profile %}
+                Your
+                {% else %}
+                {{ item.project.owner.name }}'s
+                {% endif %}
+            </span
+            >
+            project
+            · {{ item.created_at|timesince }} ago
+          </p>
+        </div>
+        <div
+          class="p-4 border bg-white border-gray-200 rounded-lg shadow dark:bg-gray-900 dark:border-gray-700"
+        >
+          <div class="flex text-sm justify-between items-center">
+            <a class="text-[#1f2328] dark:text-gray-300 font-semibold" href="{% url 'project' item.project.id %}"
+              >{{ item.project.owner.username }}/{{ item.project.title }}</a
+            >
+            <div class="flex"></div>
+          </div>
+          <div class="mt-3 flex items-center gap-5">
+            <p class="text-sm text-[#9ea3a8]">Vote{{ item.project.votes_count|pluralize:'s' }} {{ item.project.votes_count }}</p>
+            <a href="#" class="text-sm text-gray-400">⭐{{ item.project.votes_ratio }}%</a>
+            <p class="text-sm text-[#9ea3a8]">Updated {{ item.project.updated_at|timesince }}</p>
+          </div>
+        </div>
+      </div>
+        {% elif item.object_type == 'Education' %}
+            <div class="w-full mb-10">
+            <div class="flex items-center gap-3 p-2">
+            <img
+            class="w-7 h-7 rounded-full hover:cursor-pointer"
+            src="{{ item.owner.profile_image.url }}"
+            alt="user photo"
+            />
+          <p class="text-[#81888f] text-sm dark:text-gray-400">
+            <a class="text-[#2c3034] dark:text-gray-300 font-semibold" href="{% url 'user-profile' item.owner.id %}"
+              >{{ item.owner.name }}</a
+            >
+            added a new
+            <span class="text-[#2c3034] dark:text-gray-300 font-semibold"
+              >
+                education
+            </span
+            >
+            · {{ item.created_at|timesince }} ago
+          </p>
+        </div>
+        <div
+          class="p-4 border bg-white border-gray-200 rounded-lg shadow dark:bg-gray-900 dark:border-gray-700"
+        >
+          <div class="flex text-sm justify-between items-center">
+            <a class="text-[#1f2328] dark:text-gray-300 font-semibold" href="{% url 'user-profile' item.owner.id %}"
+              >{{ item.degree }}/{{ item.field_of_study }}</a
+            >
+            <div class="flex"></div>
+          </div>
+          <div class="mt-3 flex items-center gap-5">
+            <p class="text-sm text-[#9ea3a8]">{{ item.from_date }}</p>
+              {% if item.is_current %}
+                <p class="text-sm text-gray-400">Present</p>
+              {% else %}
+                <p class="text-sm text-gray-400">{{ item.to_date }}</p>
+              {% endif %}
+          </div>
+            </div>
+        </div>
+        {% elif item.object_type == 'Experience' %}
+           <div class="w-full mb-10">
+            <div class="flex items-center gap-3 p-2">
+            <img
+            class="w-7 h-7 rounded-full hover:cursor-pointer"
+            src="{{ item.owner.profile_image.url }}"
+            alt="user photo"
+            />
+          <p class="text-[#81888f] text-sm dark:text-gray-400">
+            <a class="text-[#2c3034] dark:text-gray-300 font-semibold" href="{% url 'user-profile' item.owner.id %}"
+              >{{ item.owner.name }}</a
+            >
+            added a new
+            <span class="text-[#2c3034] dark:text-gray-300 font-semibold"
+              >
+                experience
+            </span
+            >
+            · {{ item.created_at|timesince }} ago
+          </p>
+        </div>
+        <div
+          class="p-4 border bg-white border-gray-200 rounded-lg shadow dark:bg-gray-900 dark:border-gray-700"
+        >
+          <div class="flex text-sm justify-between items-center">
+            <a class="text-[#1f2328] dark:text-gray-300 font-semibold" href="{% url 'user-profile' item.owner.id %}"
+              >{{ item.company }}/{{ item.title }}</a
+            >
+            <div class="flex"></div>
+          </div>
+          <div class="mt-3 flex items-center gap-5">
+            <p class="text-sm text-[#9ea3a8]">{{ item.from_date }}</p>
+              {% if item.is_current %}
+                <p class="text-sm text-gray-400">Present</p>
+              {% else %}
+                <p class="text-sm text-gray-400">{{ item.to_date }}</p>
+              {% endif %}
+            <p class="text-sm text-[#9ea3a8]">{{ item.location }}</p>
+            </div>
+            </div>
+        </div>
+        {% elif item.object_type == 'Skill' %}
+            <div class="w-full mb-10">
+            <div class="flex items-center gap-3 p-2">
+            <img
+            class="w-7 h-7 rounded-full hover:cursor-pointer"
+            src="{{ item.owner.profile_image.url }}"
+            alt="user photo"
+            />
+          <p class="text-[#81888f] text-sm dark:text-gray-400">
+            <a class="text-[#2c3034] dark:text-gray-300 font-semibold" href="{% url 'user-profile' item.owner.id %}"
+              >{{ item.owner.name }}</a
+            >
+            added a new
+            <span class="text-[#2c3034] dark:text-gray-300 font-semibold"
+              >
+                skill
+            </span
+            >
+            · {{ item.created_at|timesince }} ago
+            </p>
+            </div>
+            <div
+            class="p-4 border bg-white border-gray-200 rounded-lg shadow dark:bg-gray-900 dark:border-gray-700"
+            >
+            <div class="flex text-sm justify-between items-center">
+            <a class="text-[#1f2328] dark:text-gray-300 font-semibold" href="{% url 'user-profile' item.owner.id %}"
+              >{{ item.name }}</a
+            >
+            <div class="flex"></div>
+            </div>
+            <div class="mt-3 flex items-center gap-5">
+              {% if item.body %}
+                <p class="text-sm text-gray-400">Main</p>
+              {% endif %}
+            <p class="text-sm text-[#9ea3a8]">{{ item.created_at|timesince }}</p>
+            </div>
+            </div>
+            </div>
+        {% endif %}
+         {% empty %}
+            <p class="ml-auto text-xs text-gray-500 dark:text-gray-400 my-3">
+             Start following people to see their projects here.
+            <a href="{% url 'profiles' %}" class="text-blue-600 dark:text-blue-500 hover:underline"
+            > developer </a
+            >.
+            </p>
+        {% endfor %}
+    </div>
+
+    <div class="hidden xl:block xl:col-span-1 mt-12">
+      <h2 class="dark:text-white text-sm font-bold mb-3">Latest News</h2>
+
+      {% include 'news.html' %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}
