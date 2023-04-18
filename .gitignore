@@ -1,1 +1,4 @@
 .idea/
+node_modules
+*.iml
+static/src

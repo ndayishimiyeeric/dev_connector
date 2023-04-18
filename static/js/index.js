@@ -1,5 +1,18 @@
 const searchForm = document.getElementById('searchForm')
 const linkBtn = document.querySelectorAll('.link_btn')
+const ulDefaultTab = document.getElementById('defaultTab')
+
+if (ulDefaultTab) {
+    // check if one of the li aria-selected is true
+    let liSelected = ulDefaultTab.querySelector('[aria-selected="true"]')
+
+    linkBtn.forEach((btn) => {
+        btn.addEventListener(('click'), (e) => {
+            e.preventDefault()
+            console.log('clicked', liSelected)
+        })
+    })
+}
 
 
 if (searchForm) {
@@ -10,6 +23,8 @@ if (searchForm) {
             let page = btn.getAttribute('data-page')
             searchForm.innerHTML += `<input value=${page} name="page" hidden />`
             searchForm.submit()
+
+
         })
     })
 }

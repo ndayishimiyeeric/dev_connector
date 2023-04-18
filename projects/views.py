@@ -1,24 +1,34 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+import datetime
 from .models import Project, Review, Tag
+from users.models import News
 from .forms import ProjectForm, ReviewForm
-from .utils import searchProjects
+from users.forms import FollowForm
+from .utils import searchProjects, userProjects
 from constants.utils import customPaginator
 
 
 # Create your views here.
-
+@login_required(login_url="login")
 def projects(request):
     search_query, projects = searchProjects(request)
     # pagination
     page, custom_range, projects, count = customPaginator(request, projects, 5)
+    news = News.objects.all().order_by('-created_at')[:3]
+
+    query, filtered_projects = userProjects(request)
 
     context = {
         "projects": projects,
         "search_query": search_query,
         "custom_range": custom_range,
         "page": page,
+        "count": count,
+        "filtered_projects": filtered_projects,
+        "query": query,
+        "news": news,
     }
     return render(request, "projects/projects.html", context)
 
@@ -26,7 +36,9 @@ def projects(request):
 def project(request, pk):
     obj = Project.objects.get(id=pk)
     tags = obj.tags.all()
+    comments = obj.review_set.all().exclude(body__exact="")
     form = ReviewForm()
+    follow_form = FollowForm()
 
     if request.method == "POST":
         form = ReviewForm(request.POST)
@@ -42,6 +54,8 @@ def project(request, pk):
         "project": obj,
         "tags": tags,
         "form": form,
+        "comments": comments,
+        "follow_form": follow_form,
     }
     return render(request, "projects/single-project.html", context)
 
@@ -74,7 +88,9 @@ def updateProject(request, pk):
     if request.method == "POST":
         form = ProjectForm(request.POST, request.FILES, instance=project)
         if form.is_valid():
-            form.save()
+            new_project = form.save(commit=False)
+            new_project.updated_at = datetime.datetime.now()
+            new_project.save()
             return redirect("dashboard")
 
     context = {

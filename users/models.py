@@ -155,24 +155,6 @@ class Education(models.Model):
         return self.school
 
 
-class Message(models.Model):
-    sender = models.ForeignKey(Profile, null=True, blank=True, on_delete=models.SET_NULL)
-    receiver = models.ForeignKey(Profile, null=True, blank=True, on_delete=models.SET_NULL, related_name='messages')
-    sender_name = models.CharField(max_length=200, null=True, blank=True)
-    sender_email = models.CharField(max_length=200, null=True, blank=True)
-    subject = models.CharField(max_length=200, null=True, blank=True)
-    body = models.TextField()
-    is_seen = models.BooleanField(default=False, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
-
-    def __str__(self):
-        return self.subject
-
-    class Meta:
-        ordering = ['is_seen', '-created_at']
-
-
 class Follower(models.Model):
     sender_profile = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True,
                                        related_name='sent_follows')
@@ -196,3 +178,16 @@ class Follower(models.Model):
     def get_following(self):
         # a flat list of id of all following
         return self.sender_profile.following.values_list('receiver_profile__id', flat=True)
+
+
+class News(models.Model):
+    title = models.CharField(max_length=200, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        ordering = ['-created_at']

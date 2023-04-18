@@ -174,7 +174,7 @@
               aria-labelledby="services-tab"
             >
               <div
-                class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+                class="w-16 p-3 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
               >
                 <div class="flex items-center justify-between mb-2">
                   <img
@@ -182,24 +182,24 @@
                     src="{{project.owner.profile_image.url}}"
                     alt="avatar"
                   />
+                  <div>
+                    {% if request.user.profile != project.owner %}
+                        {% if request.user.profile in project.owner.followers.all %}
+                        <button type="button" class="border mt-2 py-[3px] px-[12px] text-[12px] text-[#24292f] bg-[#f6f8fa] border-[rgb(31 35 40 / 15%)] dark:text-[#c9d1d9] dark:bg-[#21262d] dark:border-[#388bfd1a] rounded">Unfollow</button>
+                        {% else %}
+                         <form action="{% url 'follow' project.owner.id %}?next={{ request.path }}" method="POST">
+                            {% csrf_token %}
+                             {{follow_form.as_p}}
+                            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-xs px-3 py-1.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Follow</button>
+                        </form>
+                        {% endif %}
+                    {% endif %}
+                  </div>
                 </div>
-                <p
-                  class="text-base font-semibold leading-none text-gray-900 dark:text-white"
-                >
-                    {{project.owner.name}}
-                </p>
-                <p class="mb-3 text-sm font-normal">
+                <p class="text-sm font-normal">
                   <a href="{% url 'user-profile' project.owner.id %}" class="hover:underline text-gray-900 dark:text-blue-600"
                     >@{{ project.owner.username }}</a
                   >
-                </p>
-                <h5
-                  class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white"
-                >
-                    {{project.owner.headline}}
-                </h5>
-                <p class="mb-3 font-normal text-gray-500 dark:text-gray-400">
-                    {{project.owner.bio}}
                 </p>
               </div>
             </div>

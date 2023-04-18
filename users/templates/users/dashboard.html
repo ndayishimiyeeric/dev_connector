@@ -12,25 +12,25 @@
     </p>
     <!-- Link buttons -->
     <div class="dash-buttons">
-      <a href="{% url 'edit-profile' %}" class="btn">
-        <i class="fas fa-user-circle text-primary"></i>
+      <a href="{% url 'edit-profile' %}" class="btn my-1">
+        <i class="bi bi-person"></i>
         Edit Profile</a
       >
-      <a href="{% url 'add-experience' %}" class="btn">
-        <i class="fab fa-black-tie text-primary"></i>
+      <a href="{% url 'add-experience' %}" class="btn my-1">
+        <i class="bi bi-rocket-takeoff"></i>
         Add Experience</a
       >
-      <a href="{% url 'add-education' %}" class="btn">
-        <i class="fas fa-graduation-cap text-primary"></i>
+      <a href="{% url 'add-education' %}" class="btn my-1">
+        <i class="bi bi-award"></i>
         Add Education</a
       >
 
-      <a href="{% url 'create-project' %}" class="btn">
-        <i class="fas fa-diagram-project text-primary"></i>
+      <a href="{% url 'create-project' %}" class="btn my-1">
+        <i class="bi bi-layers"></i>
         Add Project</a
       >
-      <a href="{% url 'create-skill' %}" class="btn">
-        <i class="fas fa-star-half-alt text-primary"></i>
+      <a href="{% url 'create-skill' %}" class="btn my-1">
+        <i class="bi bi-stars"></i>
         Add Skill</a
       >
     </div>
@@ -41,14 +41,11 @@
           <th>Company</th>
           <th class="hide-sm">Title</th>
           <th class="hide-sm">Years</th>
-          <th></th>
-          <th></th>
-        </tr>
       </thead>
       <tbody>
         {% for experience in userExperiences %}
             <tr>
-            <td>{{experience.company}}</td>
+            <td><a href="{% url 'update-experience' experience.id %}">{{experience.company}}</a></td>
             <td class="hide-sm">{{experience.title}}</td>
             <td class="hide-sm">
                 {{experience.from_date|date:"M Y"}} -
@@ -57,12 +54,6 @@
                 {% else %}
                     <span class="text-primary">Active</span>
                 {% endif %}
-            </td>
-            <td>
-                <a href="{% url 'delete-experience' experience.id %}?next=/dashboard" class="btn btn-danger">Delete</a>
-            </td>
-            <td>
-                <a href="{% url 'update-experience' experience.id %}" class="btn btn-success">Update</a>
             </td>
             </tr>
         {% endfor %}
@@ -76,14 +67,12 @@
           <th>Institution</th>
           <th class="hide-sm">Degree</th>
           <th class="hide-sm">Years</th>
-          <th></th>
-          <th></th>
         </tr>
       </thead>
       <tbody>
         {% for education in userEducations %}
             <tr>
-                <td>{{education.school}}</td>
+                <td><a href="{% url 'update-education' education.id %}">{{education.school}}</a></td>
                 <td class="hide-sm" style="text-transform: capitalize;">{{education.degree}}</td>
                 <td class="hide-sm">
                     {{education.from_date|date:"M Y"}} -
@@ -92,12 +81,6 @@
                     {% else %}
                         <span class="text-primary">Active</span>
                     {% endif %}
-                </td>
-                <td>
-                    <a href="{% url 'delete-education' education.id %}?next=/dashboard" class="btn btn-danger">Delete</a>
-                </td>
-                <td>
-                    <a href="{% url 'update-education' education.id %}" class="btn btn-success">Update</a>
                 </td>
             </tr>
         {% endfor %}
@@ -111,8 +94,6 @@
           <th class="hide-sm">Votes</th>
           <th class="hide-sm">Ratio</th>
           <th class="hide-sm">Created</th>
-          <th></th>
-          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -126,7 +107,7 @@
                     <a href="{% url 'delete-project' project.id %}?next=/dashboard" class="btn btn-danger">Delete</a>
                 </td>
                 <td>
-                    <a href="{% url 'update-project' project.id %}" class="btn btn-success">Update</a>
+                    <a href="{% url 'update-project' project.id %}" class="btn btn-primary"><i class="bi bi-vector-pen"></i></a>
                 </td>
             </tr>
         {% endfor %}
@@ -137,26 +118,28 @@
         <thead>
             <tr>
                 <th>Skill</th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
             {% for skill in userSkills %}
                 <tr>
                     <td><a href="{% url 'update-skill' skill.id %}">{{skill.name}}</a></td>
-                    <td>
-                        <a href="{% url 'delete-skill' skill.id %}?next=/dashboard" class="btn btn-danger">Delete</a>
-                    </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
     <div class="my-5">
-        <p class="my-1" style="color: red;">Danger Zone</p>
-        <button class="btn btn-danger">
-            <i class="fas fa-user-minus"></i>
-            Delete My Account
-        </button>
+        <h2 class="my-1" style="color: #5f6368;">My Account</h2>
+        <div class="dash-buttons">
+            <a href="{% url 'logout' %}" class="btn my-1">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </a>
+            <a class="btn btn-danger my-1">
+                <i class="fas fa-user-minus"></i>
+                Delete My Account
+            </a>
+        </div>
     </div>
   </section>
 

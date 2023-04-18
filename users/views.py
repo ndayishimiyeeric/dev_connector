@@ -1,11 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Profile
-from .forms import CustomerUserCreationForm, ProfileForm, SkillForm, ExperienceForm, EducationForm
-from .utils import searchProfiles
+from .models import Profile, Follower, Skill, Experience, Education, News
+from .forms import CustomerUserCreationForm, ProfileForm, SkillForm, ExperienceForm, EducationForm, FollowForm
+from .utils import searchProfiles, searchUserProjects
 from constants.utils import customPaginator
 
 
@@ -29,7 +29,7 @@ def userLogin(request):
 
         if user is not None:
             login(request, user)
-            return redirect(request.GET['next'] if 'next' in request.GET else 'dashboard')
+            return redirect(request.GET['next'] if 'next' in request.GET else 'feed')
         else:
             messages.error(request, "Username or password is incorrect")
 
@@ -70,23 +70,30 @@ def userRegister(request):
 
 def userLogout(request):
     logout(request)
-    messages.success(request, "You have been logged out!")
-    return redirect('welcome')
+    messages.warning(request, "You have been logged out!")
+    return redirect('register')
 
 
 def userWelcome(request):
     return render(request, 'users/welcome.html')
 
 
+@login_required(login_url='login')
 def profiles(request):
     search_query, profiles = searchProfiles(request)
+    query, userProjects = searchUserProjects(request)
     # pagination
     page, custom_range, profiles, count = customPaginator(request, profiles, 3)
+    news = News.objects.all().order_by('-created_at')[:3]
 
     context = {
         'profiles': profiles,
         'search_query': search_query,
-        'custom_range': custom_range
+        'custom_range': custom_range,
+        'count': count,
+        'userProjects': userProjects,
+        'query': query,
+        'news': news,
     }
     return render(request, 'users/profiles.html', context)
 
@@ -96,11 +103,21 @@ def profile(request, pk):
     mainSkills = obj.skill_set.exclude(description__exact="")
     otherSkills = obj.skill_set.filter(description__exact="")
     userProjects = obj.project_set.all()
+    # pagination
     page, custom_range, userProjects, count = customPaginator(request, userProjects, 3)
+
+    # top 3 projects by votes_count
+    topProjects = obj.project_set.all().order_by('-votes_count')[:3]
 
     experiences = obj.experience_set.all().order_by('-is_current', '-to_date')
 
     educations = obj.education_set.all().order_by('-is_current', '-to_date')
+
+    # get followers and following
+    following = obj.following.all()
+    followers = obj.followers.all()
+    formFollow = FollowForm()
+
     context = {
         'profile': obj,
         'mainSkills': mainSkills,
@@ -110,6 +127,10 @@ def profile(request, pk):
         'userProjects': userProjects,
         'custom_range': custom_range,
         'count': count,
+        'topProjects': topProjects,
+        'followers': followers,
+        'following': following,
+        'formFollow': formFollow
     }
     return render(request, 'users/profile.html', context)
 
@@ -140,7 +161,7 @@ def editProfile(request):
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
-            return redirect('dashboard')
+            return redirect('user-profile', pk=profile.id)
 
     context = {
         'profile': profile,
@@ -161,7 +182,7 @@ def createSkill(request):
             skill.owner = profile
             skill.save()
             messages.success(request, "Skill created successfully")
-            return redirect('dashboard')
+            return redirect('user-profile', pk=profile.id)
 
     context = {
         'profile': profile,
@@ -183,7 +204,7 @@ def updateSkill(request, pk):
         if form.is_valid():
             form.save()
             messages.success(request, "Skill updated successfully")
-            return redirect('dashboard')
+            return redirect('user-profile', pk=profile.id)
 
     context = {
         'profile': profile,
@@ -202,7 +223,7 @@ def deleteSkill(request, pk):
     if request.method == "POST":
         skill.delete()
         messages.success(request, "Skill deleted successfully")
-        return redirect('dashboard')
+        return redirect('user-profile', pk=profile.id)
     context = {
         "object": skill,
     }
@@ -213,6 +234,7 @@ def deleteSkill(request, pk):
 def addExperience(request):
     profile = request.user.profile
     form = ExperienceForm()
+    default_url = '/profile/' + str(request.user.profile.id)
 
     if request.method == 'POST':
         form = ExperienceForm(request.POST)
@@ -222,7 +244,7 @@ def addExperience(request):
             experience.owner = profile
             experience.save()
             messages.success(request, "Experience created successfully")
-            return redirect('dashboard')
+            return redirect('edit-profile', pk=profile.id)
         else:
             messages.error(request, "An error has occurred during experience creation 😔 try again")
 
@@ -230,7 +252,8 @@ def addExperience(request):
         'profile': profile,
         'form': form,
         'text': ' Add any developer/programming position that you have had in the past',
-        'page': 'Add'
+        'page': 'Add',
+        'default_url': default_url,
     }
 
     return render(request, 'users/experience_form.html', context)
@@ -241,6 +264,7 @@ def updateExperience(request, pk):
     profile = request.user.profile
     experience = profile.experience_set.get(id=pk)
     form = ExperienceForm(instance=experience)
+    default_url = '/profile/' + str(request.user.profile.id)
 
     if request.method == 'POST':
         form = ExperienceForm(request.POST, instance=experience)
@@ -257,6 +281,7 @@ def updateExperience(request, pk):
         'text': f' Update experience ({experience.title})',
         'page': 'update',
         'experience': experience,
+        'default_url': default_url,
     }
     return render(request, 'users/experience_form.html', context)
 
@@ -269,7 +294,7 @@ def deleteExperience(request, pk):
     if request.method == "POST":
         experience.delete()
         messages.success(request, "Experience deleted successfully")
-        return redirect('dashboard')
+        return redirect('edit-profile', pk=profile.id)
 
     context = {
         "object": experience,
@@ -291,7 +316,7 @@ def addEducation(request):
             education.owner = profile
             education.save()
             messages.success(request, "Education created successfully")
-            return redirect("dashboard")
+            return redirect("edit-profile", pk=profile.id)
         else:
             messages.error(request, "An error has occurred during education creation 😔 try again")
     context = {
@@ -315,7 +340,7 @@ def updateEducation(request, pk):
         if form.is_valid():
             form.save()
             messages.success(request, "Education updated successfully")
-            return redirect("dashboard")
+            return redirect("user-profile", pk=profile.id)
         else:
             messages.error(request, "An error has occurred during education update 😔 try again")
 
@@ -338,9 +363,69 @@ def deleteEducation(request, pk):
     if request.method == 'POST':
         education.delete()
         messages.success(request, "Education deleted successfully")
-        return redirect('dashboard')
+        return redirect('user-profile', pk=profile.id)
 
     context = {
         'object': education,
     }
     return render(request, 'delete_component.html', context)
+
+
+# followers views
+
+@login_required(login_url='login')
+def follow(request, pk):
+    receiver_profile = get_object_or_404(Profile, id=pk)
+
+    # check if the user is already following the receiver
+    if request.user.profile in receiver_profile.followers.all():
+        messages.error(request, f"You are already following {receiver_profile}")
+        return redirect(request.GET['next'] if 'next' in request.GET else 'user-profile', pk=pk)
+    # check if the user is trying to follow himself
+    if request.user.profile == receiver_profile:
+        messages.error(request, "You can't follow yourself")
+        return redirect(request.GET['next'] if 'next' in request.GET else 'user-profile', pk=pk)
+
+    if request.method == "POST":
+        form = FollowForm(request.POST)
+        if form.is_valid():
+            new_follow = form.save(commit=False)
+            new_follow.sender_profile = request.user.profile
+            new_follow.receiver_profile = receiver_profile
+            new_follow.save()
+            messages.success(request, f"You are now following {new_follow.receiver_profile}")
+            return redirect(request.GET['next'] if 'next' in request.GET else 'user-profile', pk=pk)
+        else:
+            messages.error(request, f"Can't follow {receiver_profile}")
+    return redirect('user-profile', pk=pk)
+
+
+@login_required(login_url='login')
+def unfollow(request, pk):
+    follower = get_object_or_404(Follower, sender_profile=request.user.profile, receiver_profile_id=pk)
+    follower.delete()
+    messages.success(request, f"You are no longer following {follower.receiver_profile}")
+    return redirect(request.GET['next'] if 'next' in request.GET else 'user-profile', pk=pk)
+
+
+@login_required(login_url='login')
+def feed(request):
+    user_profile = request.user.profile
+    feed_items = user_profile.feed_items()
+    form = FollowForm()
+    news = News.objects.all()
+
+    query, userProjects = searchUserProjects(request)
+
+    context = {
+        'feed_items': feed_items,
+        'userProjects': userProjects,
+        'query': query,
+        'form': form,
+        'news': news,
+    }
+
+    return render(request, 'users/feed.html', context)
+
+
+
