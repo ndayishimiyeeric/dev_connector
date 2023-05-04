@@ -1,4 +1,4 @@
-from django.db import models
+Kofrom django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.core.exceptions import ValidationError
@@ -191,3 +191,4 @@ class News(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+
