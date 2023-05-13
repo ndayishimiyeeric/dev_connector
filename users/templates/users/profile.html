@@ -150,26 +150,26 @@
             role="tablist"
           >
             <li class="mr-2">
-              <button
+              <a
                 id="about-tab"
                 data-tabs-target="#about"
-                type="button"
+                href="{% url 'user-profile' profile.id %}"
                 role="tab"
                 aria-controls="about"
-                aria-selected="{% if request.GET.tab == 'about' %}true{% else %}false{% endif %}"
+                aria-selected="{% if tab == 'about' %}true{% else %}false{% endif %}"
                 class="inline-block p-4 text-blue-600 rounded-tl-lg hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-blue-500"
               >
                 <i class="bi bi-info-circle"></i> Overview
-              </button>
+              </a>
             </li>
             <li class="mr-2">
-              <button
+              <a
                 id="services-tab"
                 data-tabs-target="#services"
-                type="button"
+                href="{% url 'user-projects' profile.id %}"
                 role="tab"
                 aria-controls="services"
-                aria-selected="{% if request.GET.tab == 'projects' %}true{% else %}false{% endif %}"
+                aria-selected="{% if tab == 'projects' %}true{% else %}false{% endif %}"
                 class="flex gap-1 p-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300"
               >
                 <svg
@@ -190,16 +190,16 @@
                   class="inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-gray-800 bg-gray-100 border-2 rounded-lg dark:border-gray-900"
                   >{{ count }}</span
                 >
-              </button>
+              </a>
             </li>
             <li class="mr-2">
-              <button
+              <a
                 id="followers-tab"
                 data-tabs-target="#followers"
-                type="button"
+                href="{% url 'user-followers' profile.id %}"
                 role="tab"
                 aria-controls="followers"
-                aria-selected="{% if request.GET.tab == 'followers' %}true{% else %}false{% endif %}"
+                aria-selected="{% if tab == 'followers' %}true{% else %}false{% endif %}"
                 class="inline-block p-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300"
               >
                 <i class="bi bi-people"></i> Followers
@@ -207,16 +207,16 @@
                   class="inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-gray-800 bg-gray-100 border-2 rounded-lg dark:border-gray-900"
                   >{{ followers.count }}</span
                 >
-              </button>
+              </a>
             </li>
             <li class="mr-2">
-              <button
+              <a
                 id="following-tab"
                 data-tabs-target="#following"
-                type="button"
+                href="{% url 'user-following' profile.id %}"
                 role="tab"
                 aria-controls="following"
-                aria-selected="{% if request.GET.tab == 'following' %}true{% else %}false{% endif %}"
+                aria-selected="{% if tab == 'following' %}true{% else %}false{% endif %}"
                 class="inline-block p-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300"
               >
                 <i class="bi bi-people"></i> Following
@@ -224,7 +224,7 @@
                   class="inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-gray-800 bg-gray-100 border-2 rounded-lg dark:border-gray-900"
                   >{{ following.count }}</span
                 >
-              </button>
+              </a>
             </li>
           </ul>
         </div>

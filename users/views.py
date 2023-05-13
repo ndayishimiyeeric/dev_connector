@@ -7,6 +7,7 @@ from .models import Profile, Follower, Skill, Experience, Education, News
 from .forms import CustomerUserCreationForm, ProfileForm, SkillForm, ExperienceForm, EducationForm, FollowForm
 from .utils import searchProfiles, searchUserProjects
 from constants.utils import customPaginator
+from html import escape
 
 
 # Create your views here.
@@ -118,6 +119,10 @@ def profile(request, pk):
     followers = obj.followers.all()
     formFollow = FollowForm()
 
+    # get request Path
+    path = request.path
+    tab = path.split('/')[3][5:]
+
     context = {
         'profile': obj,
         'mainSkills': mainSkills,
@@ -130,7 +135,8 @@ def profile(request, pk):
         'topProjects': topProjects,
         'followers': followers,
         'following': following,
-        'formFollow': formFollow
+        'formFollow': formFollow,
+        'tab': tab
     }
     return render(request, 'users/profile.html', context)
 
@@ -376,6 +382,7 @@ def deleteEducation(request, pk):
 @login_required(login_url='login')
 def follow(request, pk):
     receiver_profile = get_object_or_404(Profile, id=pk)
+    print(request.path)
 
     # check if the user is already following the receiver
     if request.user.profile in receiver_profile.followers.all():
@@ -393,7 +400,7 @@ def follow(request, pk):
             new_follow.sender_profile = request.user.profile
             new_follow.receiver_profile = receiver_profile
             new_follow.save()
-            messages.success(request, f"You are now following {new_follow.receiver_profile}")
+            messages.success(request, f"You are now following {escape('<b>' + receiver_profile.user.username + '</b>')}")
             return redirect(request.GET['next'] if 'next' in request.GET else 'user-profile', pk=pk)
         else:
             messages.error(request, f"Can't follow {receiver_profile}")
