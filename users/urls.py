@@ -30,4 +30,5 @@ urlpatterns = [
     path("feed/", feed, name="feed"),
 
     path('inbox', feed, name='inbox'),
+
 ]
