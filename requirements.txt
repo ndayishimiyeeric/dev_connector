@@ -1,3 +1,5 @@
 django
 pillow
 django-compressor
+django-restframework
+django-cors-headers
