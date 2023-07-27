@@ -2,3 +2,4 @@
 node_modules
 *.iml
 static/src
+static/CACHE
