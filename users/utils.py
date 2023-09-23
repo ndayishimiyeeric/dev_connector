@@ -1,6 +1,7 @@
 from django.db.models import Q
-from .models import Profile, Skill
+
 from projects.models import Project
+from .models import Profile, Skill
 
 
 def searchProfiles(request):
@@ -9,9 +10,9 @@ def searchProfiles(request):
     if request.GET.get('q'):
         search_query = request.GET.get('q')
 
-    skills = Skill.objects.filter(name__icontains=search_query)
+    skills = Skill.objects.filter(owner__first_name__icontains=search_query)
     profiles = Profile.objects.distinct().filter(
-        Q(name__icontains=search_query) |
+        Q(first_name__icontains=search_query) |
         Q(headline__icontains=search_query) |
         Q(skill__in=skills)
     )
