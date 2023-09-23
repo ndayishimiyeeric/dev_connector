@@ -1,7 +1,7 @@
 from django.db.models.signals import post_save, post_delete
 from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.dispatch import receiver
-from django.contrib.auth.models import User
+from users.models import UserAccount
 from .models import Profile
 from django.core.mail import send_mail
 from django.conf import settings
@@ -14,7 +14,8 @@ def createProfile(sender, instance, created, **kwargs):
             user=user,
             username=user.username,
             email=user.email,
-            name=user.first_name
+            first_name=user.first_name,
+            last_name=user.last_name
         )
 
         subject = 'Welcome to DevConnect!'
@@ -36,7 +37,8 @@ def updateUser(sender, instance, created, **kwargs):
     if not created:
         user.username = profile.username
         user.email = profile.email
-        user.first_name = profile.name
+        user.first_name = profile.first_name
+        user.last_name = profile.last_name
         user.save()
 
 
@@ -57,6 +59,6 @@ def got_offline(sender, user, request, **kwargs):
     user.profile.save()
 
 
-post_save.connect(createProfile, sender=User)
+post_save.connect(createProfile, sender=UserAccount)
 post_save.connect(updateUser, sender=Profile)
 post_delete.connect(deleteUser, sender=Profile)

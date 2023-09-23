@@ -47,17 +47,19 @@ class CustomerUserCreationForm(UserCreationForm):
 class ProfileForm(ModelForm):
     class Meta:
         model = Profile
-        fields = ['name', 'username', 'email', 'headline', 'bio',
+        fields = ['first_name', 'last_name', 'username', 'email', 'headline', 'bio',
                   'profile_image', 'location', 'linkedin', 'github',
                   'website', 'twitter', 'youtube']
         labels = {
-            'name': 'Name',
+            'first_name': 'First Name',
+            'last_name': 'Last Name',
             'bio': 'About',
             'profile_image': 'Profile Picture',
         }
 
         widgets = {
-            'name': forms.TextInput(attrs={'placeholder': 'Full Name'}),
+            'first_name': forms.TextInput(attrs={'placeholder': 'First name'}),
+            'last_name': forms.TextInput(attrs={'placeholder': 'Last name'}),
             'username': forms.TextInput(attrs={'placeholder': 'Username'}),
             'email': forms.TextInput(attrs={'placeholder': 'Email'}),
             'headline': forms.TextInput(attrs={'placeholder': 'Give us an idea of where you are in your career'}),
