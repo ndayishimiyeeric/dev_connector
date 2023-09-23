@@ -1,4 +1,4 @@
-{% load compress %} {% load static %}
+{% load static %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -19,9 +19,7 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
-    {% compress css %}
     <link rel="stylesheet" href="{% static 'src/output.css' %}" />
-    {% endcompress %}
     <script>
       // On page load or when changing themes, best to add inline in `head` to avoid FOUC
       if (
