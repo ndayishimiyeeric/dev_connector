@@ -11,11 +11,13 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 import os
+import sys
 from os import getenv, path
 from pathlib import Path
 
 import dotenv
 from django.core.management.utils import get_random_secret_key
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,6 +26,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 dotenv_file = BASE_DIR / '.env.local'
 if path.isfile(dotenv_file):
     dotenv.load_dotenv(dotenv_file)
+
+DEVELOPMENT_MODE = getenv("DEVELOPMENT_MODE", "False") == "True"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -48,7 +52,8 @@ INSTALLED_APPS = [
 
     "rest_framework",
     "djoser",
-
+    "storages"
+    "social_django",
     "corsheaders",
 
     "projects.apps.ProjectsConfig",
@@ -89,6 +94,14 @@ TEMPLATES = [
 WSGI_APPLICATION = "devconnector.wsgi.application"
 
 # Auth Settings
+
+
+AUTHENTICATION_BACKENDS = [
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.github.GithubOAuth2',
+    'django.contrib.auth.backends.ModelBackend'
+]
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'api.authentication.CustomJWTAUth',
@@ -107,6 +120,15 @@ AUTH_COOKIE_HTTP_ONLY = True
 AUTH_COOKIE_PATH = "/"
 AUTH_COOKIE_SAMESITE = "None"
 
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = getenv("GOOGLE_AUTH_KEY")
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = getenv("GOOGLE_AUTH_SECRET_KEY")
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/userinfo.profile',
+    'openid'
+]
+SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ["first_name", "last_name"]
+
 # CORS
 CORS_ALLOWED_ORIGINS = getenv(
     "CORS_ALLOWED_ORIGINS",
@@ -123,7 +145,8 @@ DJOSER = {
     'SET_USERNAME_RETYPE': True,
     'PASSWORD_RESET_CONFIRM_RETYPE': True,
     'USERNAME_RESET_CONFIRM_RETYPE': True,
-    'TOKEN_MODEL': None
+    'TOKEN_MODEL': None,
+    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': getenv('REDIRECT_URLS').split(',')
 }
 
 SIMPLE_JWT = {
@@ -132,14 +155,19 @@ SIMPLE_JWT = {
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+if DEVELOPMENT_MODE:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
     }
-}
-
+elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
+    if getenv("DATABASE_URL", None) is None:
+        raise Exception("DATABASE_URL environment variable not defined")
+    DATABASES = {
+        "default": dj_database_url.parse(getenv("DATABASE_URL")),
+    }
 # Email settings
 EMAIL_BACKEND = 'django_ses.SESBackend'
 DEFAULT_FROM_EMAIL = getenv('AWS_SES_FROM_EMAIL')
@@ -185,19 +213,36 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = "static/"
-MEDIA_URL = "images/"
+if DEVELOPMENT_MODE is True:
+    STATIC_URL = "static/"
+    MEDIA_URL = "images/"
 
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
+    STATICFILES_DIRS = [
+        BASE_DIR / "static",
+    ]
 
-MEDIA_ROOT = os.path.join(BASE_DIR, "static/images")
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+    MEDIA_ROOT = os.path.join(BASE_DIR, "static/images")
+    STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
-COMPRESS_ROOT = BASE_DIR / 'static'
-COMPRESS_ENABLED = True
-STATICFILES_FINDERS = ('compressor.finders.CompressorFinder',)
+    # COMPRESS_ROOT = BASE_DIR / 'static'
+    # COMPRESS_ENABLED = True
+    # STATICFILES_FINDERS = ('compressor.finders.CompressorFinder',)
+else:
+    AWS_S3_ACCESS_KEY_ID = getenv("AWS_S3_ACCESS_KEY_ID")
+    AWS_S3_SECRET_ACCESS_KEY = getenv("AWS_S3_SECRET_ACCESS_KEY")
+    AWS_STORAGE_BUCKET_NAME = getenv("AWS_STORAGE_BUCKET_NAME")
+    AWS_S3_REGION_NAME = getenv("AWS_S3_REGION_NAME")
+    AWS_S3_ENDPOINT_URL = f"https://{AWS_S3_REGION_NAME}.digitaloceanspaces.com"
+    AWS_S3_OBJECT_PARAMETERS = {
+        'CacheControl': 'max-age=86400'
+    }
+    AWS_DEFAULT_ACL = "public-read"
+    AWS_LOCATION = "static"
+    AWS_S3_CUSTOM_DOMAIN = getenv("AWS_S3_CUSTOM_DOMAIN")
+    STORAGES = {
+        "default": {"BACKEND": "storages.backends.s3boto3.S3Boto3Storage"},
+        "staticfiles": {"BACKEND": "storages.backends.s3boto3.S3StaticStorage"}
+    }
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
