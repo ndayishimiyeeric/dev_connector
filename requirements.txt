@@ -1,5 +1,7 @@
-django
+django~=4.2.2
 pillow
 django-compressor
 django-restframework
 django-cors-headers
+djangorestframework-simplejwt
+python-dotenv
