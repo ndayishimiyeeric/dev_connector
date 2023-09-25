@@ -10,3 +10,6 @@ djoser
 gunicorn
 psycopg2
 python-dotenv
+boto3
+django-environ
+cryptography

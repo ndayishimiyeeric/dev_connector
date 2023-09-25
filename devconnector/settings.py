@@ -16,6 +16,7 @@ from os import getenv, path
 from pathlib import Path
 
 import dotenv
+import environ
 from django.core.management.utils import get_random_secret_key
 import dj_database_url
 
@@ -24,8 +25,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # dev env settings
 dotenv_file = BASE_DIR / '.env.local'
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+
 if path.isfile(dotenv_file):
     dotenv.load_dotenv(dotenv_file)
+    environ.Env.read_env(os.path.join(BASE_DIR, '.env.local'))
 
 DEVELOPMENT_MODE = getenv("DEVELOPMENT_MODE", "False") == "True"
 
@@ -52,7 +59,7 @@ INSTALLED_APPS = [
 
     "rest_framework",
     "djoser",
-    "storages"
+    "storages",
     "social_django",
     "corsheaders",
 
@@ -232,13 +239,14 @@ else:
     AWS_S3_SECRET_ACCESS_KEY = getenv("AWS_S3_SECRET_ACCESS_KEY")
     AWS_STORAGE_BUCKET_NAME = getenv("AWS_STORAGE_BUCKET_NAME")
     AWS_S3_REGION_NAME = getenv("AWS_S3_REGION_NAME")
-    AWS_S3_ENDPOINT_URL = f"https://{AWS_S3_REGION_NAME}.digitaloceanspaces.com"
+    AWS_S3_ENDPOINT_URL = f"https://{AWS_S3_REGION_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
     AWS_S3_OBJECT_PARAMETERS = {
         'CacheControl': 'max-age=86400'
     }
     AWS_DEFAULT_ACL = "public-read"
     AWS_LOCATION = "static"
-    AWS_S3_CUSTOM_DOMAIN = getenv("AWS_S3_CUSTOM_DOMAIN")
+    AWS_S3_CUSTOM_DOMAIN = getenv("AWS_S3_CUSTOM_DOMAIN").split()
+    AWS_CLOUDFRONT_KEY_ID = env.str("AWS_CLOUDFRONT_KEY_ID", multiline=True).encode('ascii').split()
     STORAGES = {
         "default": {"BACKEND": "storages.backends.s3boto3.S3Boto3Storage"},
         "staticfiles": {"BACKEND": "storages.backends.s3boto3.S3StaticStorage"}
