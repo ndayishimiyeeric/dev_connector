@@ -1,0 +1,358 @@
+{% load static %}
+
+<nav
+  class="hidden sm:block w-full border-b border-[hsla(210,18%,87%,1)] dark:border-[#30363d] bg-[#24292f] p-[16px] pl-[32px] pr-[32px] font-sans2"
+>
+  <div class="flex items-center justify-around">
+    <div class="flex items-center justify-start gap-4">
+      <a
+        href="{% url 'feed' %}"
+        class="flex items-center justify-center p-4 text-black z-50 w-[30px] h-[30px] rounded-full bg-white"
+      >
+        <i class="bi bi-window-stack text-xl"></i>
+      </a>
+
+      <form
+        class="hidden w-48 md:w-64 md:focus-within:w-96 transition-all ease-in-out duration-300 bg-[#24292f]"
+      >
+        <div
+          class="lg:w-64 relative md:focus-within:w-96 transition-all ease-in-out duration-300"
+        >
+          <input
+            type="search"
+            id="default-search"
+            class="block w-full p-1 pl-3 text-sm text-gray-900 border border-[#57606a] rounded-lg bg-[#24292f] focus:border-[#57606a] focus:ring-[#57606a] focus:bg-white"
+            placeholder="Search developers, projects, etc..."
+            name="query"
+          />
+          <button
+            type="submit"
+            class="text-white bg-[#24292f] lg:block absolute right-1 bottom-1 border border-[#57606a] focus:border-[#57606a] focus:ring-4 focus:outline-none focus:ring-[#57606a] font-medium rounded text-sm px-2"
+          >
+            /
+          </button>
+        </div>
+      </form>
+
+      <ul class="flex md:flex md:space-x-8 md:mt-0 text-sm md:font-medium">
+        {% if user.is_authenticated %}
+        <li>
+          <a
+            href="{% url 'profiles' %}"
+            class="block py-2 pl-3 pr-4 text-white rounded md:bg-transparent md:p-0 dark:hover:text-gray-400 font-bold dark:text-white"
+            >Developers</a
+          >
+        </li>
+        <li>
+          <a
+            href="{% url 'projects' %}"
+            class="block py-2 pl-3 pr-4 text-white rounded md:bg-transparent md:p-0 dark:hover:text-gray-400 font-bold dark:text-white"
+            >Projects</a
+          >
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+
+    <div class="flex items-center">
+      <div class="flex items-center ml-3">
+        <div class="flex items-center gap-5">
+            {% if user.is_authenticated %}
+          <a
+            href="{% url 'inbox' %}"
+            class="hidden :flex text-sm text-[#ffffff] hover:text-[#bbb8b8] rounded-full"
+          >
+            <span class="sr-only">Open user menu</span>
+            <i class="bi bi-bell font-bold text-[16px]"></i>
+          </a>
+
+          <button
+            type="button"
+            id="dropdownHelperButton"
+            data-dropdown-toggle="dropdownHelper"
+            aria-expanded="false"
+            class="flex text-sm text-[#ffffff] change"
+          >
+            <span class="sr-only">Open user menu</span>
+            <svg aria-hidden="true" height="16" viewBox="0 0 16 16" width="16">
+              <path
+                d="M7.75 2a.75.75 0 0 1 .75.75V7h4.25a.75.75 0 0 1 0 1.5H8.5v4.25a.75.75 0 0 1-1.5 0V8.5H2.75a.75.75 0 0 1 0-1.5H7V2.75A.75.75 0 0 1 7.75 2Z"
+                fill="#ffffff"
+              ></path>
+            </svg>
+            <i class="bi bi-chevron-down text-xs"></i>
+          </button>
+          <div
+            id="dropdownHelper"
+            class="z-[9999] hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-50 dark:bg-[#24292f] dark:divide-gray-600 border dark:border-[#30363d]"
+          >
+            <ul
+              class="relative z-50 p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200"
+              aria-labelledby="dropdownHelperButton"
+            >
+              <li class="z-50">
+                <a
+                  href="{% url 'add-experience' %}"
+                  class="block p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-500"
+                >
+                  <div class="font-semibold">New Experience</div>
+                  <span class="text-xs italic text-gray-500 dark:text-gray-400"
+                    >Showcase Your Expertise</span
+                  >
+                </a>
+              </li>
+              <li class="z-50">
+                <a
+                  href="{% url 'add-education' %}"
+                  class="block p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-500"
+                >
+                  <div class="font-semibold">New Education</div>
+                  <span class="text-xs italic text-gray-500 dark:text-gray-400"
+                    >Elevate Your Profile</span
+                  >
+                </a>
+              </li>
+              <li class="z-50">
+                <a
+                  href="{% url 'create-project' %}"
+                  class="block p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-500"
+                >
+                  <div class="font-semibold">New Project</div>
+                  <span class="text-xs italic text-gray-500 dark:text-gray-400"
+                    >Highlight Your Talent</span
+                  >
+                </a>
+              </li>
+              <li class="z-50">
+                <a
+                  href="{% url 'create-skill' %}"
+                  class="block p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-500"
+                >
+                  <div class="font-semibold">New Skill</div>
+                  <span class="text-xs italic text-gray-500 dark:text-gray-400"
+                    >Let Your Skills Shine</span
+                  >
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <button
+            type="button"
+            class="flex text-sm rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+            aria-expanded="false"
+            data-dropdown-toggle="user-dropdown"
+          >
+            <span class="sr-only">Open user menu</span>
+            <img
+              class="w-7 h-7 rounded-full"
+              src="{{ request.user.profile.profile_image.url }}"
+              alt="{{ request.user.profile.name }}"
+            />
+          </button>
+          <div
+            class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-[#24292f] dark:divide-gray-600 w-52 border dark:border-[#30363d]"
+            id="user-dropdown"
+          >
+            <div class="px-4 py-3">
+              <span class="block text-sm text-gray-900 dark:text-white"
+                >{{ request.user.profile.name }}</span
+              >
+              <span
+                class="block text-sm text-gray-500 truncate dark:text-gray-400"
+                >{{ request.user.profile.email }}</span
+              >
+            </div>
+            <ul class="py-2" aria-labelledby="user-menu-button">
+              <li>
+                <a
+                  href="{% url 'user-profile' request.user.profile.id %}?tab=about"
+                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                  ><i class="bi bi-view-list"></i>Account</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{% url 'edit-profile' %}"
+                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                  ><i class="bi bi-gear-wide-connected"></i> Settings</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{% url 'logout' %}"
+                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                  ><i class="bi bi-box-arrow-left"></i> Sign out</a
+                >
+              </li>
+              <li>
+                <button
+                  id="theme-toggle"
+                  type="button"
+                  class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white w-full"
+                >
+                  <span id="theme-toggle-dark-icon" class="hidden">
+                    <i class="bi bi-moon-fill"></i> Dark mode
+                  </span>
+                  <span id="theme-toggle-light-icon" class="hidden">
+                    <i class="bi bi-lightbulb-fill"></i> Light mode
+                  </span>
+                </button>
+              </li>
+            </ul>
+          </div>
+            {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<nav class="sm:hidden dark:border-[#30363d] bg-[#24292f] font-sans">
+  <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+    <div class="relative flex h-16 items-center justify-between">
+      <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
+        <!-- Mobile menu button-->
+        <button
+          type="button"
+          class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white"
+          aria-controls="mobile-menu"
+          data-collapse-toggle="navbar-dropdown"
+          aria-expanded="false"
+        >
+          <span class="sr-only">Open main menu</span>
+          <svg
+            class="block h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+            />
+          </svg>
+          <svg
+            class="hidden h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      </div>
+      <div
+        class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start"
+      >
+        <a
+          href="{% url 'profiles' %}"
+          class="flex flex-shrink-0 justify-center items-center p-4 text-black z-50 w-[30px] h-[30px] rounded-full bg-white"
+        >
+          <i class="bi bi-window-stack text-xl"></i>
+        </a>
+      </div>
+      <div
+        class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0"
+      >
+        <a
+          href=""
+          class="flex text-sm text-[#ffffff] hover:text-[#bbb8b8] rounded-full"
+        >
+          <span class="sr-only">Open user menu</span>
+          <i class="bi bi-bell font-bold text-[16px]"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile menu, show/hide based on menu state. -->
+  <div class="hidden" id="navbar-dropdown">
+    <div class="space-y-1 px-2 pb-3 pt-2">
+      <form class="transition-all ease-in-out duration-300 bg-[#24292f]">
+        <div class="relative">
+          <input
+            type="search"
+            id="default-search"
+            class="block w-full p-1 pl-3 text-sm text-gray-900 border border-[#57606a] rounded-lg bg-[#24292f] focus:border-[#57606a] focus:ring-[#57606a] focus:bg-white"
+            placeholder="Search developers, projects, etc..."
+            name="query"
+          />
+          <button
+            type="submit"
+            class="text-white bg-[#24292f] lg:block sm:hidden absolute right-1 bottom-1 border border-[#57606a] focus:border-[#57606a] focus:ring-4 focus:outline-none focus:ring-[#57606a] font-medium rounded text-sm px-2"
+          >
+            /
+          </button>
+        </div>
+      </form>
+      {% if user.is_authenticated %}
+      <a
+        href="{% url 'user-profile' request.user.profile.id %}"
+        class="text-white block rounded-md px-3 py-2 text-base font-medium"
+        aria-current="page"
+        >Account</a
+      >
+
+      <a
+        href="{% url 'profiles' %}"
+        class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
+        >Developers</a
+      >
+
+      <a
+        href="{% url 'projects' %}"
+        class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
+        >Projects</a
+      >
+
+      <a
+        href="{% url 'edit-profile' %}"
+        class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
+        >Settings</a
+      >
+      <a
+        href="{% url 'add-experience' %}"
+        class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
+        >New Experience</a
+      >
+      <a
+        href="{% url 'add-education' %}"
+        class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
+        >New Education</a
+      >
+      <a
+        href="{% url 'create-project' %}"
+        class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
+        >New Project</a
+      >
+      <a
+        href="{% url 'create-skill' %}"
+        class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
+        >New Skill</a
+      >
+      <a
+        href="{% url 'logout' %}"
+        class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
+        >Sign out</a
+      >
+        {% endif %}
+    </div>
+  </div>
+</nav>
+
+<style>
+  .change svg:hover path,
+  .change svg:focus-visible path {
+    fill: #bbb8b8 !important;
+  }
+</style>

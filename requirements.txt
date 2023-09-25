@@ -1,0 +1,15 @@
+Django
+dj-database-url
+django-cors-headers
+django-filter
+django-ses
+django-storages
+djangorestframework
+djangorestframework-simplejwt
+djoser
+gunicorn
+psycopg2
+python-dotenv
+boto3
+django-environ
+cryptography

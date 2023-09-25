@@ -1,0 +1,59 @@
+{% include 'base.html' %}
+
+{% block content %}
+    <section class="container zoom_out">
+        <div class="post-form-header bg-dark" style="border-top-left-radius: 0.7rem; border-top-right-radius: 0.7rem">
+            <!-- Back to messages -->
+            <a href="{% url 'inbox' %}" class="btn btn-dark">
+                <i class="bi bi-arrow-left"></i>
+            </a>
+            <!-- Delete message -->
+            <a href="" class="btn btn-dark" >
+                <i class="bi bi-trash3"></i>
+            </a>
+            <!-- Mark as unread -->
+            <a href="" class="btn btn-dark">
+                <i class="bi bi-envelope"></i>
+            </a>
+        </div>
+        <div class="messagePage" style="background: #fff;">
+            <div class="content-box">
+                <div class="message" style="border-top-left-radius: 0; border-top-right-radius: 0;">
+                      <p class="message__subject my-1">five centuries, but also the leap into electronic</p>
+                      <div class="my-1" style="display: flex; justify-content: space-between; align-items: center;">
+                          <div>
+                              <!-- sender name -->
+                              <a href="" class="">Emmy Tester</a>
+                                <!-- sender email -->
+                              <span class="sender__email">
+                                    <<span>test@devconnector</span>>
+                              </span>
+                          </div>
+                          <div class="" style="flex-basis: 30%; display: flex; align-items: center;">
+                              <!-- time and date -->
+                              <span style="font-size: 0.9rem; color: #5f6368; margin-right: 0.5rem;">04:37 PM <span class="hide-sm">(1 day ago)</span></span>
+                              <!-- start to pin -->
+                              <a href="" style="font-size: 0.9rem;" class="btn btn-primary">
+                                  <i class="bi bi-star"></i>
+                              </a>
+                              <!-- reply all -->
+                              <a href="" class="btn">
+                                  <i class="bi bi-reply-all"></i>
+                              </a>
+                          </div>
+                      </div>
+
+                      <p class="message__body my-3">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, ea? Facere minus vel nam, quas nisi dolore
+                        possimus tempora commodi. Praesentium nisi totam quas pariatur culpa nostrum dolore, nemo voluptatem!
+                        <br /><br />
+                        Voluptate dolores veniam ducimus cumque, harum fuga quaerat, culpa distinctio voluptas magnam a unde
+                        reiciendis similique necessitatibus obcaecati voluptatibus deserunt voluptatum numquam ullam in ipsum, ea
+                        aperiam. Dolorum rerum pariatur quaerat. Debitis tempora aliquid libero alias aperiam illo fuga ipsum magni
+                        quia.
+                      </p>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% if queryset.has_other_pages %}
+    <ul class="flex items-center justify-center mt-8">
+        {% if queryset.has_previous %}
+            <li>
+                <a
+                  href="?page={{ queryset.previous_page_number }}"
+                  data-page="{{ queryset.previous_page_number }}"
+                  class="block disabled: px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                  <span class="sr-only">Previous</span>
+                  <i class="bi bi-chevron-left"></i>
+                </a>
+            </li>
+        {% else %}
+            <li>
+                <a
+                  href=""
+                  class="cursor-not-allowed block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400"
+                  disabled="disabled"
+                >
+                  <span class="sr-only">Previous</span>
+                  <i class="bi bi-chevron-left"></i>
+                </a>
+            </li>
+        {% endif %}
+
+        {% for page in custom_range %}
+            {% if page == queryset.number %}
+                <li>
+                    <a
+                      href="?page={{ page }}"
+                      data-page="{{ page }}"
+                      aria-current="page"
+                      class="z-10 px-3 py-2 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
+                      >{{ page }}</a>
+                </li>
+            {% else %}
+                <li>
+                    <a
+                      href="?page={{ page }}"
+                      data-page="{{ page }}"
+                      class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                      >{{ page }}</a
+                    >
+                </li>
+            {% endif %}
+        {% endfor %}
+
+        {% if queryset.has_next %}
+            <li>
+                <a
+                  href="?page={{ queryset.next_page_number }}"
+                  data-page="{{ queryset.next_page_number }}"
+                  class="block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                  <span class="sr-only">Next</span>
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+            </li>
+        {% else %}
+            <li>
+                <a
+                  href=""
+                  class="cursor-not-allowed block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400"
+                  disabled="disabled"
+                >
+                  <span class="sr-only">Next</span>
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+{% endif %}

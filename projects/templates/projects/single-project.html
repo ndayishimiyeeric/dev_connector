@@ -1,0 +1,311 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="container px-8 sm:mx-auto max-w-4xl font-sans2 mb-4">
+        <div
+          class="w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mt-20 font-display"
+        >
+          <ul
+            class="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 rounded-t-lg bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800"
+            id="defaultTab"
+            data-tabs-toggle="#defaultTabContent"
+            role="tablist"
+          >
+            <li class="mr-2">
+              <button
+                id="about-tab"
+                data-tabs-target="#about"
+                type="button"
+                role="tab"
+                aria-controls="about"
+                aria-selected="true"
+                class="inline-block p-4 text-blue-600 rounded-tl-lg hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-blue-500"
+              >
+                <i class="bi bi-info-circle"></i> Details
+              </button>
+            </li>
+            <li class="mr-2">
+              <button
+                id="services-tab"
+                data-tabs-target="#services"
+                type="button"
+                role="tab"
+                aria-controls="services"
+                aria-selected="false"
+                class="inline-block p-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300"
+              >
+                <i class="bi bi-person"></i> Author
+              </button>
+            </li>
+            <li class="mr-2">
+              <button
+                id="statistics-tab"
+                data-tabs-target="#statistics"
+                type="button"
+                role="tab"
+                aria-controls="statistics"
+                aria-selected="false"
+                class="inline-block p-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300"
+              >
+                <i class="bi bi-graph-down"></i> Stats
+              </button>
+            </li>
+          </ul>
+          <div id="defaultTabContent">
+            <div
+              class="mx-28 hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800"
+              id="about"
+              role="tabpanel"
+              aria-labelledby="about-tab"
+            >
+              <h2
+                class="mb-3 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white"
+              >
+                {{project.title}}
+              </h2>
+              <p class="mb-3 text-gray-500 dark:text-gray-400 w-[70%]">
+                {{project.description}}
+              </p>
+              <div class="tags flex gap-1 w-full mb-4">
+                  {% for tag in project.tags.all %}
+                    <span
+                  class="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500"
+                  >{{tag}}</span
+                >
+                  {% endfor %}
+              </div>
+              <div class="links flex gap-2 w-full">
+                  {% if project.live_preview%}
+                    <div>
+                      <button
+                        data-popover-target="livelink"
+                        type="button"
+                        class="text-white bg-blue-700 hover:bg-blue-800 inline-flex items-center focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2.5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                      >
+                        <i class="bi bi-box-arrow-up-right mr-2"></i>
+                        Live Demo
+                      </button>
+                      <div
+                        data-popover
+                        id="livelink"
+                        role="tooltip"
+                        class="absolute z-10 invisible inline-block text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 w-72 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400"
+                      >
+                        <div class="p-3 space-y-2">
+                          <h3 class="font-semibold text-gray-900 dark:text-white">
+                            Available online
+                          </h3>
+                          <p>The project owner have made the project available online</p>
+                          <a
+                            href="{{project.live_preview}}"
+                            target="_blank"
+                            class="flex items-center font-medium text-blue-600 dark:text-blue-500 dark:hover:text-blue-600 hover:text-blue-700"
+                            >Visit now
+                            <svg
+                              class="w-4 h-4 ml-1"
+                              aria-hidden="true"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                fill-rule="evenodd"
+                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                clip-rule="evenodd"
+                              ></path></svg
+                          ></a>
+                        </div>
+                        <div data-popper-arrow></div>
+                      </div>
+                    </div>
+                  {% endif %}
+                  {% if project.source_code%}
+                    <div>
+                      <button
+                        data-popover-target="githublink"
+                        type="button"
+                        class="text-white bg-blue-700 hover:bg-blue-800 inline-flex items-center focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2.5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                      >
+                        <i class="bi bi-github mr-2"></i>
+                        Source Code
+                      </button>
+                      <div
+                        data-popover
+                        id="githublink"
+                        role="tooltip"
+                        class="absolute z-10 invisible inline-block text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 w-72 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400"
+                      >
+                        <div class="p-3 space-y-2">
+                          <h3 class="font-semibold text-gray-900 dark:text-white">
+                            Accessible on GitHub
+                          </h3>
+                          <p>
+                            This project is available on GitHub visit and access to source
+                            code.
+                          </p>
+                          <a
+                            href="{{project.source_code}}"
+                            class="flex items-center font-medium text-blue-600 dark:text-blue-500 dark:hover:text-blue-600 hover:text-blue-700"
+                            >Visit now
+                            <svg
+                              class="w-4 h-4 ml-1"
+                              aria-hidden="true"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                fill-rule="evenodd"
+                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                clip-rule="evenodd"
+                              ></path></svg
+                          ></a>
+                        </div>
+                        <div data-popper-arrow></div>
+                      </div>
+                    </div>
+                  {% endif %}
+              </div>
+            </div>
+            <div
+              class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800"
+              id="services"
+              role="tabpanel"
+              aria-labelledby="services-tab"
+            >
+              <div
+                class="w-16 p-3 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+              >
+                <div class="flex items-center justify-between mb-2">
+                  <img
+                    class="w-10 h-10 rounded-full"
+                    src="{{project.owner.profile_image.url}}"
+                    alt="avatar"
+                  />
+                  <div>
+                    {% if request.user.profile != project.owner %}
+                        {% if request.user.profile in project.owner.followers.all %}
+                        <button type="button" class="border mt-2 py-[3px] px-[12px] text-[12px] text-[#24292f] bg-[#f6f8fa] border-[rgb(31 35 40 / 15%)] dark:text-[#c9d1d9] dark:bg-[#21262d] dark:border-[#388bfd1a] rounded">Unfollow</button>
+                        {% else %}
+                         <form action="{% url 'follow' project.owner.id %}?next={{ request.path }}" method="POST">
+                            {% csrf_token %}
+                             {{follow_form.as_p}}
+                            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-xs px-3 py-1.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Follow</button>
+                        </form>
+                        {% endif %}
+                    {% endif %}
+                  </div>
+                </div>
+                <p class="text-sm font-normal">
+                  <a href="{% url 'user-profile' project.owner.id %}" class="hover:underline text-gray-900 dark:text-blue-600"
+                    >@{{ project.owner.username }}</a
+                  >
+                </p>
+              </div>
+            </div>
+            <div
+              class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800"
+              id="statistics"
+              role="tabpanel"
+              aria-labelledby="statistics-tab"
+            >
+              <dl
+                class="grid max-w-screen-xl grid-cols-2 gap-8 p-4 mx-auto text-gray-900 sm:grid-cols-3 xl:grid-cols-6 dark:text-white sm:p-8"
+              >
+                <div class="flex flex-col">
+                  <dt class="mb-2 text-3xl font-extrabold">{{project.votes_count}}</dt>
+                  <dd class="text-gray-500 dark:text-gray-400">Reviewer{{project.votes_count|pluralize:'s'}}</dd>
+                </div>
+                <div class="flex flex-col">
+                  <dt class="mb-2 text-3xl font-extrabold">{{project.votes_ratio}}%</dt>
+                  <dd class="text-gray-500 dark:text-gray-400">Positive</dd>
+                </div>
+                <div class="flex flex-col">
+                  <dt class="mb-2 text-3xl font-extrabold">{{ comments.count }}</dt>
+                  <dd class="text-gray-500 dark:text-gray-400">Comment{{ comments.count|pluralize:'s' }}</dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+        </div>
+        {% if request.user.profile.id in project.getReviewers %}
+        <p class="ml-auto text-lg text-gray-500 dark:text-gray-400 my-3 font-mono">
+          You have already reviewed this project
+        </p>
+        {% elif request.user.profile == project.owner %}
+         <p class="ml-auto text-lg text-gray-500 dark:text-gray-400 my-3 font-mono">
+          You can't review your own project
+         </p>
+        {% elif request.user.is_authenticated %}
+        <!-- Comment form -->
+        <div class="mt-10">
+          <form action="{% url 'project' project.id %}" method="POST">
+            {% csrf_token %}
+              {{ form.value }}
+            <div
+              class="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600"
+            >
+              <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
+                <label for="id_body" class="sr-only">Your comment</label>
+                {{ form.body }}
+              </div>
+              <div
+                class="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600"
+              >
+                <button
+                  type="submit"
+                  class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800"
+                >
+                  Post comment
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+        {% else %}
+        <p class="ml-auto text-lg text-gray-500 dark:text-gray-400 my-3 font-mono">
+          To review this project, you need to
+          <a href="{% url 'login' %}?next={{ request.path }}" class="text-blue-600 dark:text-blue-500 hover:underline"
+            >Login</a
+          >.
+        </p>
+        {% endif %}
+
+        <p class="ml-auto text-xs text-gray-500 dark:text-gray-400 my-3">
+          Remember, reviews to this project should follow our
+          <a href="#" class="text-blue-600 dark:text-blue-500 hover:underline"
+            >Community Guidelines</a
+          >.
+        </p>
+
+        <ol
+          class="relative border-l border-gray-200 dark:border-gray-700 mt-5 last:mb-0"
+        >
+            {% for review in comments %}
+                <li class="mb-10 ml-6" id="{{ review.owner.username }}">
+                    <span
+                      class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -left-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900"
+                    >
+                      <a href="{% url 'user-profile' review.owner.id %}">
+                          <img
+                            class="rounded-full shadow-lg"
+                            src="{{review.owner.profile_image.url}}"
+                            alt="avatar"
+                          />
+                      </a>
+                    </span>
+                    <div
+                      class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:bg-gray-700 dark:border-gray-600"
+                    >
+                      <time class="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0"
+                        >{{ review.created_at|timesince }} ago</time
+                      >
+                      <div class="text-sm font-normal text-gray-500 dark:text-gray-300">
+                        {{ review.body|linebreaksbr }}
+                      </div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ol>
+    </div>
+{% endblock content %}

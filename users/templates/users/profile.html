@@ -1,0 +1,953 @@
+{%  extends 'base.html' %}
+
+{% block content %}
+
+<div class="bg-[#ffffff] dark:bg-[#0d1117] min-h-screen font-display">
+  <div class="container mx-auto p-5">
+    <div class="lg:flex no-wrap lg:-mx-2">
+      <!-- Left Side -->
+      <div class="w-full lg:w-3/12 lg:mx-2 mb-3">
+        <!-- Profile Card -->
+        <div class="bg-white dark:bg-gray-800 p-3 rounded-xl">
+          <div
+            class="flex flex-col justify-center p-6 shadow-md rounded-xl bg-gray-800 text-gray-100"
+            bis_skin_checked="1"
+          >
+            <img
+              src="{{ profile.profile_image.url }}"
+              alt=""
+              class="w-32 h-32 mx-auto rounded-full bg-gray-500 aspect-square"
+            />
+            <div
+              class="space-y-4 text-center divide-y divide-gray-700"
+              bis_skin_checked="1"
+            >
+              <div class="my-2 text-center" bis_skin_checked="1">
+                <h2
+                  class="text-sm xl:text-xl font-semibold flex items-center justify-center gap-1"
+                >
+                    {{ profile.name }}
+                    {% if profile.is_online %}
+                    <span class="flex w-3 h-3 bg-green-500 rounded-full"></span>
+                    {% endif %}
+                </h2>
+                <p class="px-5 text-xs text-gray-400">{{ profile.headline }}</p>
+              </div>
+                {% if request.user.profile != profile %}
+              <div
+                class="flex justify-center pt-2 align-center gap-3"
+                bis_skin_checked="1"
+              >
+              {% if request.user.profile not in profile.followers.all %}
+                  <form action="{% url 'follow' profile.id %}?next={{ request.path }}" method="POST">
+                    {% csrf_token %}
+                    {{ formFollow.as_p }}
+                    <button type="submit" class="inline-flex w-full justify-center rounded-md bg-[#2f81f7] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#7aaef7] sm:ml-3 sm:w-auto">
+                      Follow
+                    </button>
+                {% else %}
+                  <a
+                  href="{% url 'unfollow' profile.id %}?next={{ request.path }}"
+                  class="inline-flex w-full justify-center rounded-md bg-[#2f81f7] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#7aaef7] sm:ml-3 sm:w-auto"
+                >
+                  Unfollow
+                </a>
+                {% endif %}
+
+                </div>
+              {% endif %}
+            </div>
+          </div>
+          <p
+            class="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-600 leading-6 mt-6"
+          >
+            {{ profile.bio }}
+          </p>
+          <ul
+            class="bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm"
+          >
+            <li class="flex items-center py-3 text-sm">
+              <span class="text-gray-700 dark:text-gray-300">Location</span>
+              <span class="ml-auto">{{ profile.location }}</span>
+            </li>
+            <li class="flex items-center py-3 text-sm">
+              <span class="text-gray-700 dark:text-gray-300">Member since</span>
+              <span class="ml-auto">{{ profile.created_at|date:"M Y" }}</span>
+            </li>
+          </ul>
+          <div
+            class="flex justify-center pt-2 align-center mt-4"
+            bis_skin_checked="1"
+          >
+           {% if profile.github %}
+            <a
+              rel="noopener noreferrer"
+              target="_blank"
+              href="{{ profile.github }}"
+              aria-label="GitHub"
+              class="p-2 rounded-md text-gray-500 hover:text-[#2f81f7]"
+            >
+              <i class="bi bi-github text-2xl"></i>
+            </a>
+            {% endif %}
+            {% if profile.linkedin %}
+            <a
+              rel="noopener noreferrer"
+              href="{{ profile.linkedin }}"
+              target="_blank"
+              aria-label="Linkedin"
+              class="p-2 rounded-md text-gray-500 hover:text-[#2f81f7]"
+            >
+              <i class="bi bi-linkedin text-2xl"></i>
+            </a>
+            {% endif %}
+            {% if profile.website %}
+            <a
+              rel="noopener noreferrer"
+              href="{{ profile.website }}"
+              target="_blank"
+              aria-label="Dribble"
+              class="p-2 rounded-md text-gray-500 hover:text-[#2f81f7]"
+            >
+              <i class="bi bi-globe text-2xl"></i>
+            </a>
+            {% endif %}
+            {% if profile.twitter %}
+            <a
+              rel="noopener noreferrer"
+              href="{{ profile.twitter }}"
+              target="_blank"
+              aria-label="Twitter"
+              class="p-2 rounded-md text-gray-500 hover:text-[#2f81f7]"
+            >
+              <i class="bi bi-twitter text-2xl"></i>
+            </a>
+            {% endif %}
+            {% if profile.youtube %}
+            <a
+              rel="noopener noreferrer"
+              href="{{ profile.youtube }}"
+              target="_blank"
+              aria-label="Youtube"
+              class="p-2 rounded-md text-gray-500 hover:text-[#2f81f7]"
+            >
+              <i class="bi bi-youtube text-2xl"></i>
+            </a>
+            {% endif %}
+          </div>
+        </div>
+        <!-- End of profile card -->
+      </div>
+      <!-- Right Side -->
+      <div class="w-full lg:w-9/12 lg:mx-2">
+        <div
+          class="w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mt-3 font-display"
+        >
+          <ul
+            class="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 rounded-t-lg bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800"
+            id="defaultTab"
+            data-tabs-toggle="#defaultTabContent"
+            role="tablist"
+          >
+            <li class="mr-2">
+              <a
+                id="about-tab"
+                data-tabs-target="#about"
+                href="{% url 'user-profile' profile.id %}"
+                role="tab"
+                aria-controls="about"
+                aria-selected="{% if tab == 'about' %}true{% else %}false{% endif %}"
+                class="inline-block p-4 text-blue-600 rounded-tl-lg hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-blue-500"
+              >
+                <i class="bi bi-info-circle"></i> Overview
+              </a>
+            </li>
+            <li class="mr-2">
+              <a
+                id="services-tab"
+                data-tabs-target="#services"
+                href="{% url 'user-projects' profile.id %}"
+                role="tab"
+                aria-controls="services"
+                aria-selected="{% if tab == 'projects' %}true{% else %}false{% endif %}"
+                class="flex gap-1 p-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300"
+              >
+                <svg
+                  aria-hidden="true"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  version="1.1"
+                  width="16"
+                  data-view-component="true"
+                  class="h-5 fill-current"
+                >
+                  <path
+                    d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"
+                  ></path>
+                </svg>
+                Projects
+                <span
+                  class="inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-gray-800 bg-gray-100 border-2 rounded-lg dark:border-gray-900"
+                  >{{ count }}</span
+                >
+              </a>
+            </li>
+            <li class="mr-2">
+              <a
+                id="followers-tab"
+                data-tabs-target="#followers"
+                href="{% url 'user-followers' profile.id %}"
+                role="tab"
+                aria-controls="followers"
+                aria-selected="{% if tab == 'followers' %}true{% else %}false{% endif %}"
+                class="inline-block p-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300"
+              >
+                <i class="bi bi-people"></i> Followers
+                <span
+                  class="inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-gray-800 bg-gray-100 border-2 rounded-lg dark:border-gray-900"
+                  >{{ followers.count }}</span
+                >
+              </a>
+            </li>
+            <li class="mr-2">
+              <a
+                id="following-tab"
+                data-tabs-target="#following"
+                href="{% url 'user-following' profile.id %}"
+                role="tab"
+                aria-controls="following"
+                aria-selected="{% if tab == 'following' %}true{% else %}false{% endif %}"
+                class="inline-block p-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300"
+              >
+                <i class="bi bi-people"></i> Following
+                <span
+                  class="inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-gray-800 bg-gray-100 border-2 rounded-lg dark:border-gray-900"
+                  >{{ following.count }}</span
+                >
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div id="defaultTabContent">
+          <div
+            class="hidden mt-3"
+            id="about"
+            role="tabpanel"
+            aria-labelledby="about-tab"
+          >
+            <div class="bg-white dark:bg-[#0d1117] p-3 rounded-sm">
+              <div class="grid grid-cols-2 gap-6">
+                <div>
+                  <div
+                    class="flex items-center space-x-2 font-semibold text-gray-900 dark:text-gray-400 leading-8 mb-3"
+                  >
+                    <span>
+                      <i class="bi bi-tools"></i>
+                    </span>
+                    <span class="tracking-wide">Career Path</span>
+                  </div>
+
+                  <ol
+                    class="relative border-l border-gray-200 dark:border-gray-700"
+                  >
+                    {% for experience in experiences %}
+                        <li class="mb-10 ml-6">
+                      <span
+                        class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -left-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900"
+                      >
+                        <i
+                          class="bi bi-wrench-adjustable-circle-fill text-[#2f81f7]"
+                        ></i>
+                      </span>
+                      <button
+                        type="button"
+                        id="readProductButton"
+                        data-modal-toggle="{{ experience.id }}"
+                        class="flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white"
+                      >
+                        {{ experience.title }}
+                        {% if experience.is_current %}
+                        <span
+                          class="bg-[#ddf4ff] text-[#0969da] text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:text-[#2f81f7] dark:bg-[#388bfd1a] ml-3"
+                          >Active</span
+                        >
+                        {% endif %}
+                      </button>
+                      <time
+                        class="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500"
+                        >From: {{ experience.from_date|date}}
+                        {% if experience.to_date %}
+                        - {{ experience.to_date|date}}
+                        {% endif %}
+                      </time
+                      >
+                      <!-- Main modal -->
+                      <div
+                        id="{{ experience.id }}"
+                        tabindex="-1"
+                        aria-hidden="true"
+                        class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full"
+                      >
+                        <div
+                          class="relative p-4 w-full max-w-xl h-full md:h-auto"
+                        >
+                          <!-- Modal content -->
+                          <div
+                            class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5"
+                          >
+                            <!-- Modal header -->
+                            <div
+                              class="flex justify-between mb-4 rounded-t sm:mb-5"
+                            >
+                              <div
+                                class="text-lg text-gray-900 md:text-xl dark:text-white"
+                              >
+                                <h3 class="font-semibold">
+                                  {{ experience.title }}
+                                    {% if experience.is_current %}
+                                        <span
+                                            class="bg-[#ddf4ff] text-[#0969da] text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:text-[#2f81f7] dark:bg-[#388bfd1a] ml-3"
+                                             >Active</span
+                                        >
+                                    {% endif %}
+                                </h3>
+                                <p class="font-normal text-sm">
+                                    {{ experience.from_date }}
+                                    {% if experience.to_date %}
+                                        - {{ experience.to_date|date}}
+                                    {% endif %}
+                                </p>
+                              </div>
+                              <div>
+                                <button
+                                  type="button"
+                                  class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 inline-flex dark:hover:bg-gray-600 dark:hover:text-white"
+                                  data-modal-toggle="{{ experience.id }}"
+                                >
+                                  <i class="bi bi-x-lg text-xl"></i>
+                                  <span class="sr-only">Close modal</span>
+                                </button>
+                              </div>
+                            </div>
+                            <dl>
+                              <dt
+                                class="mb-2 font-semibold leading-none text-gray-900 dark:text-white"
+                              >
+                                Details
+                              </dt>
+                              <dd
+                                class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400"
+                              >
+                                  {{ experience.description|linebreaksbr }}
+                              </dd>
+                              <dt
+                                class="mb-2 font-semibold leading-none text-gray-900 dark:text-white"
+                              >
+                                Company
+                              </dt>
+                              <dd
+                                class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400"
+                              >
+                                  {{ experience.company}}/{{ experience.location }}
+                              </dd>
+                            </dl>
+                           {% if request.user.profile == experience.owner %}
+                                <div class="flex justify-between items-center">
+                                  <div
+                                    class="flex items-center space-x-3 sm:space-x-4"
+                                  >
+                                    <a
+                                      href="{% url 'update-experience' experience.id %}?next={{ request.path }}"
+                                      class="text-white bg-[#2f81f7] inline-flex items-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                                    >
+                                      Edit
+                                    </a>
+                                  </div>
+                                  <a
+                                    href="{% url 'delete-experience' experience.id %}?next={{ request.path }}"
+                                    class="inline-flex items-center text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900"
+                                  >
+                                    Delete
+                                  </a>
+                            </div>
+                            {% endif %}
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    {% endfor %}
+                  </ol>
+                </div>
+                <div>
+                  <div
+                    class="flex items-center space-x-2 font-semibold text-gray-900 dark:text-gray-400 leading-8 mb-3"
+                  >
+                    <span>
+                      <svg
+                        class="h-5"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path fill="#fff" d="M12 14l9-5-9-5-9 5 9 5z"></path>
+                        <path
+                          fill="#fff"
+                          d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"></path>
+                      </svg>
+                    </span>
+                    <span class="tracking-wide">Education</span>
+                  </div>
+
+                  <ol
+                    class="relative border-l border-gray-200 dark:border-gray-700"
+                  >
+                    {% for education in educations %}
+                        <li class="mb-10 ml-6">
+                          <span
+                            class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -left-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900"
+                          >
+                            <i class="bi bi-award-fill text-[#2f81f7]"></i>
+                          </span>
+                          <button
+                            type="button"
+                            id="readProductButton"
+                            data-modal-toggle="{{ education.id }}"
+                            class="flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white"
+                          >
+                              {{ education.degree|capfirst }} in {{ education.field_of_study }}
+                              {% if education.is_current %}
+                                <span
+                                  class="bg-[#ddf4ff] text-[#0969da] text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:text-[#2f81f7] dark:bg-[#388bfd1a] ml-3"
+                                  >Active</span
+                                >
+                              {% endif %}
+                          </button>
+                          <time
+                            class="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500"
+                            >
+                                From: {{ education.from_date }}
+                                {% if education.to_date %}
+                                    - {{ education.to_date|date}}
+                                {% endif %}
+                          </time
+                          >
+                          <!-- Main modal -->
+                          <div
+                            id="{{ education.id }}"
+                            tabindex="-1"
+                            aria-hidden="true"
+                            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full"
+                          >
+                            <div
+                              class="relative p-4 w-full max-w-xl h-full md:h-auto"
+                            >
+                              <!-- Modal content -->
+                              <div
+                                class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5"
+                              >
+                                <!-- Modal header -->
+                                <div
+                                  class="flex justify-between mb-4 rounded-t sm:mb-5"
+                                >
+                                  <div
+                                    class="text-lg text-gray-900 md:text-xl dark:text-white"
+                                  >
+                                    <h3 class="font-semibold">
+                                      {{ education.degree|capfirst }} in {{ education.field_of_study }}
+                                      {% if education.is_current %}
+                                        <span
+                                          class="bg-[#ddf4ff] text-[#0969da] text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:text-[#2f81f7] dark:bg-[#388bfd1a] ml-3"
+                                          >Active</span
+                                        >
+                                      {% endif %}
+                                    </h3>
+                                    <p class="font-normal text-sm">
+                                        {{ education.from_date }}
+                                        {% if education.to_date %}
+                                            - {{ education.to_date|date}}
+                                        {% endif %}
+                                    </p>
+                                  </div>
+                                  <div>
+                                    <button
+                                      type="button"
+                                      class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 inline-flex dark:hover:bg-gray-600 dark:hover:text-white"
+                                      data-modal-toggle="{{ education.id }}"
+                                    >
+                                      <i class="bi bi-x-lg text-xl"></i>
+                                      <span class="sr-only">Close modal</span>
+                                    </button>
+                                  </div>
+                                </div>
+                                <dl>
+                                  <dt
+                                    class="mb-2 font-semibold leading-none text-gray-900 dark:text-white"
+                                  >
+                                    Details
+                                  </dt>
+                                  <dd
+                                    class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400"
+                                  >
+                                    {{ education.description|linebreaksbr }}
+                                  </dd>
+                                  <dt
+                                    class="mb-2 font-semibold leading-none text-gray-900 dark:text-white"
+                                  >
+                                    Institution
+                                  </dt>
+                                  <dd
+                                    class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400"
+                                  >
+                                      {{ education.school }}
+                                  </dd>
+                                </dl>
+                              {% if request.user.profile == education.owner %}
+                                <div class="flex justify-between items-center">
+                                  <div
+                                    class="flex items-center space-x-3 sm:space-x-4"
+                                  >
+                                    <a
+                                      href="{% url 'update-education' education.id %}?next={{ request.path }}"
+                                      class="text-white bg-[#2f81f7] inline-flex items-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                                    >
+                                      Edit
+                                    </a>
+                                  </div>
+                                  <a
+                                    href="{% url 'delete-education' education.id %}?next={{ request.path }}"
+                                    class="inline-flex items-center text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900"
+                                  >
+                                    Delete
+                                  </a>
+                                </div>
+                              {% endif %}
+                              </div>
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                  </ol>
+                </div>
+              </div>
+              <!-- End of Experience and education grid -->
+            </div>
+
+            <div class="my-4"></div>
+
+            <!-- Skills grid -->
+            <div class="bg-white dark:bg-[#0d1117] p-3 rounded-sm">
+              <div class="grid md:grid-cols-2">
+                <div class="mb-2 md:mb-0">
+                  <div
+                    class="flex items-center space-x-2 font-semibold text-gray-900 dark:text-gray-400 leading-8 mb-3"
+                  >
+                    <span><i class="bi bi-rocket-takeoff"></i></span>
+                    <span class="tracking-wide">Main Skills</span>
+                  </div>
+                  <div class="grid grid-cols-3 md:grid-cols-2 xl:grid-cols-3 gap-2">
+                    {% for skill in mainSkills %}
+                        <button
+                        type="button"
+                        data-popover-target="popover-{{ skill.id }}"
+                        class="max-w-[10rem] text-left p-3 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+                        >
+                      <span class="flex gap-1 items-center">
+                        <i class="bi bi-patch-check-fill text-sm dark:text-white"></i>
+                        <p class="text-sm font-semibold tracking-tight text-gray-900 dark:text-white">
+                          {{ skill.name }}
+                        </p>
+                      </span>
+                      <p
+                        class="text-[0.7rem] hidden sm:block font-normal text-gray-500 dark:text-gray-400"
+                      >
+                          {{ skill.description|truncatechars:30 }}
+                      </p>
+                    </button>
+                        <div
+                      data-popover
+                      id="popover-{{ skill.id }}"
+                      role="tooltip"
+                      class="absolute z-10 invisible inline-block text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 w-72 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400"
+                    >
+                      <div class="p-3 space-y-2">
+                        <h3 class="font-semibold text-gray-900 dark:text-white">
+                            {{ skill.name }}
+                        </h3>
+                        <p>
+                            {{ skill.description }}
+                        </p>
+                          {% if request.user.profile == skill.owner %}
+                        <div class="flex items-center justify-between">
+                          <a
+                            href="{% url 'update-skill' skill.id %}?next={{ request.path }}"
+                            class="flex items-center font-medium text-blue-600 dark:text-blue-500 dark:hover:text-blue-600 hover:text-blue-700"
+                            >Update
+                          </a>
+                          <a
+                            href="{% url 'delete-skill' skill.id %}?next={{ request.path }}"
+                            class="flex items-center font-medium text-red-600 dark:text-red-500 dark:hover:text-red-600 hover:text-red-700"
+                            >Delete
+                          </a>
+                        </div>
+                        {% endif %}
+                      </div>
+                      <div data-popper-arrow></div>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+                <div class="">
+                  <div
+                    class="flex items-center space-x-2 font-semibold text-gray-900 dark:text-gray-400 leading-8 mb-3"
+                  >
+                    <span>
+                      <i class="bi bi-award"></i>
+                    </span>
+                    <span class="tracking-wide">Other Skills</span>
+                  </div>
+                  <div class="flex gap-2 flex-wrap">
+                    {% for skill in otherSkills %}
+                    <button
+                      type="button"
+                      data-popover-target="popover-{{ skill.id }}"
+                      class="p-1 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+                    >
+                      <span class="flex gap-1 items-center">
+                        <i
+                          class="bi bi-patch-check text-sm dark:text-white"
+                        ></i>
+                        <p
+                          class="text-xs font-semibold tracking-tight text-gray-900 dark:text-white"
+                        >
+                          {{ skill.name }}
+                        </p>
+                      </span>
+                    </button>
+                    <div
+                      data-popover
+                      id="popover-{{ skill.id }}"
+                      role="tooltip"
+                      class="absolute z-10 invisible inline-block text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 w-72 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400"
+                    >
+                      <div class="p-3 space-y-2">
+                        <h3 class="font-semibold text-gray-900 dark:text-white">
+                            {{ skill.name }}
+                        </h3>
+                        {% if request.user.profile == skill.owner %}
+                        <div class="flex items-center justify-between">
+                          <a
+                            href="{% url 'update-skill' skill.id %}?next={{ request.path }}"
+                            class="flex items-center font-medium text-blue-600 dark:text-blue-500 dark:hover:text-blue-600 hover:text-blue-700"
+                            >Update
+                          </a>
+                          <a
+                            href="{% url 'delete-skill' skill.id %}?next={{ request.path }}"
+                            class="flex items-center font-medium text-red-600 dark:text-red-500 dark:hover:text-red-600 hover:text-red-700"
+                            >Delete
+                          </a>
+                        </div>
+                        {% endif %}
+                      </div>
+                      <div data-popper-arrow></div>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+              <!-- End of Experience and education grid -->
+            </div>
+
+            <div class="my-4"></div>
+
+            <!-- Projects section -->
+
+            <div class="bg-white dark:bg-[#0d1117] p-3 rounded-sm">
+              <div
+                class="flex items-center space-x-2 font-semibold text-gray-900 dark:text-gray-400 leading-8 mb-3"
+              >
+                <span class="text-gray-900 dark:text-gray-400">
+                  <svg
+                    aria-hidden="true"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    width="16"
+                    data-view-component="true"
+                    class="h-5 fill-current"
+                  >
+                    <path
+                      d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"
+                    ></path>
+                  </svg>
+                </span>
+                <span class="tracking-wide">Top Projects</span>
+              </div>
+              <div class="grid gap-2 sm:grid-cols-2 lg:grid-cols-3 max-w-full">
+                {% for project in topProjects %}
+                <div
+                  class="p-4 bg-white dark:bg-[#0d1117] border border-[#d0d7de] dark:border-[#21262d] rounded shadow-sm"
+                >
+                  <p class="mb-3 text-xs font-semibold tracking-wide uppercase">
+                    {% for tag in  project.tags.all|slice:'1' %}
+                    <p
+                      class="text-[#7d8590] transition-colors duration-200 text-deep-purple-accent-400 hover:text-deep-purple-800"
+                      aria-label="Category"
+                      >{{ tag }}</p
+                    >{% endfor %}
+                    <span class="text-[#7d8590] text-xs">Created {{ project.created_at|timesince }} ago</span>
+                  </p>
+                  <a
+                    href="{% url 'project' project.id %}"
+                    aria-label="Article"
+                    title="Jingle Bells"
+                    class="inline-block mb-3 text-xl font-bold leading-5 text-[#2f81f7] transition-colors duration-200 hover:text-deep-purple-accent-400"
+                    >{{ project.title|truncatechars:25 }}</a
+                  >
+                  <p class="text-[#7d8590] text-sm">
+                    {{ project.description|truncatechars:65 }}
+                  </p>
+                </div>
+                {% endfor %}
+              </div>
+              <!-- End of projects grid -->
+            </div>
+          </div>
+          <div
+            class="hidden mt-3"
+            id="services"
+            role="tabpanel"
+            aria-labelledby="services-tab"
+          >
+            <div class="bg-white dark:bg-[#0d1117] py-3 rounded-sm">
+              <div
+                class="grid max-w-full border-t border-[hsla(210,18%,87%,1)] dark:border-[#30363d]"
+              >
+               {% for project in userProjects %}
+                <div
+                  class="flex justify-between bg-white dark:bg-[#0d1117] border-b border-[hsla(210,18%,87%,1)] dark:border-[#30363d]"
+                >
+                  <div class="p-4">
+                    <a
+                      href="{% url 'project' project.id %}"
+                      aria-label="Article"
+                      title="{{ project.title }}"
+                      class="inline-block mb-3 text-xl font-bold leading-5 text-[#2f81f7] transition-colors duration-200 hover:text-deep-purple-accent-400"
+                      >{{ project.title }}</a
+                    >
+                    <p class="text-[#7d8590] text-sm lg:w-[40rem]">
+                        {{ project.description|truncatechars:100 }}
+                    </p>
+                    <div class="tags flex gap-1 w-full my-3">
+                      {% for tag in  project.tags.all %}
+                      <span
+                        class="bg-[#ddf4ff] inline-block text-[#0969da] text-xs font-medium mr-2 px-2.5 py-0.5 rounded-xl dark:bg-[#388bfd1a] dark:text-[#2f81f7]"
+                        >{{ tag }}</span
+                      >
+                      {% endfor %}
+                    </div>
+                    <div class="text-xs text-[#878e95]">
+                      <span>{{ project.votes_count }} Votes</span>
+                      <span>{{ project.votes_ratio }}% Positive</span>
+                      <span>Updated on {{ project.updated_at|date}}</span>
+                    </div>
+                  </div>
+                  {% if request.user.profile == project.owner %}
+                  <div>
+                    <button
+                      id="dropdownButton"
+                      data-dropdown-toggle="dropdown-{{ project.id }}"
+                      class="inline-block text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:ring-1 focus:outline-none focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-1.5"
+                      type="button"
+                    >
+                      <span class="sr-only">Open dropdown</span>
+                      <svg
+                        class="w-6 h-6"
+                        aria-hidden="true"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"
+                        ></path>
+                      </svg>
+                    </button>
+                    <!-- Dropdown menu -->
+                    <div
+                      id="dropdown-{{ project.id }}"
+                      class="z-[999] hidden text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-[#388bfd1a]"
+                    >
+                      <ul class="py-2" aria-labelledby="dropdownButton">
+                        <li>
+                          <a
+                            href="{% url 'update-project' project.id %}?next={{ request.path }}"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-[#2f81f7] dark:text-gray-200 hover:text-white"
+                            >Edit</a
+                          >
+                        </li>
+                        <li>
+                          <a
+                            href="{% url 'delete-project' project.id %}?next={{ request.path }}"
+                            class="block px-4 py-2 text-sm hover:text-white hover:bg-red-600 text-red-600"
+                            >Delete</a
+                          >
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  {% endif %}
+                </div>
+                {% endfor %}
+                {% include 'pagination.html' with queryset=userProjects custom_range=custom_range current_url=request.GET.path %}
+              </div>
+              <!-- End of projects grid -->
+            </div>
+          </div>
+          <div
+            class="hidden mt-3"
+            id="followers"
+            role="tabpanel"
+            aria-labelledby="followers-tab"
+          >
+            <div class="bg-white dark:bg-[#0d1117] py-3 rounded-sm">
+              <div
+                class="grid max-w-full border-t border-[hsla(210,18%,87%,1)] dark:border-[#30363d]"
+              >
+                {% for follower in followers %}
+                <div
+                  class="flex sm:justify-between items-center bg-white dark:bg-[#0d1117] border-b border-[hsla(210,18%,87%,1)] dark:border-[#30363d]"
+                >
+                  <div class="p-4">
+                    <a
+                      href="{% url 'user-profile' follower.id %}"
+                      aria-label="Article"
+                      title="{{ follower.name }}"
+                      class="flex gap-2 mb-3 text-sm font-bold leading-5 text-[#2f81f7] transition-colors duration-200 hover:text-deep-purple-accent-400"
+                    >
+                      <img
+                        src="{{ follower.profile_image.url }}"
+                        alt="{{ follower.name }}"
+                        class="h-8 w-8 rounded-full"
+                      />
+                      {{ follower.name }}
+                      <span class="text-[#7d8590] text-sm">{{ follower.username }}</span></a
+                    >
+                    <p
+                      class="text-[#1f2328] dark:text-[#e6edf3] text-sm lg:w-[40rem]"
+                    >
+                        {% if follower.bio %}
+                      {{ follower.bio|truncatechars:100 }}
+                        {% endif %}
+                    </p>
+                    <div class="text-xs text-[#878e95] mt-2">
+                        {% if follower.location %}
+                      <span>{{ follower.location }}</span>
+                        {% endif %}
+                    </div>
+                  </div>
+                  <div>
+                     {% if request.user.profile in follower.followers.all %}
+                        <a href="{% url 'unfollow' follower.id %}?next={{ request.path }}" class="border mt-2 py-[3px] px-[12px] text-[12px] text-[#24292f] bg-[#f6f8fa] border-[rgb(31 35 40 / 15%)] dark:text-[#c9d1d9] dark:bg-[#21262d] dark:border-[#388bfd1a] rounded">
+                        Unfollow
+                        </a>
+                       {% endif %}
+                      {% if request.user.profile not in follower.followers.all and request.user.profile != follower %}
+                          <form method="POST" action="{% url 'follow' follower.id %}?next={{ request.path }}">
+                            {% csrf_token %}
+                            {{ formFollow.as_p }}
+                            <button type="submit" class="border mt-2 py-[3px] px-[12px] text-[12px] text-[#24292f] bg-[#f6f8fa] border-[rgb(31 35 40 / 15%)] dark:text-[#c9d1d9] dark:bg-[#21262d] dark:border-[#388bfd1a] rounded"
+                            >Follow
+                            </button>
+                          </form>
+                      {% endif %}
+
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+              <!-- End of projects grid -->
+            </div>
+          </div>
+          <div
+            class="hidden mt-3"
+            id="following"
+            role="tabpanel"
+            aria-labelledby="following-tab"
+          >
+            <div class="bg-white dark:bg-[#0d1117] py-3 rounded-sm">
+
+              <div
+                class="grid max-w-full border-t border-[hsla(210,18%,87%,1)] dark:border-[#30363d]"
+              >
+                {% for follow in following %}
+                <div
+                  class="flex sm:justify-between items-center bg-white dark:bg-[#0d1117] border-b border-[hsla(210,18%,87%,1)] dark:border-[#30363d]"
+                >
+                  <div class="p-4">
+                    <a
+                      href="{% url 'user-profile' follow.id %}"
+                      aria-label="Article"
+                      title="{{ follow.name }}"
+                      class="flex gap-2 mb-3 text-sm font-bold leading-5 text-[#2f81f7] transition-colors duration-200 hover:text-deep-purple-accent-400"
+                    >
+                      <img
+                        src="{{ follow.profile_image.url }}"
+                        alt=""
+                        class="h-8 w-8 rounded-full"
+                      />
+                        {{ follow.name }}
+                      <span class="text-[#7d8590] text-sm">{{ follow.username }}</span></a
+                    >
+                    <p
+                      class="text-[#1f2328] dark:text-[#e6edf3] text-sm lg:w-[40rem]"
+                    >
+                        {% if follow.bio %}
+                        {{ follow.bio|truncatechars:100 }}
+                        {% endif %}
+                    </p>
+                    <div class="text-xs text-[#878e95] mt-2">
+                      <span>
+                        {% if follow.location %}
+                        {{ follow.location }}
+                        {% endif %}
+                      </span>
+                    </div>
+                  </div>
+                  <div>
+                      {% if request.user.profile in follow.followers.all %}
+                        <a href="{% url 'unfollow' follow.id %}?next={{ request.path }}" class="border mt-2 py-[3px] px-[12px] text-[12px] text-[#24292f] bg-[#f6f8fa] border-[rgb(31 35 40 / 15%)] dark:text-[#c9d1d9] dark:bg-[#21262d] dark:border-[#388bfd1a] rounded">
+                        Unfollow
+                        </a>
+                       {% endif %}
+                      {% if request.user.profile not in follow.followers.all and request.user.profile != follow %}
+                          <form method="POST" action="{% url 'follow' follow.id %}?next={{ request.path }}">
+                            {% csrf_token %}
+                            {{ formFollow.as_p }}
+                            <button type="submit" class="border mt-2 py-[3px] px-[12px] text-[12px] text-[#24292f] bg-[#f6f8fa] border-[rgb(31 35 40 / 15%)] dark:text-[#c9d1d9] dark:bg-[#21262d] dark:border-[#388bfd1a] rounded"
+                            >Follow
+                            </button>
+                          </form>
+                      {% endif %}
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+              <!-- End of projects grid -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script
+  src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"
+></script>
+
+{% endblock %}
