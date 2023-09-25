@@ -251,7 +251,7 @@ else:
     # MEDIA_URL = "/media/"
     STORAGES = {
         "default": {"BACKEND": "constants.custom_storages.CustomS3Boto3Storage"},
-        "staticfiles": {"BACKEND": "storages.backends.s3boto3.S3StaticStorage"}
+        "staticfiles": {"BACKEND": "storages.backends.s3boto3.S3ManifestStaticStorage"}
     }
     STATIC_ROOT = BASE_DIR / "staticfiles"
     STATIC_HOST = f"https://{AWS_S3_CUSTOM_DOMAIN}"
