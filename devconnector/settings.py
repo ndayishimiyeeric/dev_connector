@@ -246,6 +246,8 @@ else:
     AWS_S3_CUSTOM_DOMAIN = getenv("AWS_S3_CUSTOM_DOMAIN")
     AWS_CLOUDFRONT_KEY_ID = getenv("AWS_CLOUDFRONT_KEY_ID")
     AWS_CLOUDFRONT_KEY = env.str("AWS_CLOUDFRONT_KEY_ID", multiline=True).encode('ascii').split()
+    MEDIA_ROOT = BASE_DIR / "media"
+    MEDIA_URL = "/media/"
     STORAGES = {
         "default": {"BACKEND": "storages.backends.s3boto3.S3Boto3Storage"},
         "staticfiles": {"BACKEND": "whitenoise.storage.CompressedStaticFilesStorage"}
@@ -253,6 +255,7 @@ else:
     STATIC_ROOT = BASE_DIR / "staticfiles"
     STATIC_HOST = f"https://{AWS_S3_CUSTOM_DOMAIN}"
     STATIC_URL = STATIC_HOST + "/static/"
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
