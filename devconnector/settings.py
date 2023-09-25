@@ -237,7 +237,7 @@ else:
     AWS_STORAGE_BUCKET_NAME = getenv("AWS_STORAGE_BUCKET_NAME")
     AWS_S3_FILE_OVERWRITE = True
     AWS_S3_REGION_NAME = getenv("AWS_S3_REGION_NAME")
-    # AWS_S3_ENDPOINT_URL = f"https://{AWS_S3_REGION_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
+    AWS_S3_ENDPOINT_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
     AWS_S3_OBJECT_PARAMETERS = {
         'CacheControl': 'max-age=86400'
     }
