@@ -243,13 +243,14 @@ else:
     }
     AWS_DEFAULT_ACL = "public-read"
     AWS_LOCATION = "static"
+    AWS_MEDIA_LOCATION = "media"
     AWS_S3_CUSTOM_DOMAIN = getenv("AWS_S3_CUSTOM_DOMAIN")
     AWS_CLOUDFRONT_KEY_ID = getenv("AWS_CLOUDFRONT_KEY_ID")
     AWS_CLOUDFRONT_KEY = env.str("AWS_CLOUDFRONT_KEY_ID", multiline=True).encode('ascii').split()
-    MEDIA_ROOT = BASE_DIR / "media"
-    MEDIA_URL = "/media/"
+    # MEDIA_ROOT = BASE_DIR / "media"
+    # MEDIA_URL = "/media/"
     STORAGES = {
-        "default": {"BACKEND": "storages.backends.s3boto3.S3Boto3Storage"},
+        "default": {"BACKEND": "constants.custom_storages.CustomS3Boto3Storage"},
         "staticfiles": {"BACKEND": "whitenoise.storage.CompressedStaticFilesStorage"}
     }
     STATIC_ROOT = BASE_DIR / "staticfiles"
