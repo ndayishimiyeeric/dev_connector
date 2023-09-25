@@ -237,19 +237,20 @@ else:
     AWS_STORAGE_BUCKET_NAME = getenv("AWS_STORAGE_BUCKET_NAME")
     AWS_S3_FILE_OVERWRITE = True
     AWS_S3_REGION_NAME = getenv("AWS_S3_REGION_NAME")
-    # AWS_S3_ENDPOINT_URL = f"https://{AWS_S3_REGION_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
+    AWS_S3_ENDPOINT_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
     AWS_S3_OBJECT_PARAMETERS = {
         'CacheControl': 'max-age=86400'
     }
     AWS_DEFAULT_ACL = "public-read"
     AWS_LOCATION = "static"
+    AWS_MEDIA_LOCATION = "media"
     AWS_S3_CUSTOM_DOMAIN = getenv("AWS_S3_CUSTOM_DOMAIN")
     AWS_CLOUDFRONT_KEY_ID = getenv("AWS_CLOUDFRONT_KEY_ID")
     AWS_CLOUDFRONT_KEY = env.str("AWS_CLOUDFRONT_KEY_ID", multiline=True).encode('ascii').split()
-    MEDIA_ROOT = BASE_DIR / "media"
-    MEDIA_URL = "/media/"
+    # MEDIA_ROOT = BASE_DIR / "media"
+    # MEDIA_URL = "/media/"
     STORAGES = {
-        "default": {"BACKEND": "storages.backends.s3boto3.S3Boto3Storage"},
+        "default": {"BACKEND": "constants.custom_storages.CustomS3Boto3Storage"},
         "staticfiles": {"BACKEND": "whitenoise.storage.CompressedStaticFilesStorage"}
     }
     STATIC_ROOT = BASE_DIR / "staticfiles"
