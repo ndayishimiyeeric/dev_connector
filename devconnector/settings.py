@@ -222,7 +222,7 @@ USE_TZ = True
 
 if DEVELOPMENT_MODE is True:
     STATIC_URL = "static/"
-    MEDIA_URL = "images/"
+    MEDIA_URL = "/media/"
 
     STATICFILES_DIRS = [
         BASE_DIR / "static",
@@ -230,23 +230,21 @@ if DEVELOPMENT_MODE is True:
 
     MEDIA_ROOT = os.path.join(BASE_DIR, "static/images")
     STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-
-    # COMPRESS_ROOT = BASE_DIR / 'static'
-    # COMPRESS_ENABLED = True
-    # STATICFILES_FINDERS = ('compressor.finders.CompressorFinder',)
 else:
     AWS_S3_ACCESS_KEY_ID = getenv("AWS_S3_ACCESS_KEY_ID")
     AWS_S3_SECRET_ACCESS_KEY = getenv("AWS_S3_SECRET_ACCESS_KEY")
     AWS_STORAGE_BUCKET_NAME = getenv("AWS_STORAGE_BUCKET_NAME")
+    AWS_S3_FILE_OVERWRITE = True
     AWS_S3_REGION_NAME = getenv("AWS_S3_REGION_NAME")
-    AWS_S3_ENDPOINT_URL = f"https://{AWS_S3_REGION_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
+    # AWS_S3_ENDPOINT_URL = f"https://{AWS_S3_REGION_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
+    # print(AWS_S3_ENDPOINT_URL)
     AWS_S3_OBJECT_PARAMETERS = {
         'CacheControl': 'max-age=86400'
     }
     AWS_DEFAULT_ACL = "public-read"
     AWS_LOCATION = "static"
-    AWS_S3_CUSTOM_DOMAIN = getenv("AWS_S3_CUSTOM_DOMAIN").split()
-    AWS_CLOUDFRONT_KEY_ID = getenv("AWS_CLOUDFRONT_KEY_ID").split()
+    AWS_S3_CUSTOM_DOMAIN = getenv("AWS_S3_CUSTOM_DOMAIN")
+    AWS_CLOUDFRONT_KEY_ID = getenv("AWS_CLOUDFRONT_KEY_ID")
     AWS_CLOUDFRONT_KEY = env.str("AWS_CLOUDFRONT_KEY_ID", multiline=True).encode('ascii').split()
     STORAGES = {
         "default": {"BACKEND": "storages.backends.s3boto3.S3Boto3Storage"},

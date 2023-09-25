@@ -1,12 +1,9 @@
 from django.db import models
-import uuid
+
 from users.models import Profile
 
-# Create your models here.
 
-from django.db import models
-from django.conf import settings
-from django.utils import timezone
+# Create your models here.
 
 
 class Conversation(models.Model):
