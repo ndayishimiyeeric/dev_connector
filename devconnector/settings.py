@@ -246,7 +246,8 @@ else:
     AWS_DEFAULT_ACL = "public-read"
     AWS_LOCATION = "static"
     AWS_S3_CUSTOM_DOMAIN = getenv("AWS_S3_CUSTOM_DOMAIN").split()
-    AWS_CLOUDFRONT_KEY_ID = env.str("AWS_CLOUDFRONT_KEY_ID", multiline=True).encode('ascii').split()
+    AWS_CLOUDFRONT_KEY_ID = getenv("AWS_CLOUDFRONT_KEY_ID").split()
+    AWS_CLOUDFRONT_KEY = env.str("AWS_CLOUDFRONT_KEY_ID", multiline=True).encode('ascii').split()
     STORAGES = {
         "default": {"BACKEND": "storages.backends.s3boto3.S3Boto3Storage"},
         "staticfiles": {"BACKEND": "storages.backends.s3boto3.S3StaticStorage"}
